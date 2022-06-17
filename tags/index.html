@@ -13,7 +13,7 @@
 
     <title>
         
-        rot_will&#39;Blog
+        Tags - rot_will&#39;Blog
         
     </title>
 
@@ -59,13 +59,13 @@
     </div>
     <div class="contents" id="nav-content">
         <ul>
-            <li  class=active >
+            <li >
                 <a href="/">
                     <i class="iconfont icon-shouye1"></i>
                     <span>主页</span>
                 </a>
             </li>
-            <li >
+            <li  class=active >
                 <a href="/tags">
                     <i class="iconfont icon-biaoqian1"></i>
                     <span>标签</span>
@@ -124,74 +124,73 @@
     
     <div class="index-middle">
         <!-- Main Content -->
-        
-<div class="post-preview-container" style="min-height: 720px">
+        <div id='tag_cloud' class="tags">
     
-    <div class="post-preview">
-        <div class="post-time">2022-05-07</div>
-        <div class="post-info">
-            <a href="https://rot.github.io/2022/05/07/sh%E6%96%87%E4%BB%B6%E4%B8%AD^M%E9%97%AE%E9%A2%98/">
-                <h3>
-                    sh文件中^M问题
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#a" title="a">a</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
-    </div>
+    <a href="#a" class="tag-triangle" title="a"><i class="tag-i">a</i></a>
     
-    <div class="post-preview">
-        <div class="post-time">2022-05-07</div>
-        <div class="post-info">
-            <a href="https://rot.github.io/2022/05/07/%E8%87%AA%E5%8A%A8%E8%B0%83%E7%94%A8/createMenuItems/">
-                <h3>
-                    createMenuItems
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#b" title="b">b</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
-    </div>
+    <a href="#b" class="tag-triangle" title="b"><i class="tag-i">b</i></a>
     
+</div>
+
+<!-- 标签列表 -->
+
+
+<div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="a">
+                    <span class="tag-text">a</span>
+                </span>
+    
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
     <div class="post-preview">
-        <div class="post-time">2022-05-07</div>
-        <div class="post-info">
-            <a href="https://rot.github.io/2022/05/07/%E8%87%AA%E5%8A%A8%E8%B0%83%E7%94%A8/processHttpMessage/">
-                <h3>
-                    processHttpMessage
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#b" title="b">b</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
+        <a href="/2022/05/07/sh文件中^M问题/">
+            <h2 class="post-title">
+                sh文件中^M问题
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
     </div>
     
 </div>
-<ul class="pager">
+
+<div class="one-tag-list">
+                <span class="fa fa-tag listing-seperator" id="b">
+                    <span class="tag-text">b</span>
+                </span>
     
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2022/05/07/自动调用/createMenuItems/">
+            <h2 class="post-title">
+                createMenuItems
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
     
-</ul>
+    <!-- <li class="listing-item">
+    <time datetime="{{ post.date | date:"%Y-%m-%d" }}">{{ post.date | date:"%Y-%m-%d" }}</time>
+    <a href="{{ post.url }}" title="{{ post.title }}">{{ post.title }}</a>
+    </li> -->
+    <div class="post-preview">
+        <a href="/2022/05/07/自动调用/processHttpMessage/">
+            <h2 class="post-title">
+                processHttpMessage
+            </h2>
+            
+        </a>
+        <!-- <p class="post-meta">{{ post.date | date:"%Y-%m-%d" }}</p> -->
+    </div>
+    
+</div>
+
 
     </div>
 </div>

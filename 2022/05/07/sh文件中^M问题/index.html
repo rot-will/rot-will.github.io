@@ -13,7 +13,7 @@
 
     <title>
         
-        rot_will&#39;Blog
+        sh文件中^M问题 - rot_will&#39;Blog
         
     </title>
 
@@ -59,7 +59,7 @@
     </div>
     <div class="contents" id="nav-content">
         <ul>
-            <li  class=active >
+            <li >
                 <a href="/">
                     <i class="iconfont icon-shouye1"></i>
                     <span>主页</span>
@@ -100,6 +100,10 @@
         </ul>
     </div>
     
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sh%E6%96%87%E4%BB%B6%E4%B8%AD-M%E9%97%AE%E9%A2%98"><span class="toc-text">sh文件中^M问题</span></a></li></ol>
+</div>
+    
 </div>
 
 
@@ -125,73 +129,39 @@
     <div class="index-middle">
         <!-- Main Content -->
         
-<div class="post-preview-container" style="min-height: 720px">
-    
-    <div class="post-preview">
-        <div class="post-time">2022-05-07</div>
-        <div class="post-info">
-            <a href="https://rot.github.io/2022/05/07/sh%E6%96%87%E4%BB%B6%E4%B8%AD^M%E9%97%AE%E9%A2%98/">
-                <h3>
-                    sh文件中^M问题
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#a" title="a">a</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
+
+
+<div class="post-container">
+    <div class="post-title">
+        sh文件中^M问题
     </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2022-05-07</div>
-        <div class="post-info">
-            <a href="https://rot.github.io/2022/05/07/%E8%87%AA%E5%8A%A8%E8%B0%83%E7%94%A8/createMenuItems/">
-                <h3>
-                    createMenuItems
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#b" title="b">b</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2022-05-07 09:00:00</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#a" title="a">a</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
     </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2022-05-07</div>
-        <div class="post-info">
-            <a href="https://rot.github.io/2022/05/07/%E8%87%AA%E5%8A%A8%E8%B0%83%E7%94%A8/processHttpMessage/">
-                <h3>
-                    processHttpMessage
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#b" title="b">b</a>
-                <span>/</span>
-                
-                
-            </p>
+    <div class="post-content ">
+        <!-- toc -->
+<h1 id="sh文件中-M问题"><a href="#sh文件中-M问题" class="headerlink" title="sh文件中^M问题"></a>sh文件中^M问题</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">使用vim打开文件</span><br><span class="line">在末行模式中输入 <span class="built_in">set</span> ff? ,检查文件类型</span><br><span class="line">当返回dos时</span><br><span class="line">继续在末行模式中输入 <span class="built_in">set</span> ff=unix 就可以解决问题</span><br></pre></td></tr></table></figure>
+        
+        <br />
+        <div id="comment-container">
         </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
     </div>
-    
 </div>
-<ul class="pager">
-    
-    
-</ul>
 
     </div>
 </div>
@@ -231,7 +201,7 @@
     // We expose some of the variables needed by the front end
     window.hexo_search_path = "search.json"
     window.hexo_root = "/"
-    window.isPost = false
+    window.isPost = true
 </script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 
