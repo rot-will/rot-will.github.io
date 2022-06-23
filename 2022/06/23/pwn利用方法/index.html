@@ -335,6 +335,8 @@
 <td>通过<code>size_t</code>判断，将数据作为<code>long</code>类型处理还是以<code>long long</code>类型处理</td>
 </tr>
 </tbody></table>
+<br>
+
 <table>
 <thead>
 <tr>
@@ -379,84 +381,90 @@
 <td>.数字 用来指定浮点数精度 或 字符串输出的最大长度</td>
 </tr>
 </tbody></table>
+<br>
+
 <table>
 <thead>
 <tr>
 <th align="center">类型</th>
-<th>作用</th>
+<th align="left">作用</th>
 </tr>
 </thead>
 <tbody><tr>
 <td align="center">x</td>
-<td>将无符号整型以全小写十六进制的形式输入输出</td>
+<td align="left">将无符号整型以全小写十六进制的形式输入输出</td>
 </tr>
 <tr>
 <td align="center">X</td>
-<td>将无符号整型以全大写十六进制的形式输入输出</td>
+<td align="left">将无符号整型以全大写十六进制的形式输入输出</td>
 </tr>
 <tr>
 <td align="center">o</td>
-<td>将无符号整型以八进制的形式输入输出</td>
+<td align="left">将无符号整型以八进制的形式输入输出</td>
 </tr>
 <tr>
 <td align="center">u</td>
-<td>将无符号整型以十进制的形式输入输出</td>
+<td align="left">将无符号整型以十进制的形式输入输出</td>
 </tr>
 <tr>
 <td align="center">d</td>
-<td>将有符号整型以十进制的形式输入输出</td>
+<td align="left">将有符号整型以十进制的形式输入输出</td>
 </tr>
 <tr>
 <td align="center">i</td>
-<td>输入输出有符号整型(将开头为0的数字识别为八进制，将开头为0x的数字识别为十六进制)</td>
+<td align="left">输入输出有符号整型(将开头为0的数字识别为八进制，将开头为0x的数字识别为十六进制)</td>
 </tr>
 <tr>
 <td align="center">f</td>
-<td>以定点数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>inf</code>,当 浮点数 无法作为数字处理时输出<code>nan</code>)</td>
+<td align="left">以定点数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>inf</code>,当 浮点数 无法作为数字处理时输出<code>nan</code>)</td>
 </tr>
 <tr>
 <td align="center">F</td>
-<td>以定点数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>INF</code>,当 浮点数 无法作为数字处理时输出<code>NAN</code>)</td>
+<td align="left">以定点数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>INF</code>,当 浮点数 无法作为数字处理时输出<code>NAN</code>)</td>
 </tr>
 <tr>
 <td align="center">e</td>
-<td>以指数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>inf</code>,当 浮点数 无法作为数字处理时输出<code>nan</code>)</td>
+<td align="left">以指数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>inf</code>,当 浮点数 无法作为数字处理时输出<code>nan</code>)</td>
 </tr>
 <tr>
 <td align="center">E</td>
-<td>以指数表示法全大写输出浮点数 (当浮点数 为 无限浮点数时输出<code>INF</code>,当 浮点数 无法作为数字处理时输出<code>NAN</code>)</td>
+<td align="left">以指数表示法全大写输出浮点数 (当浮点数 为 无限浮点数时输出<code>INF</code>,当 浮点数 无法作为数字处理时输出<code>NAN</code>)</td>
 </tr>
 <tr>
 <td align="center">g</td>
-<td>自动选择使用定点数或指数输出浮点数(效果为<code>f</code>和<code>e</code>的结合体)</td>
+<td align="left">自动选择使用定点数或指数输出浮点数(效果为<code>f</code>和<code>e</code>的结合体)</td>
 </tr>
 <tr>
 <td align="center">G</td>
-<td>自动选择使用定点数或指数输出浮点数(效果为<code>F</code>和<code>E</code>的结合体)</td>
+<td align="left">自动选择使用定点数或指数输出浮点数(效果为<code>F</code>和<code>E</code>的结合体)</td>
 </tr>
 <tr>
 <td align="center">a</td>
-<td>以十六进制的形式全小写输出浮点数(当小数为无限小数时输出<code>inf</code>,当小数无法作为数字处理时输出<code>nan</code>)</td>
+<td align="left">以十六进制的形式全小写输出浮点数(当小数为无限小数时输出<code>inf</code>,当小数无法作为数字处理时输出<code>nan</code>)</td>
 </tr>
 <tr>
 <td align="center">A</td>
-<td>以十六进制的形式全大写输出浮点数(当小数为无限小数时输出<code>INF</code>,当小数无法作为数字处理时输出<code>NAN</code>)</td>
+<td align="left">以十六进制的形式全大写输出浮点数(当小数为无限小数时输出<code>INF</code>,当小数无法作为数字处理时输出<code>NAN</code>)</td>
 </tr>
 <tr>
 <td align="center">s</td>
-<td>输出指定地址中的数据 (以<code>\x00</code>截断) 输入时以<code>空格</code>或<code>\n</code>为截断</td>
+<td align="left">输出指定地址中的数据 (以<code>\x00</code>截断) 输入时以<code>空格</code>或<code>\n</code>为截断</td>
 </tr>
 <tr>
 <td align="center">p</td>
-<td>以十六进制的形式输出 地址&#x2F;整数 (当 地址&#x2F;整数为 0 时输出 <code>(nil)</code> )</td>
+<td align="left">以十六进制的形式输出 地址&#x2F;整数 (当 地址&#x2F;整数为 0 时输出 <code>(nil)</code> )</td>
 </tr>
 <tr>
 <td align="center">c</td>
-<td>以字符的形式输入输出数据</td>
+<td align="left">以字符的形式输入输出数据</td>
 </tr>
 <tr>
 <td align="center">n</td>
-<td>将已经输出的数据长度 写入指定地址</td>
+<td align="left">将已经输出的数据长度 写入指定地址</td>
+</tr>
+<tr>
+<td align="center">&#x3D;&#x3D;&#x3D;&#x3D;</td>
+<td align="left">———————————</td>
 </tr>
 </tbody></table>
 <blockquote>
@@ -475,9 +483,7 @@
 </ul>
 </li>
 </ul>
-<blockquote>
 <p>通过<code>n</code>进行任意写，通过<code>s</code>进行任意地址读，通过<code>p</code>获取栈中的数据</p>
-</blockquote>
 <h2 id="栈中格式化字符串"><a href="#栈中格式化字符串" class="headerlink" title="栈中格式化字符串"></a>栈中格式化字符串</h2><blockquote>
 <p>在栈中的格式化字符串比较简单，因为可以通过字符串中的地址，达到任意地址读写</p>
 </blockquote>
