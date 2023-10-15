@@ -54,8 +54,22 @@
 
 
 
-  
-<link rel="stylesheet" href="/css/custom.css">
+    
+        
+        
+        <link id="csscustom_image-light" rel="stylesheet" href="/css/image.css" />
+        
+          <link id="csscustom_image-dark" rel="stylesheet" href="/css/image-dark.css" />
+        
+    
+        
+        
+        <link id="csscustom_salient-light" rel="stylesheet" href="/css/salient.css" />
+        
+          <link id="csscustom_salient-dark" rel="stylesheet" href="/css/salient-dark.css" />
+        
+    
+
 
 
 
@@ -247,13 +261,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/06/23/year/month/day/%E6%95%B4%E5%9E%8B%E6%BA%A2%E5%87%BA%E5%8F%8A%E6%A0%88%E5%9F%BA%E7%A1%80/" target="_self">
+        <a href="/page/%E6%95%B4%E5%9E%8B%E6%BA%A2%E5%87%BA%E5%8F%8A%E6%A0%88%E5%9F%BA%E7%A1%80/" target="_self">
           整型溢出及栈基础
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/06/23/year/month/day/%E6%95%B4%E5%9E%8B%E6%BA%A2%E5%87%BA%E5%8F%8A%E6%A0%88%E5%9F%BA%E7%A1%80/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/%E6%95%B4%E5%9E%8B%E6%BA%A2%E5%87%BA%E5%8F%8A%E6%A0%88%E5%9F%BA%E7%A1%80/" target="_self">
         <div>
           整数溢出 由于数据类型的使用不当产生的利用点 如: 123456789101112131415#include&lt;stdio.h&gt;#include&lt;stdlib.h&gt;int main()&amp;#123;    int a&#x3D;0;    char c[10]&#x3D;&quot;&quot;;    read(0,c,5);    if (c[0]&#x3D;&#x3D;&amp;#x27;-&amp;#x27;) &amp;#123
         </div>
@@ -310,15 +324,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/01/23/year/month/day/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/" target="_self">
+        <a href="/page/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/" target="_self">
           格式化字符串
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/01/23/year/month/day/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/" target="_self">
         <div>
-          ∫sin⁡xdx&#x3D;−cos⁡x+C\int\sin xdx&#x3D;-\cos x+C∫sinxdx&#x3D;−cosx+C 利用程序直接对用户可控制的数据格式化，让用户可以利用格式化字符串达到任意地址读写 因为格式化字符串的参数在栈中，所以尽管无法写，也可以从栈中获取些有用的信息 格式化详解 printf实际执行的是位于stdio-common&#x2F;vfprintf-internal.c文件中的vfprintf函数
+          利用程序直接对用户可控制的数据格式化，让用户可以利用格式化字符串达到任意地址读写 因为格式化字符串的参数在栈中，所以尽管无法写，也可以从栈中获取些有用的信息 格式化详解 printf实际执行的是位于stdio-common&#x2F;vfprintf-internal.c文件中的vfprintf函数 在vfprintf中会按照占位符的顺序输出字符串，但如果占位符中存在$就会执行printf_position
         </div>
       </a>
 
@@ -480,6 +494,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="/js/custom.js"></script>
 
 
 

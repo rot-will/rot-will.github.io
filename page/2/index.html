@@ -54,8 +54,22 @@
 
 
 
-  
-<link rel="stylesheet" href="/css/custom.css">
+    
+        
+        
+        <link id="csscustom_image-light" rel="stylesheet" href="/css/image.css" />
+        
+          <link id="csscustom_image-dark" rel="stylesheet" href="/css/image-dark.css" />
+        
+    
+        
+        
+        <link id="csscustom_salient-light" rel="stylesheet" href="/css/salient.css" />
+        
+          <link id="csscustom_salient-dark" rel="stylesheet" href="/css/salient-dark.css" />
+        
+    
+
 
 
 
@@ -247,13 +261,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/11/22/year/month/day/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" target="_self">
+        <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" target="_self">
           攻击方法一
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/11/22/year/month/day/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" target="_self">
         <div>
           heap overflow 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979
         </div>
@@ -310,13 +324,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/11/22/year/month/day/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/" target="_self">
+        <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/" target="_self">
           攻击方法二
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/11/22/year/month/day/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/" target="_self">
         <div>
           fast bin 12345&#x2F;*    在较低版本中因为在获取fast bin中的chunk时没有进行检测    所以如果有条件，直接修改fast bin中的chunk的fd段就可以在任意地址创建chunk了*&#x2F; unsorted bin small bin large bin tcache bin
         </div>
@@ -373,13 +387,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/09/29/year/month/day/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E6%B5%99%E6%B1%9F%E7%9C%81%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" target="_self">
+        <a href="/page/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E6%B5%99%E6%B1%9F%E7%9C%81%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" target="_self">
           第五届大学生浙江省网络安全大赛-pwn
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/29/year/month/day/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E6%B5%99%E6%B1%9F%E7%9C%81%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E6%B5%99%E6%B1%9F%E7%9C%81%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" target="_self">
         <div>
           new_stack   后门函数会将我们输入的数据写入栈中，刚好最后8字节可以修改X29寄存器的值，而这个寄存器在程序中是用来临时储存函数第一个参数的寄存器，会用来修改X0寄存器，刚好在后门函数结束后会执行一次输入输出，这时可以通过修改got表控制程序流程 1234567891011121314151617181920212223242526272829303132&quot;&quot;&amp;quo
         </div>
@@ -438,13 +452,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/09/28/year/month/day/%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%A4%B4/" target="_self">
+        <a href="/page/%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%A4%B4/" target="_self">
           文件格式头
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/28/year/month/day/%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%A4%B4/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E5%A4%B4/" target="_self">
         <div>
           Mime Type（Content-Type） 文件扩展名 文件头     video&#x2F;3gpp 3gp 00 00 00 14 66 74 79 7000 00 00 14 66 74 79 7000 00 00 20 66 74 79 7000 00 00 20 66 74 79 70   video&#x2F;mp4 mp4 00 00 00 14 66 74 79 70 69 73 6f 6d
         </div>
@@ -480,13 +494,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/09/23/year/month/day/wp/%E7%AC%AC%E5%85%AD%E5%B1%8A%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%9D%92%E5%B0%91%E5%B9%B4%E6%9D%AF%E9%A2%84%E8%B5%9B/" target="_self">
+        <a href="/page/wp/%E7%AC%AC%E5%85%AD%E5%B1%8A%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%9D%92%E5%B0%91%E5%B9%B4%E6%9D%AF%E9%A2%84%E8%B5%9B/" target="_self">
           第六届强网杯青少年杯
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/09/23/year/month/day/wp/%E7%AC%AC%E5%85%AD%E5%B1%8A%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%9D%92%E5%B0%91%E5%B9%B4%E6%9D%AF%E9%A2%84%E8%B5%9B/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/%E7%AC%AC%E5%85%AD%E5%B1%8A%E5%BC%BA%E7%BD%91%E6%9D%AF%E9%9D%92%E5%B0%91%E5%B9%B4%E6%9D%AF%E9%A2%84%E8%B5%9B/" target="_self">
         <div>
           战队信息 战队名称：Rml 战队排名：5 web web1 CVE-2021-41773，payload直接打  misc misc1 base64解密后得到一张图片，但是每两个字节被换了位置 修复脚本 123456f&#x3D;open(&amp;#x27;a.png&amp;#x27;,&amp;#x27;rb&amp;#x27;)f1&#x3D;open(&amp;#x27;b.png&amp;#x27;,&amp;#x27;wb&amp;#x27;)data&#x3D;f.read
         </div>
@@ -543,13 +557,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/08/18/year/month/day/wp/2022%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2-pwn/" target="_self">
+        <a href="/page/wp/2022%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2-pwn/" target="_self">
           2022巅峰极客-pwn
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/18/year/month/day/wp/2022%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2-pwn/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/2022%E5%B7%85%E5%B3%B0%E6%9E%81%E5%AE%A2-pwn/" target="_self">
         <div>
           Gift     程序中仅允许创建10个chunk，但在remove_gift函数中存在uaf，bargain函数可以用来修改chunk的fd，且可以输入负数让fd向大地址偏移，但只能修改低四字节，经过测试，靶机中libc版本为libc_2.27~libc_2.31，所以可以利用tcache bin attack，在free_hook的位置写入one_gadget函数，来获取shell，使用正常的
         </div>
@@ -608,13 +622,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/08/08/year/month/day/wp/2021%E7%BE%8E%E5%9B%A2%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9B-pwn/" target="_self">
+        <a href="/page/wp/2021%E7%BE%8E%E5%9B%A2%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9B-pwn/" target="_self">
           2021美团高校挑战赛-pwn
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/08/year/month/day/wp/2021%E7%BE%8E%E5%9B%A2%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9B-pwn/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/2021%E7%BE%8E%E5%9B%A2%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9B-pwn/" target="_self">
         <div>
           babyrop   main函数中v6变量仅占24字节，但却允许输入25个字节，刚好可以泄露cookie的值 在main函数伪代码中，输入v5的值处，并不是让v5的值为&quot;password&quot;，而是要v5的值为&quot;password&quot;的地址 vuln函数中存在栈溢出，但溢出数据长度较小， 仅能做到修改rip的值，所以要通过多次栈迁移构造payload 1234567
         </div>
@@ -673,13 +687,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/08/08/year/month/day/wp/corctf-pwn/" target="_self">
+        <a href="/page/wp/corctf-pwn/" target="_self">
           2022 corctf-pwn
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/08/year/month/day/wp/corctf-pwn/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/corctf-pwn/" target="_self">
         <div>
           cshell2       在create,show,delete,edit函数中都检测了chunk数组中对应的chunk的size是否为0，这表示在正常情况下，如果chunk被释放了之后，就无法使用show,delete,edit函数，对那个chunk进行操作，但change_age函数可以修改被释放的chunk的bk_nextsize字段 create只允许创建大于等于0x408大小的chun
         </div>
@@ -738,13 +752,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/08/08/year/month/day/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E5%BC%BA%E7%BD%91%E6%8B%9F%E6%80%81%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" target="_self">
+        <a href="/page/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E5%BC%BA%E7%BD%91%E6%8B%9F%E6%80%81%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" target="_self">
           第五届强网拟态挑战赛预赛-pwn
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/08/08/year/month/day/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E5%BC%BA%E7%BD%91%E6%8B%9F%E6%80%81%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E5%BC%BA%E7%BD%91%E6%8B%9F%E6%80%81%E6%8C%91%E6%88%98%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" target="_self">
         <div>
           bfbf    通过run_bfbf函数中看到，brain fuck的指针指向的地址位于栈中，且没有限制偏移大小，所以可以利用 &lt;,&gt;或[]将指针偏移到指定位置泄露run_bfbf的返回地址，__libc_start_main函数地址,并且可以控制返回地址，构造rop  程序中开启了沙盒,当程序执行过程中从非0或1句柄中读取数据,就退出程序,这让我们不能通过执行&#x2F;bin&#x2F;sh获取设立了
         </div>
@@ -803,13 +817,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/06/24/year/month/day/ret2dl_runtime_resolve/" target="_self">
+        <a href="/page/ret2dl_runtime_resolve/" target="_self">
           ret2dl_resolve
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/06/24/year/month/day/ret2dl_runtime_resolve/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/ret2dl_runtime_resolve/" target="_self">
         <div>
           是利用elf文件的延迟绑定技术_dl_runtime_resolve，达到攻击目的的一种技术 程序在执行时，程序link_map结构体的地址位于got表的第二项，_dl_runtime_resolve函数地址位于got表的第三项  在使用_dl_runtime_resolve导出函数时，会设置函数在got表中对应的项为函数真实地址 如果程序开启了PIE保护，那么会在加载程序的阶段，将got表中对应
         </div>
@@ -973,6 +987,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="/js/custom.js"></script>
 
 
 

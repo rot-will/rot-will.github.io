@@ -80,6 +80,16 @@
     return 'light';
   }
 
+  function setCustom(schema){
+    var css=document.querySelectorAll("[id^='csscustom']");
+    for (var i=0;i<css.length;i++){
+          if (css[i].id.includes(schema)){
+            css[i].removeAttribute('disabled');
+          } else {
+            css[i].setAttribute('disabled','');
+          }
+    }
+  }
   function applyCustomColorSchemaSettings(schema) {
     // 接受从「开关」处传来的模式，或者从 localStorage 读取，否则按默认设置值
     var current = schema || getLS(colorSchemaStorageKey) || getDefaultColorSchema();
@@ -106,6 +116,9 @@
 
     // 设置其他应用
     setApplications(current);
+
+    // 设置自定义样式
+    setCustom(current);
   }
 
   var invertColorSchemaObj = {

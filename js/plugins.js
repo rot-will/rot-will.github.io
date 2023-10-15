@@ -34,6 +34,7 @@ Fluid.plugins = {
     if (!CONFIG.image_zoom.enable || !('fancybox' in jQuery)) { return; }
 
     jQuery(selector || '.markdown-body :not(a) > img, .markdown-body > img').each(function() {
+      
       var $image = jQuery(this);
       var imageUrl = $image.attr('data-src') || $image.attr('src') || '';
       if (CONFIG.image_zoom.img_url_replace) {
@@ -65,9 +66,13 @@ Fluid.plugins = {
         if (imageTitle) {
           $imageWrap.attr('title', imageTitle).attr('data-caption', imageTitle);
         }
+
+        if (imageTitle){
+            $image.before(`${imageTitle}</br>`);
+        }
+        $imageWrap.wrap(`<div class="img_box"></div>`);
       }
     });
-
     jQuery.fancybox.defaults.hash = false;
     jQuery('.fancybox').fancybox({
       loop   : true,
@@ -84,6 +89,7 @@ Fluid.plugins = {
 
     jQuery(selector || `.markdown-body > p > img, .markdown-body > figure > img,
       .markdown-body > p > a.fancybox, .markdown-body > figure > a.fancybox`).each(function() {
+        return;
       var $target = jQuery(this);
       var $figcaption = $target.next('figcaption');
       if ($figcaption.length !== 0) {

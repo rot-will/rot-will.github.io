@@ -69,7 +69,6 @@ Fluid.utils = {
         });
       }
     }
-
     if (typeof selectorOrElement === 'string') {
       this.waitElementLoaded(selectorOrElement, function(element) {
         waitInViewport(element);

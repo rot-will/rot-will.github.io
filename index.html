@@ -54,8 +54,22 @@
 
 
 
-  
-<link rel="stylesheet" href="/css/custom.css">
+    
+        
+        
+        <link id="csscustom_image-light" rel="stylesheet" href="/css/image.css" />
+        
+          <link id="csscustom_image-dark" rel="stylesheet" href="/css/image-dark.css" />
+        
+    
+        
+        
+        <link id="csscustom_salient-light" rel="stylesheet" href="/css/salient.css" />
+        
+          <link id="csscustom_salient-dark" rel="stylesheet" href="/css/salient-dark.css" />
+        
+    
+
 
 
 
@@ -247,15 +261,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/10/07/year/month/day/%E7%A8%8B%E5%BA%8F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" target="_self">
+        <a href="/page/%E7%A8%8B%E5%BA%8F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" target="_self">
           程序启动过程分析
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/10/07/year/month/day/%E7%A8%8B%E5%BA%8F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/%E7%A8%8B%E5%BA%8F%E5%90%AF%E5%8A%A8%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/" target="_self">
         <div>
-          空间管理使用minimal，第一次申请的地址最高，后面申请的比前面的低，通常同一个程序如果使用相同的依赖库，则每次执行时依赖的地址都相同 程序是通过系统的ld.so进行启动的 在执行ld.so的_start函数之前先把程序与ld.so都加载到内存中 并且将程序的hurd信息放入栈中，在执行_dl_main之前解析了栈中的hurt信息，并传入_dl_main 用于构造程序的link_map结构体时解
+          心血来潮想要看看程序到底是怎么开始的，于是就有了这篇文章  大致流程图  分析 起初,我以为加载依赖等操作是在__libc_start_main中执行的,于是我使用gdb调试程序,并把断点下在了_start处. 我发现这个时候断点列表中有两个,一个指向了ld.so::_start,一个指向了elf::_start. 从这里我就知道了,要想知道实际上是怎么执行的,我不能只看__libc_start
         </div>
       </a>
 
@@ -310,13 +324,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/05/27/year/month/day/wp/2023ciscn%E5%88%9D%E8%B5%9Bwp/" target="_self">
+        <a href="/page/wp/2023ciscn%E5%88%9D%E8%B5%9Bwp/" target="_self">
           2023ciscn初赛wp
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/27/year/month/day/wp/2023ciscn%E5%88%9D%E8%B5%9Bwp/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/2023ciscn%E5%88%9D%E8%B5%9Bwp/" target="_self">
         <div>
           misc 签到卡 print(open(&#39;&#x2F;flag&#39;).read())  被加密的生产流量 追踪tcp流，数据提取出来base32   国粹 先分割题目.png中的小麻将到output 12345678910111213import osw&#x3D;0h&#x3D;0from PIL import Imagea&#x3D;Image.open(&amp;#x27;题目.png&amp;#x27;)w1,h1&#x3D;a.sizewhile w&amp;l
         </div>
@@ -373,13 +387,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/05/19/year/month/day/wp/2023%E6%98%A5%E7%A7%8B%E6%9D%AF%E6%98%A5%E5%AD%A3%E8%B5%9B/" target="_self">
+        <a href="/page/wp/2023%E6%98%A5%E7%A7%8B%E6%9D%AF%E6%98%A5%E5%AD%A3%E8%B5%9B/" target="_self">
           2023春秋杯春季赛
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/19/year/month/day/wp/2023%E6%98%A5%E7%A7%8B%E6%9D%AF%E6%98%A5%E5%AD%A3%E8%B5%9B/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/2023%E6%98%A5%E7%A7%8B%E6%9D%AF%E6%98%A5%E5%AD%A3%E8%B5%9B/" target="_self">
         <div>
           MISC sudo CVE-2023-22809 连接靶机执行sudo -V,发现版本为1.8.21p2符合文章中说的版本 查看&#x2F;etc&#x2F;sudoers发现当前文件可以无密码执行sudoedit &#x2F;etc&#x2F;GAMELAB,这也符合文章中的条件 文章中执行了一条EDITOR&#x3D;&quot;vim -- &#x2F;path&#x2F;to&#x2F;extra&#x2F;file&quot; sudoedit &#x2F;etc&#x2F;GAMELAB，用来
         </div>
@@ -436,13 +450,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/05/07/year/month/day/wp/2023%E5%B9%B4D3ctf-pwn/" target="_self">
+        <a href="/page/wp/2023%E5%B9%B4D3ctf-pwn/" target="_self">
           2023年D3CTF-pwn
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/05/07/year/month/day/wp/2023%E5%B9%B4D3ctf-pwn/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/2023%E5%B9%B4D3ctf-pwn/" target="_self">
         <div>
           d3op 预操作 解压附件之后得到三个文件: start.sh,squashfs-root.img,Image 执行start.sh之后，启动了一个虚拟机，查看&#x2F;etc&#x2F;os-release之后发现虚拟机是openwrt 22.03.3版本的固件，架构为armvirt&#x2F;64,到官网上下载对应版本的文件镜像https:&#x2F;&#x2F;archive.openwrt.org&#x2F;releases&#x2F;22.03.3&#x2F;ta
         </div>
@@ -499,13 +513,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/03/26/year/month/day/wp/NKCTF2023/" target="_self">
+        <a href="/page/wp/NKCTF2023/" target="_self">
           2023NKCTF-wp
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/26/year/month/day/wp/NKCTF2023/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/NKCTF2023/" target="_self">
         <div>
           rank：15  Misc hard-misc base32，公众号发NKCTF2023我来了！ blue 先导入进vmware，开机发现是windows2008系统，用户带密码 挂载一个2008的iso镜像，设置启动项为cd优先，重启，选择修复计算机，进入命令提示符  复制一份cmd到放大镜  左下角启动放大镜功能后就启动了cmd，修改administrator密码  进入系统  easymus
         </div>
@@ -562,13 +576,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2023/02/07/year/month/day/wp/2022%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%E5%88%9D%E8%B5%9Bwp/" target="_self">
+        <a href="/page/wp/2022%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%E5%88%9D%E8%B5%9Bwp/" target="_self">
           2022西湖论剑-初赛
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/07/year/month/day/wp/2022%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%E5%88%9D%E8%B5%9Bwp/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/2022%E8%A5%BF%E6%B9%96%E8%AE%BA%E5%89%91%E5%88%9D%E8%B5%9Bwp/" target="_self">
         <div>
           Reverse BabyRE 程序先对输入的数据进行base8加密，并将加密后数据的0x10~0x70与16230465152334621443147115031070150320711603206314033466154344611443406614230466156344661543046比较 然后对加密后数据的0~0x70进行魔改过的sha1加密，并将哈希值与67339fc92b4875b8
         </div>
@@ -625,13 +639,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/12/09/year/month/day/heap/IO%E7%BB%93%E6%9E%84%E4%BD%93%E5%88%86%E6%9E%90/" target="_self">
+        <a href="/page/heap/IO%E7%BB%93%E6%9E%84%E4%BD%93%E5%88%86%E6%9E%90/" target="_self">
           IO结构体分析
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/12/09/year/month/day/heap/IO%E7%BB%93%E6%9E%84%E4%BD%93%E5%88%86%E6%9E%90/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/heap/IO%E7%BB%93%E6%9E%84%E4%BD%93%E5%88%86%E6%9E%90/" target="_self">
         <div>
           IO_FILE 结构体 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475struct _IO_FILE_complete_plus&amp;#123; &#x2F;* +00 *&#x2F; i
         </div>
@@ -688,13 +702,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/11/30/year/month/day/wp/NCTF2021-pwn/" target="_self">
+        <a href="/page/wp/NCTF2021-pwn/" target="_self">
           NCTF2021-pwn
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/11/30/year/month/day/wp/NCTF2021-pwn/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/NCTF2021-pwn/" target="_self">
         <div>
           ezheap     在delete函数中存在UAF漏洞，可以多次释放同一个chunk，但如果chunk已经被释放，则无法修改chunk数据 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869
         </div>
@@ -753,13 +767,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/11/24/year/month/day/wp/2021%E9%87%91%E7%A0%96-pwn/" target="_self">
+        <a href="/page/wp/2021%E9%87%91%E7%A0%96-pwn/" target="_self">
           2021金砖-pwn
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/11/24/year/month/day/wp/2021%E9%87%91%E7%A0%96-pwn/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/wp/2021%E9%87%91%E7%A0%96-pwn/" target="_self">
         <div>
           pmagic1  123456789101112131415161718192021222324252627282930313233343536373839404142from pwn import *def pwn(p,gadget):    libc&#x3D;ELF(&amp;#x27;.&#x2F;libc-2.23.so&amp;#x27;,checksec&#x3D;0)    p.sendafter(&quot;name.\n&amp;
         </div>
@@ -818,13 +832,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2022/11/22/year/month/day/heap/%E5%A0%86%E5%9F%BA%E7%A1%80/" target="_self">
+        <a href="/page/heap/%E5%A0%86%E5%9F%BA%E7%A1%80/" target="_self">
           堆基础
         </a>
       </h1>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2022/11/22/year/month/day/heap/%E5%A0%86%E5%9F%BA%E7%A1%80/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/page/heap/%E5%A0%86%E5%9F%BA%E7%A1%80/" target="_self">
         <div>
           ptmlloc空间布局 chunk结构 12345678910111213141516171819202122struct malloc_chunk &amp;#123;  INTERNAL_SIZE_T      mchunk_prev_size;  INTERNAL_SIZE_T      mchunk_size;   &#x2F;* mchunk_prev_size 仅在前一个chunk被放入unsorted
         </div>
@@ -988,6 +1002,10 @@
   <script  src="/js/local-search.js" ></script>
 
 
+
+
+  
+<script src="/js/custom.js"></script>
 
 
 
