@@ -7,16 +7,16 @@
     
     transition: all .15s;
     font-size:14px;
-    border: 1px solid #b0b0b0;
-    box-shadow: 0px 0px 6px 0px #b8b8b8 ;
+    border: 1px solid #c0c0c0;
+    box-shadow: 0px 0px 6px 0px #c8c8c8 ;
 }
 
 .img_box:hover{
     /* font-size: 16px; */
     /* color: #777777; */
     font-weight: bold;
-    box-shadow: 0px 0px 7px 3px #b8b8b8 ;
-    border: 1px solid #b0b0b0;
+    box-shadow: 0px 0px 7px 3px #c8c8c8 ;
+    border: 1px solid #c0c0c0;
     border-radius: 15px ;
 }
 .img_box img{

@@ -16,12 +16,12 @@
   <meta name="author" content="rot_will">
   <meta name="keywords" content="">
   
-    <meta name="description" content="fast bin 12345&#x2F;*    在较低版本中因为在获取fast bin中的chunk时没有进行检测    所以如果有条件，直接修改fast bin中的chunk的fd段就可以在任意地址创建chunk了*&#x2F; unsorted bin small bin large bin tcache bin">
+    <meta name="description" content="Here&#39;s something encrypted, password is required to continue reading.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="攻击方法二">
 <meta property="og:url" content="https://rot-will.github.io/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/index.html">
 <meta property="og:site_name" content="rot&#39;s Blog">
-<meta property="og:description" content="fast bin 12345&#x2F;*    在较低版本中因为在获取fast bin中的chunk时没有进行检测    所以如果有条件，直接修改fast bin中的chunk的fd段就可以在任意地址创建chunk了*&#x2F; unsorted bin small bin large bin tcache bin">
+<meta property="og:description" content="Here&#39;s something encrypted, password is required to continue reading.">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-11-22T07:10:45.000Z">
 <meta property="article:modified_time" content="2023-10-07T11:47:16.828Z">
@@ -347,19 +347,19 @@
     
       
       
-        <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" title="攻击方法一"
+        <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/" title="攻击方法二"
            class="list-group-item list-group-item-action
-           ">
-          <span class="category-post">攻击方法一</span>
+           active">
+          <span class="category-post">攻击方法二</span>
         </a>
       
     
       
       
-        <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%BA%8C/" title="攻击方法二"
+        <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" title="攻击方法一"
            class="list-group-item list-group-item-action
-           active">
-          <span class="category-post">攻击方法二</span>
+           ">
+          <span class="category-post">攻击方法一</span>
         </a>
       
     
@@ -402,17 +402,22 @@
               </p>
             
             
-              <div class="markdown-body">
-                
-                <h2 id="fast-bin">fast bin</h2>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">/*</span><br><span class="hljs-comment">    在较低版本中因为在获取fast bin中的chunk时没有进行检测</span><br><span class="hljs-comment">    所以如果有条件，直接修改fast bin中的chunk的fd段就可以在任意地址创建chunk了</span><br><span class="hljs-comment">*/</span><br><br></code></pre></td></tr></table></figure>
-<h2 id="unsorted-bin">unsorted bin</h2>
-<h2 id="small-bin">small bin</h2>
-<h2 id="large-bin">large bin</h2>
-<h2 id="tcache-bin">tcache bin</h2>
+              
+              <div class="hbe hbe-container" id="hexo-blog-encrypt" data-wpm="Oh, this is an invalid password. Check and try again, please." data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <script id="hbeData" type="hbeData" data-hmacdigest="bf9acaa4c2ce707f9e44eae6f750b48d621211e7140a9e66592ddcb689199c08">38b5afc9f438108a88e9962942f967003dc3ea8ab676100b97832a5f8875128abb1043dd55fde89bc65bb16cee8614983d9325e0191d114d8a1e750a3021b86ef1ba31465d3b4ea43dbe3f7cd177cbe0cca9abd7f46a284aa29b4014e28c5760b9383d9d2c3c862e3797fb81158330ebdba3e6f3856354550cf536e172c6cc037bc200da3e1c87389711e5c68374bc7a80050eee898012093cf8d41a52a34d3360a6755ab371598b08ab76355401d3f52efa1a39b381dbbe7e638e8e351bc150520bb2e97511772acbedafb380a41d230a177e0bbe12bf6a80b41a8288a3b240405d5b79a43bfc399649da53c5215c00aec4aebca4385b35ff7f706d3424286d737254f5308a7b2d9bf0c72c2a6e6f102d5785a4ae8dd59daf1258d945da92c57deb2b061f141730596dd849ebdc5421915f3163fff4f26668b34eb98232063531f70aa32b1e387f8779a2c6cc5d85938d182bd68c3df8507f815dee05eb1345e3ece21373acbbb1a65f03eaeb158774f111c24d3a0978e16a2353227893145ec9320521f21005066eaafa1e0e4fb9760d969fc77418cf134ca62abfbdbece4ec484703b098d6399901c045330ae2c57b801d6134669477570a5785b25553d691e94a8f539bc669b69e06b3534a477ba34a6f342f76338e676844a05224ac64ae7866ae97bf0c1320bce598846e5628a9d51fe91bf7b98854d2b2374eefb8e2132a768b9ea6f28d451c66fa774fdfde7d93837c1fcbc6c4c688a2d5517f69c6a8d5df8c13046fe5140aa7559e75971be60f223018576021ce3333ac107546d5d9f854d0ee216c1d6f9d29211caccd6ddf3e7c02eb3d24a1ad4afa2ecd0ef8eb1b701cbd67deaef7a6cc7ab7f8627822e1fe121201059cc63d63f7cbad89d1c1fcfeda53da9bfa9f02571ee1edbdf6eaa0b38f897487484446d53ff3429b9bbccef15d07bb43137530c2593cfdb1b2b893c28c1b128e0a64be51a7e06bbe579490a06d72f6c468ca9aabb0a46e26a7352f1f890308f80296c12c7a28735cc082ea7251d25d9ba40f44b7e102cac42cdfdd8b51ddccb6460d5e1dbec1f55e909706bd3101269621b91ca370d25777daf614a0ee928ae7066625142e5686f82aa872e917c7baccad8cbb04d492b1ab446809abf526d55ca4dbe3dfe859697c8fe41dba0e0eb905e2d8d27276c21c5ecf6af3ba2cf01133af40e1b3b9fd4d06a77d3</script>
+  <div class="hbe hbe-content">
+    <div class="hbe hbe-input hbe-input-default">
+      <input class="hbe hbe-input-field hbe-input-field-default" type="password" id="hbePass">
+      <label class="hbe hbe-input-label hbe-input-label-default" for="hbePass">
+        <span class="hbe hbe-input-label-content hbe-input-label-content-default">Hey, password is required here.</span>
+      </label>
+    </div>
+  </div>
+</div>
+<script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">
+              
 
-                
-              </div>
+              
             
             <hr/>
             <div>
@@ -517,9 +522,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" title="攻击方法一">
+                      <a href="/page/heap/%E5%A0%86%E5%9F%BA%E7%A1%80/" title="堆基础">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">攻击方法一</span>
+                        <span class="hidden-mobile">堆基础</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -527,8 +532,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/page/wp/%E7%AC%AC%E4%BA%94%E5%B1%8A%E6%B5%99%E6%B1%9F%E7%9C%81%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B%E9%A2%84%E8%B5%9B-pwn/" title="第五届大学生浙江省网络安全大赛-pwn">
-                        <span class="hidden-mobile">第五届大学生浙江省网络安全大赛-pwn</span>
+                      <a href="/page/heap/%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95%E4%B8%80/" title="攻击方法一">
+                        <span class="hidden-mobile">攻击方法一</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
@@ -727,6 +732,23 @@
   
 
 
+
+
+  
+  <script defer>
+    if (document.getElementById('hbePass')) {
+      Fluid.utils.waitElementLoaded('hbe-prefix', function() {
+        var hbePrefix = document.querySelector('hbe-prefix');
+        hbePrefix.parentElement.classList.add('markdown-body');
+        Fluid.utils.retry(function() {
+          if (Fluid.boot && Fluid.boot.refreshPlugins) {
+            Fluid.boot.refreshPlugins();
+            return true;
+          }
+        }, 100, 10);
+      })
+    }
+  </script>
 
 
   
