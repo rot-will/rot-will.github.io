@@ -69,8 +69,11 @@ Fluid.plugins = {
 
         if (imageTitle){
             $image.before(`${imageTitle}</br>`);
+            $imageWrap.wrap(`<div class="img_box"></div>`);
+        } else {
+          $imageWrap.wrap(`<div class="img_box" style="padding-top:15px;"></div>`);
         }
-        $imageWrap.wrap(`<div class="img_box"></div>`);
+        
       }
     });
     jQuery.fancybox.defaults.hash = false;

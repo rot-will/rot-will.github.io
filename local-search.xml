@@ -669,6 +669,39 @@
   
   
   <entry>
+    <title>about</title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[<p>QQ: 2127361651</p><p>记录生活</p>]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[.img_box{    background-color: #fbfbfb;    line-height:30px;    text-align:center;    margin-top:15px;    padding-bottom: 15px;        transition: all .15s;    font-size:14px;    border: 1px solid #c0c0c0;    box-shadow: 0px 0px 6px 0px #c8c8c8 ;}.img_box:hover{    /* font-size: 16px; */    /* color: #777777; */    font-weight: bold;    box-shadow: 0px 0px 7px 3px #c8c8c8 ;    border: 1px solid #c0c0c0;    border-radius: 15px ;}.img_box img{    object-fit:contain;    max-height:500px;}.img_box a{    color:#999999;    font-family: "楷书";}.img_box a:hover{    color:#999999;}.img_box span{    display:inline-block;}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[.img_box{     /* background-color: #f8f8f8;  */    line-height:30px;    text-align:center;    margin-top:15px;    padding-bottom: 15px;        transition: all .15s;    font-size:14px;    border: 1px solid #404040;    box-shadow: 0px 0px 6px 0px #484848 ;}.img_box:hover{    /* font-size: 16px; */    /* color: #777777; */    font-weight: bold;    box-shadow: 0px 0px 7px 3px #484848 ;    border: 1px solid #404040;    border-radius: 15px ;}.img_box img{    object-fit:contain;    max-height:600px;}.img_box a{    color:#aaaaaa;    font-family: "楷书";}.img_box a:hover{    color:#aaaaaa;}.img_box span{    display:inline-block;} ]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>收藏</title>
     <link href="/"/>
     <url>/</url>
@@ -684,40 +717,7 @@
     <link href="/"/>
     <url>/</url>
     
-    <content type="html"><![CDATA[.img_box{    /* background-color: #f8f8f8; */    line-height:30px;    text-align:center;    margin-top:15px;    padding-bottom: 15px;        transition: all .15s;    font-size:14px;    border: 1px solid #c0c0c0;    box-shadow: 0px 0px 6px 0px #c8c8c8 ;}.img_box:hover{    /* font-size: 16px; */    /* color: #777777; */    font-weight: bold;    box-shadow: 0px 0px 7px 3px #c8c8c8 ;    border: 1px solid #c0c0c0;    border-radius: 15px ;}.img_box img{    object-fit:contain;    max-height:500px;}.img_box a{    color:#999999;    font-family: "楷书";}.img_box a:hover{    color:#999999;}.img_box span{    display:inline-block;}]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[.img_box{    /* background-color: #f8f8f8; */    line-height:30px;    text-align:center;    margin-top:15px;    padding-bottom: 15px;        transition: all .15s;    font-size:14px;    border: 1px solid #404040;    box-shadow: 0px 0px 6px 0px #484848 ;}.img_box:hover{    /* font-size: 16px; */    /* color: #777777; */    font-weight: bold;    box-shadow: 0px 0px 7px 3px #484848 ;    border: 1px solid #404040;    border-radius: 15px ;}.img_box img{    object-fit:contain;    max-height:600px;}.img_box a{    color:#aaaaaa;    font-family: "楷书";}.img_box a:hover{    color:#aaaaaa;}.img_box span{    display:inline-block;} ]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
     <content type="html"><![CDATA[.salient{    padding-top:1px;    padding-bottom:1px;    padding-left:2px;}.salient:hover{    background-color:#3a4a5a;    border: 1px solid #454d68;    box-shadow: 0px 0px 10px 1px #454d58;    padding-top:1px;    padding-bottom:1px;}]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>about</title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[<p>QQ: 2127361651</p><p>记录生活</p>]]></content>
     
   </entry>
   
