@@ -641,7 +641,7 @@
   
   
   <entry>
-    <title>整型溢出及栈基础</title>
+    <title>整型溢出及栈溢出</title>
     <link href="/page/%E6%95%B4%E5%9E%8B%E6%BA%A2%E5%87%BA%E5%8F%8A%E6%A0%88%E5%9F%BA%E7%A1%80/"/>
     <url>/page/%E6%95%B4%E5%9E%8B%E6%BA%A2%E5%87%BA%E5%8F%8A%E6%A0%88%E5%9F%BA%E7%A1%80/</url>
     
@@ -698,66 +698,11 @@
   
   
   <entry>
-    <title>收藏</title>
+    <title>about</title>
     <link href="/"/>
     <url>/</url>
     
-    <content type="html"><![CDATA[]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[.salient{    padding-top:3px;    padding-bottom:3px;    padding-left:2px;    padding-right:1px;}.salient:hover{    background-color:#3a4a5a;    border: 1px solid #454d68;    box-shadow: 0px 0px 10px 3px #454d58;    padding-top:2px;    padding-bottom:2px;    padding-left: 1px;    padding-right:0px;}]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[.salient{    padding-top:3px;    padding-bottom:3px;    padding-left:2px;    padding-right:1px;}.salient:hover{    background-color:#daeafa;    border: 1px solid #d5ddf8;    box-shadow: 0px 0px 10px 3px #daeafa;    padding-top:2px;    padding-bottom:2px;    padding-left:1px;    padding-right:0px;}]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[.img_box{     /* background-color: #f8f8f8;  */    line-height:30px;    text-align:center;    margin-top:15px;    padding-bottom: 15px;        transition: all .15s;    font-size:14px;    border: 1px solid #404040;    box-shadow: 0px 0px 6px 0px #484848 ;}.img_box:hover{    /* font-size: 16px; */    /* color: #777777; */    font-weight: bold;    box-shadow: 0px 0px 7px 3px #484848 ;    border: 1px solid #404040;    border-radius: 15px ;}.img_box img{    object-fit:contain;    max-height:600px;}.img_box a{    color:#aaaaaa;    font-family: "楷书";}.img_box a:hover{    color:#aaaaaa;}.img_box span{    display:inline-block;} ]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[.img_box{    background-color: #fbfbfb;    line-height:30px;    text-align:center;    margin-top:15px;    padding-bottom: 15px;        transition: all .15s;    font-size:14px;    border: 1px solid #c0c0c0;    box-shadow: 0px 0px 6px 0px #c8c8c8 ;}.img_box:hover{    /* font-size: 16px; */    /* color: #777777; */    font-weight: bold;    box-shadow: 0px 0px 7px 3px #c8c8c8 ;    border: 1px solid #c0c0c0;    border-radius: 15px ;}.img_box img{    object-fit:contain;    max-height:500px;}.img_box a{    color:#999999;    font-family: "楷书";}.img_box a:hover{    color:#999999;}.img_box span{    display:inline-block;}]]></content>
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title></title>
-    <link href="/"/>
-    <url>/</url>
-    
-    <content type="html"><![CDATA[@font-face {  font-family: "iconfont"; /* Project id 1749284 */  src: url('/font/font_1749284_hj8rtnfg7um.woff2?t=1643373093955') format('woff2'),       url('/font/font_1749284_hj8rtnfg7um.woff?t=1643373093955') format('woff'),       url('/font/font_1749284_hj8rtnfg7um.ttf?t=1643373093955') format('truetype');}.iconfont {  font-family: "iconfont" !important;  font-size: 16px;  font-style: normal;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;}.icon-success:before {  content: "\e619";}.icon-cc:before {  content: "\e8e4";}.icon-nd:before {  content: "\e90e";}.icon-sa:before {  content: "\e604";}.icon-nc:before {  content: "\ed48";}.icon-by:before {  content: "\e741";}.icon-top:before {  content: "\e605";}.icon-author:before {  content: "\e7aa";}.icon-light:before {  content: "\e6e6";}.icon-dark:before {  content: "\e640";}.icon-articles:before {  content: "\e61f";}.icon-category-fill:before {  content: "\e60d";}.icon-category:before {  content: "\e65e";}.icon-chart:before {  content: "\e618";}.icon-search:before {  content: "\e6f2";}.icon-love:before {  content: "\e643";}.icon-eye:before {  content: "\e722";}.icon-archive-fill:before {  content: "\ef1c";}.icon-date-fill:before {  content: "\ef5a";}.icon-home-fill:before {  content: "\f017";}.icon-link-fill:before {  content: "\f037";}.icon-tags-fill:before {  content: "\f0f3";}.icon-user-fill:before {  content: "\f12c";}.icon-date:before {  content: "\f27d";}.icon-copy:before {  content: "\f289";}.icon-list:before {  content: "\f2c0";}.icon-tags:before {  content: "\e798";}.icon-clock-fill:before {  content: "\e67d";}.icon-arrowup:before {  content: "\e799";}.icon-arrowleft:before {  content: "\f2c2";}.icon-arrowright:before {  content: "\f2c3";}.icon-arrowdown:before {  content: "\f2c4";}]]></content>
+    <content type="html"><![CDATA[<p>QQ: 2127361651</p><p>记录生活</p>]]></content>
     
   </entry>
   
@@ -779,6 +724,61 @@
     <link href="/"/>
     <url>/</url>
     
+    <content type="html"><![CDATA[@font-face {  font-family: "iconfont"; /* Project id 1749284 */  src: url('/font/font_1749284_hj8rtnfg7um.woff2?t=1643373093955') format('woff2'),       url('/font/font_1749284_hj8rtnfg7um.woff?t=1643373093955') format('woff'),       url('/font/font_1749284_hj8rtnfg7um.ttf?t=1643373093955') format('truetype');}.iconfont {  font-family: "iconfont" !important;  font-size: 16px;  font-style: normal;  -webkit-font-smoothing: antialiased;  -moz-osx-font-smoothing: grayscale;}.icon-success:before {  content: "\e619";}.icon-cc:before {  content: "\e8e4";}.icon-nd:before {  content: "\e90e";}.icon-sa:before {  content: "\e604";}.icon-nc:before {  content: "\ed48";}.icon-by:before {  content: "\e741";}.icon-top:before {  content: "\e605";}.icon-author:before {  content: "\e7aa";}.icon-light:before {  content: "\e6e6";}.icon-dark:before {  content: "\e640";}.icon-articles:before {  content: "\e61f";}.icon-category-fill:before {  content: "\e60d";}.icon-category:before {  content: "\e65e";}.icon-chart:before {  content: "\e618";}.icon-search:before {  content: "\e6f2";}.icon-love:before {  content: "\e643";}.icon-eye:before {  content: "\e722";}.icon-archive-fill:before {  content: "\ef1c";}.icon-date-fill:before {  content: "\ef5a";}.icon-home-fill:before {  content: "\f017";}.icon-link-fill:before {  content: "\f037";}.icon-tags-fill:before {  content: "\f0f3";}.icon-user-fill:before {  content: "\f12c";}.icon-date:before {  content: "\f27d";}.icon-copy:before {  content: "\f289";}.icon-list:before {  content: "\f2c0";}.icon-tags:before {  content: "\e798";}.icon-clock-fill:before {  content: "\e67d";}.icon-arrowup:before {  content: "\e799";}.icon-arrowleft:before {  content: "\f2c2";}.icon-arrowright:before {  content: "\f2c3";}.icon-arrowdown:before {  content: "\f2c4";}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[.img_box{    background-color: #fbfbfb;    line-height:30px;    text-align:center;    margin-top:15px;    padding-bottom: 15px;        transition: all .15s;    font-size:14px;    border: 1px solid #c0c0c0;    box-shadow: 0px 0px 6px 0px #c8c8c8 ;}.img_box:hover{    /* font-size: 16px; */    /* color: #777777; */    font-weight: bold;    box-shadow: 0px 0px 7px 3px #c8c8c8 ;    border: 1px solid #c0c0c0;    border-radius: 15px ;}.img_box img{    object-fit:contain;    max-height:500px;}.img_box a{    color:#999999;    font-family: "楷书";}.img_box a:hover{    color:#999999;}.img_box span{    display:inline-block;}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[.salient{    padding-top:3px;    padding-bottom:3px;    padding-left:2px;    padding-right:1px;}.salient:hover{    background-color:#3a4a5a;    border: 1px solid #454d68;    box-shadow: 0px 0px 10px 3px #454d58;    padding-top:2px;    padding-bottom:2px;    padding-left: 1px;    padding-right:0px;}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[.img_box{     /* background-color: #f8f8f8;  */    line-height:30px;    text-align:center;    margin-top:15px;    padding-bottom: 15px;        transition: all .15s;    font-size:14px;    border: 1px solid #404040;    box-shadow: 0px 0px 6px 0px #484848 ;}.img_box:hover{    /* font-size: 16px; */    /* color: #777777; */    font-weight: bold;    box-shadow: 0px 0px 7px 3px #484848 ;    border: 1px solid #404040;    border-radius: 15px ;}.img_box img{    object-fit:contain;    max-height:600px;}.img_box a{    color:#aaaaaa;    font-family: "楷书";}.img_box a:hover{    color:#aaaaaa;}.img_box span{    display:inline-block;} ]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
+    <content type="html"><![CDATA[.salient{    padding-top:3px;    padding-bottom:3px;    padding-left:2px;    padding-right:1px;}.salient:hover{    background-color:#daeafa;    border: 1px solid #d5ddf8;    box-shadow: 0px 0px 10px 3px #daeafa;    padding-top:2px;    padding-bottom:2px;    padding-left:1px;    padding-right:0px;}]]></content>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title></title>
+    <link href="/"/>
+    <url>/</url>
+    
     <content type="html"><![CDATA[(function(window, document) {function change_style(isenc){    if (isenc==true)        var parentElement=document.getElementById("hexo-blog-encrypt").childNodes[0];    else        var parentElement = document.querySelector("[class='markdown-body']");    var pTags = parentElement.querySelectorAll(":scope>p");    for(var i=0;i<pTags.length;i++){        var child_es=pTags[i].querySelectorAll("img");        if (child_es.length==0){            pTags[i].classList.add('salient');        }    }}function loadImage(){    for (const each of document.querySelectorAll('img[lazyload]')) {        Fluid.utils.waitElementVisible(each, function() {          each.removeAttribute('srcset');          each.removeAttribute('lazyload');        }, CONFIG.lazyload.offset_factor);      }}const hdeElement=document.getElementById('hexo-blog-encrypt');if (hdeElement==null)    change_style();else{    window.addEventListener('hexo-blog-decrypt',(        function(){            change_style(true);            loadImage();            }));}})(window,document)]]></content>
     
   </entry>
@@ -786,11 +786,11 @@
   
   
   <entry>
-    <title>about</title>
+    <title>收藏</title>
     <link href="/"/>
     <url>/</url>
     
-    <content type="html"><![CDATA[<p>QQ: 2127361651</p><p>记录生活</p>]]></content>
+    <content type="html"><![CDATA[]]></content>
     
   </entry>
   
